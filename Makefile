@@ -1,28 +1,40 @@
-CC = c++
+CC					= c++
 
-CC_FLAGS = -Wall -Werror -Wextra -std=c++98 #-fsanitize=address
+CC_FLAGS			= -Wall -Werror -Wextra -std=c++98
 
-NAME := ft_containers
-	
-SRCS := $(shell find srcs -type f -name "*.cpp" | cut -c6-)
+NAME				= ft_containers
 
-OBJS := $(SRCS:.cpp=.o)
+OBJS_DIR			= srcs/objs
 
-all : $(NAME)
+INC_DIR				= includes/
 
-$(NAME):	$(addprefix srcs/objs/, $(OBJS)) Makefile
-			$(CC) $(CC_FLAGS) $(addprefix srcs/objs/, $(OBJS)) -o $(NAME) 
+SRCS_DIR			= srcs/
 
-srcs/objs/%.o:	srcs/%.cpp  Makefile $(shell find . -type f -name "*.hpp")
-				@mkdir -p srcs/objs
-				$(CC) $(CC_FLAGS) -c $< -o "$@"
+OBJECTS_PREFIXED	= $(addprefix $(OBJS_DIR)/, $(OBJS))
 
-clean :
-		rm -rf srcs/objs
+OBJS				= $(SRCS:.cpp=.o)
 
-fclean : clean
-		rm -f $(NAME)
+SRCS				=	main.cpp
 
-re : fclean all
+INC					=	$(INC_DIR)vector.hpp
 
-.PHONY : re clean fclean all .PHONY
+all: $(NAME)
+
+$(NAME): $(OBJECTS_PREFIXED)
+	$(CC) -o $(NAME) $(OBJECTS_PREFIXED) $(CC_FLAGS)
+
+$(OBJS_DIR):
+	@mkdir -p $(OBJS_DIR)
+
+$(OBJS_DIR)/%.o: $(SRCS_DIR)%.cpp Makefile $(INC) | $(OBJS_DIR)
+	$(CC) $(CC_FLAGS) -c $< -o $@ -I $(INC_DIR)
+
+clean:
+	rm -rf $(OBJS_DIR)
+
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re
