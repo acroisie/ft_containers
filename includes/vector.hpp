@@ -1,4 +1,5 @@
 #pragma		once
+
 #include	<memory>
 
 namespace ft
@@ -44,7 +45,7 @@ namespace ft
 	//Constructor/Destructor--------------------------------------------------//
 		vector(void): _data(NULL), _size(0), _capacity(0){realloc(2);};
 		~vector(){};
-		vector& operator= (const vector& x)
+		vector&				operator= (const vector& x) // To modify with deep copy i think
 		{
 			_data = x._data;
 			_size = x._size;
@@ -81,6 +82,12 @@ namespace ft
 		const_reference		operator[](size_type n) const {return(_data[n]);}
 		reference			at(size_type n) {return(_data[n]);}
 		const_reference		at(size_type n) const {return(_data[n]);}
+		reference 			back() {return(_data[_size - 1]);}
+		const_reference		back() const {return(_data[_size - 1]);}
+		reference 			front() {return(_data[0]);}
+		const_reference		front() const {return(_data[0]);}
+		value_type* 		data() {return(&_data[0]);}
+		const value_type*	data() const {return(&_data[0]);}
 
 	//Modifiers---------------------------------------------------------------//
 		void				push_back(const_reference value)

@@ -35,5 +35,18 @@ int	main(void)
 	if (emptyVector.empty())
 		std::cout << "Empty" << std::endl;
 
+	std::cout << "Back :" << strVector2.back() << std::endl;
+	std::string* tmpV = strVector2.data();
+	*tmpV = "10";
+	++tmpV;
+	*tmpV = "20";
+	tmpV[2] = "200";
+
+	std::cout << "myvector contains:";
+	for (unsigned i=0; i<strVector2.size(); ++i)
+		std::cout << ' ' << strVector2[i] << std::endl;
+
+
+
 	return (0);
 }
