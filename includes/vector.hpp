@@ -15,10 +15,10 @@ namespace ft
 		typedef typename allocator_type::pointer         pointer;
 		typedef typename allocator_type::const_pointer   const_pointer;
 		// typedef std::reverse_iterator<iterator>          reverse_iterator;
-		// typedef implementation-defined                   iterator;
-		// typedef implementation-defined                   const_iterator;
+		// typedef iterator              				     iterator;
+		// typedef const_iterator         			         const_iterator;
 		// typedef std::reverse_iterator<const_iterator>    const_reverse_iterator;
-		// typedef typename allocator_type::difference_type difference_type;
+		typedef typename allocator_type::difference_type difference_type;
 		typedef typename allocator_type::size_type       size_type;
 
 	private:
@@ -28,11 +28,11 @@ namespace ft
 		allocator_type	_alloc;
 
 //Member functions------------------------------------------------------------//
-		void	realloc (size_type newCapacity)
+		void			realloc (size_type newCapacity)
 		{
 			T* newData = _alloc.allocate(newCapacity);
-			// _alloc.construct(newData, ); 
-			if (newCapacity < _size)
+			// _alloc.construct(newData, );
+	 		if (newCapacity < _size)
 				_size = newCapacity;
 			for (size_type i = 0; i < _size; i++)
 				newData[i] = _data[i];
@@ -54,6 +54,14 @@ namespace ft
 		}
 
 	//Iterators---------------------------------------------------------------//
+		iterator begin(){return (iterator(_data));};
+		const_iterator begin() const {return const_iterator((_data));};
+		iterator end(){return (iterator(_data + _size));};
+		const_iterator end() const {return const_iterator((_data + _size));};
+		reverse_iterator rbegin() {return (this->end);};
+		const_reverse_iterator rbegin() const {return (this->end);};
+		reverse_iterator rend(){return (reverse_iterator(_data));};
+		const_reverse_iterator rend() const {return const_reverse_iterator((_data));};
 
 	//Capacity----------------------------------------------------------------//
 		size_type			size() const {return(_size);}
@@ -80,8 +88,18 @@ namespace ft
 	//Element access----------------------------------------------------------//
 		reference			operator[](size_type n) {return(_data[n]);}
 		const_reference		operator[](size_type n) const {return(_data[n]);}
-		reference			at(size_type n) {return(_data[n]);}
-		const_reference		at(size_type n) const {return(_data[n]);}
+		reference			at(size_type n)
+		{
+			if (n >= _size)
+				throw std::out_of_range("vector");
+			return(_data[n]);
+		}
+		const_reference		at(size_type n) const 
+		{
+			if (n >= _size)
+				throw std::out_of_range("vector");
+			return(_data[n]);
+		}
 		reference 			back() {return(_data[_size - 1]);}
 		const_reference		back() const {return(_data[_size - 1]);}
 		reference 			front() {return(_data[0]);}
