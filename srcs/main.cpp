@@ -46,7 +46,5 @@ int	main(void)
 	for (unsigned i=0; i<strVector2.size(); ++i)
 		std::cout << ' ' << strVector2[i] << std::endl;
 
-
-
 	return (0);
 }
