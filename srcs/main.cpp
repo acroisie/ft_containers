@@ -1,6 +1,7 @@
 #include	"../includes/vector.hpp"
 #include	<iostream>
 #include	<vector>
+#include	<iterator>
 
 template <class T>
 void	printVector(const ft::vector<T>& vector)
@@ -15,6 +16,8 @@ int	main(void)
 	ft::vector<std::string> strVector;
 	ft::vector<std::string> strVector2;
 	ft::vector<std::string> emptyVector;
+
+	std::vector<int>::iterator test = strVector2.begin();
 
 	strVector.push_back("1rst");
 	strVector.push_back("2nd");

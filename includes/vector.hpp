@@ -1,6 +1,7 @@
 #pragma		once
 
 #include	<memory>
+#include	"../includes/iterator.hpp"
 
 namespace ft
 {
@@ -16,29 +17,10 @@ namespace ft
 		typedef typename allocator_type::const_pointer			const_pointer;
 		typedef typename ft::iterator							iterator;
 		typedef typename ft::const_iterator						const_iterator;
-		// typedef typename ft::reverse_iterator<iterator>		reverse_iterator;
-		// typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+		typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
+		typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 		typedef typename allocator_type::difference_type		difference_type;
 		typedef typename allocator_type::size_type				size_type;
-
-//Iterator--------------------------------------------------------------------//
-		class	iterator
-		{
-			private:
-				pointer	_ptr;
-
-			public:
-				iterator() : _ptr(nullptr) {}
-				iterator(pointer ptr) : _ptr(ptr) {}
-				~iterator() {}
-
-				typedef value_type = T;
-				typedef reference = T&;
-				typedef pointer = T*;
-				typedef difference_type = ptrdiff_t;
-				// typedef iterator_category = std::random_access_iterator_tag;
-
-		};
 
 	private:
 		value_type*		_data;
@@ -61,6 +43,7 @@ namespace ft
 		}
 
 	public:
+
 	//Constructor/Destructor--------------------------------------------------//
 		vector(void): _data(NULL), _size(0), _capacity(0){realloc(2);}
 		~vector(){}
