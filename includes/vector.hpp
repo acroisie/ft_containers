@@ -1,9 +1,9 @@
 #pragma		once
 
 #include	<memory>
-#include	"../includes/iterator.hpp"
+#include	"random_access_iterator.hpp"
 
-namespace ft
+namespace	ft
 {
 	template <class T, class Allocator = std::allocator<T> >
 	class vector
@@ -15,10 +15,10 @@ namespace ft
 		typedef typename allocator_type::const_reference		const_reference;
 		typedef typename allocator_type::pointer				pointer;
 		typedef typename allocator_type::const_pointer			const_pointer;
-		typedef typename ft::iterator							iterator;
-		typedef typename ft::const_iterator						const_iterator;
-		typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
-		typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+		typedef typename ft::random_access_iterator<value_type>	iterator;
+		// typedef typename ft::const_iterator						const_iterator;
+		// typedef typename ft::reverse_iterator<iterator>			reverse_iterator;
+		// typedef typename ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 		typedef typename allocator_type::difference_type		difference_type;
 		typedef typename allocator_type::size_type				size_type;
 
@@ -28,8 +28,8 @@ namespace ft
 		size_type		_capacity;
 		allocator_type	_alloc;
 
-//Member functions------------------------------------------------------------//
-		void					realloc (size_type newCapacity)
+//Member functions -----------------------------------------------------------//
+		void	realloc(size_type newCapacity) //Or Reserve ??
 		{
 			T* newData = _alloc.allocate(newCapacity);
 			// _alloc.construct(newData, );
@@ -43,29 +43,52 @@ namespace ft
 		}
 
 	public:
+	//Constructor/Destructor -------------------------------------------------//
+		//Default ------------------------------------------------------------//
+		explicit	vector(const allocator_type& alloc = allocator_type())
+		: _data(NULL), _size(0), _capacity(0), _alloc(alloc) {}
 
-	//Constructor/Destructor--------------------------------------------------//
-		vector(void): _data(NULL), _size(0), _capacity(0){realloc(2);}
+		//Fill ---------------------------------------------------------------//
+		// explicit	vector(size_type n, const value_type& val = value_type(), 
+		// const allocator_type& alloc = allocator_type())
+		// : _data(NULL), _size(0), _capacity(0), _alloc(alloc)
+		// {
+		// 	assign(n, val);
+		// }
+
+		//Range --------------------------------------------------------------//
+		// template <class InputIterator>	vector(InputIterator first, InputIterator last,
+		// const allocator_type& alloc = allocator_type())
+		// : _data(NULL), _size(0), _capacity(0), _alloc(alloc)
+		// {
+		// 	assign(first, last);
+		// }
+
+		//Copy ---------------------------------------------------------------//
+		vector(const vector& x) {return (*this = x);}
+
 		~vector(){}
-		vector&					operator= (const vector& x) // To modify with deep copy i think
+		
+		vector&	operator=(const vector& x) // To modify with deep copy i think
 		{
 			_data = x._data;
 			_size = x._size;
 			_capacity = x._capacity;
+			_alloc = x._alloc;
 			return (*this);
 		}
 
-	//Iterators---------------------------------------------------------------//
-		iterator				begin(){return (iterator(_data));}
-		const_iterator			begin() const {return const_iterator((_data));}
+	//Iterators --------------------------------------------------------------//
+		iterator				begin() {return (iterator(_data));}
+		// const_iterator			begin() const {return const_iterator((_data));}
 		iterator				end(){return (iterator(_data + _size));}
-		const_iterator			end() const {return const_iterator((_data + _size));}
-		reverse_iterator		rbegin() {return (this->end);}
-		const_reverse_iterator	rbegin() const {return (this->end);}
-		reverse_iterator 		rend(){return (reverse_iterator(_data));}
-		const_reverse_iterator	rend() const {return const_reverse_iterator((_data));}
+		// const_iterator			end() const {return const_iterator((_data + _size));}
+		// reverse_iterator		rbegin() {return (this->end);}
+		// const_reverse_iterator	rbegin() const {return (this->end);}
+		// reverse_iterator 		rend() {return (reverse_iterator(_data));}
+		// const_reverse_iterator	rend() const {return const_reverse_iterator((_data));}
 
-	//Capacity----------------------------------------------------------------//
+	//Capacity ---------------------------------------------------------------//
 		size_type				size() const {return(_size);}
 		size_type				max_size() const {return(_alloc.max_size());}
 		void					resize(size_type n, value_type val = value_type()); //To define
@@ -87,7 +110,7 @@ namespace ft
 				realloc(_size);
 		}
 
-	//Element access----------------------------------------------------------//
+	//Element access ---------------------------------------------------------//
 		reference				operator[](size_type n) {return(_data[n]);}
 		const_reference			operator[](size_type n) const {return(_data[n]);}
 		reference				at(size_type n)
@@ -109,7 +132,7 @@ namespace ft
 		value_type* 			data() {return(&_data[0]);}
 		const value_type*		data() const {return(&_data[0]);}
 
-	//Modifiers---------------------------------------------------------------//
+	//Modifiers --------------------------------------------------------------//
 		void					push_back(const_reference value)
 		{
 			if (_size == _capacity)
@@ -117,7 +140,7 @@ namespace ft
 			_data[_size++] = value;
 		}
 
-	//Allocator---------------------------------------------------------------//
+	//Allocator --------------------------------------------------------------//
 
 	};
 }
