@@ -5,8 +5,8 @@
 namespace	ft
 {
 	template<class T>
-	class	ra_iterator:
-	public ft::iterator<std::random_access_iterator_tag, T>
+	class	random_access_iterator:
+	public	ft::iterator<std::random_access_iterator_tag, T>
 	{
 	public:
 		typedef typename ft::iterator<std::random_access_iterator_tag, T>
@@ -26,18 +26,35 @@ namespace	ft
 	public:
 //Property -------------------------------------------------------------------//
 	//Constructor/Destructor -------------------------------------------------//
-		ra_iterator(): _ptr(NULL) {}
-		ra_iterator(pointer ptr): _ptr(ptr) {}
-		ra_iterator(const ra_iterator& cpy) {*this = cpy;}
-		~ra_iterator() {}
-		ra_iterator&	operator=(const ra_iterator obj)
+		random_access_iterator(): _ptr(NULL) {}
+		random_access_iterator(pointer ptr): _ptr(ptr) {}
+		random_access_iterator(const random_access_iterator& cpy) {*this = cpy;}
+		~random_access_iterator() {}
+		random_access_iterator&	operator=(const random_access_iterator obj)
 		{
 			_ptr = obj._ptr;
 			return (*this);
 		}
 
 	//Equality/Inequality ----------------------------------------------------//
-	bool	operator==(ra_iterator const &obj) const {return (_ptr == obj._ptr);}
-	bool	operator!=(ra_iterator const &obj) const {return (_ptr != obj._ptr);}
+		// bool	operator==(const random_access_iterator &lhs, const random_access_iterator &rhs) const
+		// {return (lhs._ptr == rhs._ptr);}
+		// bool	operator!=(const random_access_iterator &lhs, const random_access_iterator &rhs) const 
+		// {return (lhs._ptr != rhs._ptr);}
+
+	//Dereferenced -----------------------------------------------------------//
+		reference	operator*() const {return (*_ptr);}
+		pointer		operator->() const {return (_ptr);}
+
+		random_access_iterator	operator++(int)
+		{
+			_ptr++;
+			return (random_access_iterator cpy(*this));
+		}
+		random_access_iterator& operator++()
+		{
+			_ptr++;
+			return (*this);
+		}
 	};
 }

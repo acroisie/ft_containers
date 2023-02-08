@@ -17,8 +17,6 @@ int	main(void)
 	ft::vector<std::string> strVector2;
 	ft::vector<std::string> emptyVector;
 
-
-
 	strVector.push_back("1rst");
 	strVector.push_back("2nd");
 	strVector.push_back("3rd");
@@ -49,7 +47,14 @@ int	main(void)
 	for (unsigned i=0; i<strVector2.size(); ++i)
 		std::cout << ' ' << strVector2[i] << std::endl;
 
+	std::vector<std::string> lol(2, "test2");
+	std::vector<std::string>::iterator it = lol.begin();
+	*it = "test1";
+	std::cout << *it << std::endl;
+	it++;
+	std::cout << *it << std::endl;
 	// ft::vector<std::string>::iterator test = strVector.begin();
-	// std::cout << test << std::endl;
+	// std::cout << *test << std::endl;
+
 	return (0);
 }

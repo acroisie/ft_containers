@@ -81,7 +81,7 @@ namespace	ft
 	//Iterators --------------------------------------------------------------//
 		iterator				begin() {return (iterator(_data));}
 		// const_iterator			begin() const {return const_iterator((_data));}
-		iterator				end(){return (iterator(_data + _size));}
+		iterator				end(){return (iterator(_data + (_size - 1)));}
 		// const_iterator			end() const {return const_iterator((_data + _size));}
 		// reverse_iterator		rbegin() {return (this->end);}
 		// const_reverse_iterator	rbegin() const {return (this->end);}
