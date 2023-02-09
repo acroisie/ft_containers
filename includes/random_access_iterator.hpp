@@ -37,24 +37,42 @@ namespace	ft
 		}
 
 	//Equality/Inequality ----------------------------------------------------//
-		// bool	operator==(const random_access_iterator &lhs, const random_access_iterator &rhs) const
-		// {return (lhs._ptr == rhs._ptr);}
-		// bool	operator!=(const random_access_iterator &lhs, const random_access_iterator &rhs) const 
-		// {return (lhs._ptr != rhs._ptr);}
+		friend bool	operator==(const random_access_iterator &lhs,
+		const random_access_iterator &rhs) {return (lhs._ptr == rhs._ptr);}
+		friend bool	operator!=(const random_access_iterator &lhs,
+		const random_access_iterator &rhs) {return (lhs._ptr != rhs._ptr);}
 
-	//Dereferenced -----------------------------------------------------------//
+	//Dereference -----------------------------------------------------------//
 		reference	operator*() const {return (*_ptr);}
 		pointer		operator->() const {return (_ptr);}
 
+	//Increment -------------------------------------------------------------//
 		random_access_iterator	operator++(int)
 		{
+			random_access_iterator cpy(*this);
 			_ptr++;
-			return (random_access_iterator cpy(*this));
+			return (cpy);
 		}
 		random_access_iterator& operator++()
 		{
 			_ptr++;
 			return (*this);
 		}
+
+	//Decrement -------------------------------------------------------------//
+		random_access_iterator	operator--(int)
+		{
+			random_access_iterator cpy(*this);
+			_ptr--;
+			return (cpy);
+		}
+		random_access_iterator& operator--()
+		{
+			_ptr--;
+			return (*this);
+		}
+
+	//Arithmetic operators --------------------------------------------------//
+
 	};
 }

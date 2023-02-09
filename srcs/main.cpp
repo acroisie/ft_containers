@@ -13,6 +13,7 @@ void	printVector(const ft::vector<T>& vector)
 
 int	main(void)
 {
+	std::vector<std::string> V;
 	ft::vector<std::string> strVector;
 	ft::vector<std::string> strVector2;
 	ft::vector<std::string> emptyVector;
@@ -47,14 +48,19 @@ int	main(void)
 	for (unsigned i=0; i<strVector2.size(); ++i)
 		std::cout << ' ' << strVector2[i] << std::endl;
 
-	std::vector<std::string> lol(2, "test2");
-	std::vector<std::string>::iterator it = lol.begin();
-	*it = "test1";
-	std::cout << *it << std::endl;
-	it++;
-	std::cout << *it << std::endl;
-	// ft::vector<std::string>::iterator test = strVector.begin();
-	// std::cout << *test << std::endl;
+	ft::vector<std::string>::iterator test = strVector.begin();
+	std::cout << *test << std::endl;
+	// test++;
+	++test;
+	std::cout << *test << std::endl;
+	ft::vector<std::string>::iterator test2 = strVector.end();
+	if (test == test2)
+		std::cout << "Equal" << std::endl;
+	else
+		std::cout << "Not equal" << std::endl;
 
+	V.push_back("ki");
+	std::vector<std::string>::iterator it = V.begin();
+	it.base();
 	return (0);
 }
