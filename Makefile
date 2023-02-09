@@ -1,27 +1,28 @@
-CC = c++
-CFLAGS = -Wall -Werror -Wextra -std=c++98
-EXEC = ft_containers
-SRC_DIR = srcs
-OBJ_DIR = srcs/objs
-INC_DIR = includes
+CC			:= c++
+CC_FLAGS	:= -Wall -Werror -Wextra -std=c++98
+NAME		:= ft_containers
+OBJS_DIR 	:= srcs/objs/
+SRCS_DIR	:= srcs/
+SOURCES		:= $(wildcard $(SRCS_DIR)*.cpp)
+OBJECTS		:= $(SOURCES:$(SRCS_DIR)%.cpp=$(OBJS_DIR)%.o)
+INC_DIR		:= includes/
+INCLUDES	:= $(wildcard $(INC_DIR)*.hpp)
 
-SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
-OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
+all: $(NAME)
+$(NAME): $(OBJS_DIR) $(OBJECTS)
+	$(CC) -o $@ $(OBJECTS) $(CC_FLAGS)
 
-all: $(EXEC)
+$(OBJS_DIR):
+	@mkdir -p $@
 
-$(EXEC): $(OBJECTS)
-	$(CC) $(CFLAGS) $^ -o $@
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
+$(OBJS_DIR)%.o: $(SRCS_DIR)%.cpp $(INCLUDES) Makefile | $(OBJS_DIR)
+	$(CC) $(CC_FLAGS) -c $< -o $@ -I $(INC_DIR)
 
 clean:
-	rm -rf $(OBJ_DIR)
+	rm -rf $(OBJS_DIR)
 
 fclean: clean
-	rm -f $(EXEC)
+	rm -f $(NAME)
 
 re: fclean all
 
