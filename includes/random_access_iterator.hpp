@@ -28,7 +28,8 @@ namespace	ft
 	//Constructor/Destructor -------------------------------------------------//
 		random_access_iterator(): _ptr(NULL) {}
 		random_access_iterator(pointer ptr): _ptr(ptr) {}
-		random_access_iterator(const random_access_iterator& cpy): _ptr(cpy._ptr) {}
+		random_access_iterator(const random_access_iterator& cpy)
+		: _ptr(cpy._ptr) {}
 		~random_access_iterator() {}
 		random_access_iterator&	operator=(const random_access_iterator& obj)
 		{
@@ -107,6 +108,10 @@ namespace	ft
 		random_access_iterator &rhs) {return (lhs._ptr <= rhs._ptr);}
 		friend bool	operator>=(const random_access_iterator &lhs,
 		random_access_iterator &rhs) {return (lhs._ptr >= rhs._ptr);}
+
+	//Assignment operations --------------------------------------------------//
+		random_access_iterator	operator+(int n) {return (_ptr + n);}
+		random_access_iterator	operator-(int n) {return (_ptr - n);}
 
 	};
 }
