@@ -32,7 +32,7 @@ namespace	ft
 
 	public:
 //Member functions -----------------------------------------------------------//
-	//Constructor/Destructor -------------------------------------------------//
+	//Constructor/Destructor/Assign content ----------------------------------//
 		//Default ------------------------------------------------------------//
 		explicit	vector(const allocator_type& alloc = allocator_type())
 		: _data(NULL), _size(0), _capacity(0), _alloc(alloc) {}
@@ -74,10 +74,10 @@ namespace	ft
 	//Iterators --------------------------------------------------------------//
 		iterator				begin() {return (iterator(_data));}
 		// const_iterator			begin() const {return const_iterator((_data));}
-		iterator				end() {return (iterator(_data + (_size - 1)));}
+		iterator				end() {return (iterator((_data + _size) - 1));}
 		// const_iterator			end() const {return const_iterator((_data + _size));}
-		// reverse_iterator		rbegin() {return (this->end);}
-		// const_reverse_iterator	rbegin() const {return (this->end);}
+		// reverse_iterator		rbegin() {return ((_data + _size));}
+		// const_reverse_iterator	rbegin() const {return ((_data + _size));}
 		// reverse_iterator 		rend() {return (reverse_iterator(_data));}
 		// const_reverse_iterator	rend() const {return const_reverse_iterator((_data));}
 
@@ -94,7 +94,7 @@ namespace	ft
 		}
 		void 					reserve (size_type n)
 		{
-			std::cout << "Debug :" << n << std::endl;
+			std::cout << "Debug :" << n << std::endl; //Debug
 			// if (n <= _capacity)
 			// 	return;
 			value_type* newData = _alloc.allocate(n);
@@ -135,15 +135,9 @@ namespace	ft
 		const value_type*		data() const {return(&_data[0]);}
 
 	//Modifiers --------------------------------------------------------------//
-		// template <class InputIterator>
-		// void					assign(InputIterator first, InputIterator last)
-		// {
-
-		// }
-		// void					assign(size_type n, const value_type& val)
-		// {
-			
-		// }
+		template <class InputIterator>
+		void					assign(InputIterator first, InputIterator last);
+		void					assign(size_type n, const value_type& val);
 		void					push_back(const_reference value)
 		{
 			if (_size == _capacity)
@@ -152,10 +146,33 @@ namespace	ft
 					_capacity = 1;
 				reserve(_capacity * 2);
 			}
-			_data[_size++] = value;
+			_alloc.construct((_data + _size++), value);
+		}
+		void					pop_back()
+		{
+			if (_size != 0)
+				_alloc.destroy((_data + _size--) - 1);
+		}
+		iterator				insert (iterator position, const value_type& val);
+		void					insert (iterator position, size_type n, const value_type& val);
+		template <class InputIterator>
+		void					insert (iterator position, InputIterator first, InputIterator last);
+		iterator				erase (iterator position);
+		iterator				erase (iterator first, iterator last);
+		void					swap (vector& x)
+		{
+			vector	tmp(this*);
+			this* = x;
+			x = tmp;
+		}
+		void					clear()
+		{
+			for (size_type i = 0; i < _size; i++)
+				_alloc.destroy(_data[i]);
+			_size = 0;
 		}
 
 	//Allocator --------------------------------------------------------------//
-
+		allocator_type			get_allocator() const {return(_alloc);};
 	};
 }
