@@ -62,7 +62,7 @@ namespace	ft
 
 		~vector(){}
 		
-		vector&	operator=(const vector& x) // To modify with deep copy i think ?
+		vector&	operator=(const vector& x) // To modify with deep copy
 		{
 			_data = x._data;
 			_size = x._size;
@@ -135,9 +135,9 @@ namespace	ft
 		const value_type*		data() const {return(&_data[0]);}
 
 	//Modifiers --------------------------------------------------------------//
-		template <class InputIterator>
-		void					assign(InputIterator first, InputIterator last);
-		void					assign(size_type n, const value_type& val);
+		// template <class InputIterator>
+		// void					assign(InputIterator first, InputIterator last);
+		// void					assign(size_type n, const value_type& val);
 		void					push_back(const_reference value)
 		{
 			if (_size == _capacity)
@@ -153,16 +153,16 @@ namespace	ft
 			if (_size != 0)
 				_alloc.destroy((_data + _size--) - 1);
 		}
-		iterator				insert (iterator position, const value_type& val);
-		void					insert (iterator position, size_type n, const value_type& val);
-		template <class InputIterator>
-		void					insert (iterator position, InputIterator first, InputIterator last);
-		iterator				erase (iterator position);
-		iterator				erase (iterator first, iterator last);
+		// iterator				insert (iterator position, const value_type& val);
+		// void					insert (iterator position, size_type n, const value_type& val);
+		// template <class InputIterator>
+		// void					insert (iterator position, InputIterator first, InputIterator last);
+		// iterator				erase (iterator position);
+		// iterator				erase (iterator first, iterator last);
 		void					swap (vector& x)
 		{
-			vector	tmp(this*);
-			this* = x;
+			vector	tmp(*this);
+			*this = x;
 			x = tmp;
 		}
 		void					clear()

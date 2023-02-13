@@ -16,6 +16,7 @@ int	main(void)
 	std::vector<std::string> V;
 	ft::vector<std::string> strVector;
 	ft::vector<std::string> strVector2;
+	ft::vector<std::string> strVector3;
 	ft::vector<std::string> emptyVector;
 
 	strVector.push_back("1rst");
@@ -23,6 +24,11 @@ int	main(void)
 	strVector.push_back("3rd");
 	strVector.push_back("4rth");
 	strVector.push_back("5th");
+	strVector3.push_back("lol");
+	strVector3.push_back("Hola");
+	strVector3.push_back("mani");
+	strVector3.push_back("man");
+
 	printVector(strVector);
 	std::cout << "Capacity ; " << strVector.capacity() << std::endl;
 	strVector.shrink_to_fit();
@@ -61,6 +67,13 @@ int	main(void)
 		std::cout << "Equal" << std::endl;
 	else
 		std::cout << "Not equal" << std::endl;
+
+	printVector(strVector2);
+	strVector2.swap(strVector3);
+	printVector(strVector2);
+	printVector(strVector3);
+
+
 
 	return (0);
 }
