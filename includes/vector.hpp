@@ -1,6 +1,7 @@
 #pragma		once
 
 #include	<memory>
+#include	<iostream>
 #include	"random_access_iterator.hpp"
 
 namespace	ft
@@ -28,21 +29,9 @@ namespace	ft
 		size_type		_capacity;
 		allocator_type	_alloc;
 
-//Member functions -----------------------------------------------------------//
-		void	realloc(size_type newCapacity) //Or Reserve ??
-		{
-			T* newData = _alloc.allocate(newCapacity);
-			// _alloc.construct(newData, );
-	 		if (newCapacity < _size)
-				_size = newCapacity;
-			for (size_type i = 0; i < _size; i++)
-				newData[i] = _data[i];
-			_alloc.deallocate(_data, _capacity);
-			_data = newData;
-			_capacity = newCapacity;
-		}
 
 	public:
+//Member functions -----------------------------------------------------------//
 	//Constructor/Destructor -------------------------------------------------//
 		//Default ------------------------------------------------------------//
 		explicit	vector(const allocator_type& alloc = allocator_type())
@@ -53,7 +42,7 @@ namespace	ft
 		// const allocator_type& alloc = allocator_type())
 		// : _data(NULL), _size(0), _capacity(0), _alloc(alloc)
 		// {
-		// 	assign(n, val);
+			// assign(n, val);
 		// }
 
 		//Range --------------------------------------------------------------//
@@ -65,11 +54,15 @@ namespace	ft
 		// }
 
 		//Copy ---------------------------------------------------------------//
-		vector(const vector& x) {return (*this = x);}
+		// vector(const vector& x)
+		// : _data(NULL), _size(0), _capacity(0), _allocator(x._allocator)
+		// {
+		// 	return (*this = x);
+		// }
 
 		~vector(){}
 		
-		vector&	operator=(const vector& x) // To modify with deep copy i think
+		vector&	operator=(const vector& x) // To modify with deep copy i think ?
 		{
 			_data = x._data;
 			_size = x._size;
@@ -101,13 +94,22 @@ namespace	ft
 		}
 		void 					reserve (size_type n)
 		{
-			if (n > _size)
-				realloc(n);
+			std::cout << "Debug :" << n << std::endl;
+			// if (n <= _capacity)
+			// 	return;
+			value_type* newData = _alloc.allocate(n);
+			for (size_type i = 0; i < _size; i++)
+				_alloc.construct((newData + i), _data[i]);
+			for (size_type i = 0; i < _size; i++)
+				_alloc.destroy(_data + i);
+			_alloc.deallocate(_data, _capacity);
+			_data = newData;
+			_capacity = n;
 		}
 		void					shrink_to_fit()
 		{
 			if (_capacity > _size)
-				realloc(_size);
+				reserve(_size);
 		}
 
 	//Element access ---------------------------------------------------------//
@@ -133,10 +135,23 @@ namespace	ft
 		const value_type*		data() const {return(&_data[0]);}
 
 	//Modifiers --------------------------------------------------------------//
+		// template <class InputIterator>
+		// void					assign(InputIterator first, InputIterator last)
+		// {
+
+		// }
+		// void					assign(size_type n, const value_type& val)
+		// {
+			
+		// }
 		void					push_back(const_reference value)
 		{
 			if (_size == _capacity)
-				vector::realloc(_capacity * 2);
+			{
+				if (_capacity == 0)
+					_capacity = 1;
+				reserve(_capacity * 2);
+			}
 			_data[_size++] = value;
 		}
 

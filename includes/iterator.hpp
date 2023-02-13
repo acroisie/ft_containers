@@ -1,5 +1,7 @@
 #pragma		once
 
+#include <cstddef>
+
 namespace	ft
 {
 	template	<class Category, class T, class Distance = ptrdiff_t,
