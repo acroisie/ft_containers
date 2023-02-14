@@ -94,7 +94,6 @@ namespace	ft
 		}
 		void 					reserve (size_type n)
 		{
-			std::cout << "Debug :" << n << std::endl; //Debug
 			// if (n <= _capacity)
 			// 	return;
 			value_type* newData = _alloc.allocate(n);
@@ -157,8 +156,22 @@ namespace	ft
 		// void					insert (iterator position, size_type n, const value_type& val);
 		// template <class InputIterator>
 		// void					insert (iterator position, InputIterator first, InputIterator last);
-		// iterator				erase (iterator position);
-		// iterator				erase (iterator first, iterator last);
+		iterator				erase (iterator position)
+		{
+			for (; position != (_data + _size); position++)
+			{
+				_alloc.destroy(position);
+				_size--;
+			}
+		}
+		iterator				erase (iterator first, iterator last)
+		{
+			for (; first != last; first++)
+			{
+				_alloc.destroy(first);
+				_size--;
+			}
+		}
 		void					swap (vector& x)
 		{
 			vector	tmp(*this);

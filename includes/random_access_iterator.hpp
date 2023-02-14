@@ -75,10 +75,10 @@ namespace	ft
 
 	//Arithmetic operators ---------------------------------------------------//
 		friend random_access_iterator	
-		operator+(random_access_iterator rhs, int n)
+		operator+(random_access_iterator lhs, int n)
 		{
-			rhs._ptr += n;
-			return (rhs);
+			lhs._ptr += n;
+			return (lhs);
 		}
 		friend random_access_iterator	
 		operator+(int n, random_access_iterator rhs)
@@ -87,10 +87,10 @@ namespace	ft
 			return (rhs);
 		}
 		friend random_access_iterator	
-		operator-(random_access_iterator rhs, int n)
+		operator-(random_access_iterator lhs, int n)
 		{
-			rhs._ptr -= n;
-			return (rhs);
+			lhs._ptr -= n;
+			return (lhs);
 		}
 		friend random_access_iterator	
 		operator-(int n, random_access_iterator rhs)
