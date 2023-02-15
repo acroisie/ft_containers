@@ -31,7 +31,7 @@ int	main(void)
 
 	printVector(strVector);
 	std::cout << "Capacity ; " << strVector.capacity() << std::endl;
-	strVector.shrink_to_fit();
+
 	std::cout << "Capacity ; " << strVector.capacity() << std::endl;
 
 	strVector2 = strVector;

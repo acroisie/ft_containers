@@ -4,9 +4,9 @@
 
 namespace	ft
 {
-	template<class T>
-	class	random_access_iterator:
-	public	ft::iterator<std::random_access_iterator_tag, T>
+	template	<class T>
+	class		random_access_iterator:
+	public		ft::iterator<std::random_access_iterator_tag, T>
 	{
 	public:
 		typedef typename ft::iterator<std::random_access_iterator_tag, T>
@@ -24,19 +24,22 @@ namespace	ft
 		pointer	_ptr;
 
 	public:
-//Property -------------------------------------------------------------------//
-	//Constructor/Destructor -------------------------------------------------//
+//Member function ------------------------------------------------------------//
+		random_access_iterator base() const {return (_ptr);}
+	//Constructor/Destructor/Assign content ----------------------------------//
 		random_access_iterator(): _ptr(NULL) {}
 		random_access_iterator(pointer ptr): _ptr(ptr) {}
 		random_access_iterator(const random_access_iterator& cpy)
 		: _ptr(cpy._ptr) {}
 		~random_access_iterator() {}
+
 		random_access_iterator&	operator=(const random_access_iterator& obj)
 		{
 			_ptr = obj._ptr;
 			return (*this);
 		}
-
+		
+//Property -------------------------------------------------------------------//
 	//Equality/Inequality ----------------------------------------------------//
 		friend bool	operator==(const random_access_iterator &lhs,
 		random_access_iterator &rhs) {return (lhs._ptr == rhs._ptr);}
