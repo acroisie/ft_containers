@@ -1,10 +1,10 @@
-#pragma		once
+#pragma			once
 
-#include	<memory>
-#include	"random_access_iterator.hpp"
-#include	"reverse_iterator.hpp"
+#include		<memory>
+#include		"random_access_iterator.hpp"
+#include		"reverse_iterator.hpp"
 
-namespace	ft
+namespace		ft
 {
 	template	<class T, class Allocator = std::allocator<T> >
 	class		vector
@@ -29,20 +29,36 @@ namespace	ft
 		size_type		_capacity;
 		allocator_type	_alloc;
 
-
 	public:
 //Member functions -----------------------------------------------------------//
 	//Constructor/Destructor/Assign content ----------------------------------//
+		vector() {}
 		explicit	vector(const allocator_type& alloc = allocator_type())
 		: _data(NULL), _size(0), _capacity(0), _alloc(alloc) {}
+		explicit	vector(size_type count,  const T& value = T(),
+                 const Allocator& alloc = Allocator())
+		{
+			assign(n, val);
+		}
+		template<class InputIt>	vector(InputIt first, InputIt last, 
+        const Allocator& alloc = Allocator())
+		{
+			assign(first, last);
+		}
+		vector(const vector& other)
+		: _data(NULL), _size(other._size), _capacity(other._capacity), _alloc(other._alloc)
+		{
+			*this = other;
+		}
 		~vector(){}
 
-		vector&	operator=(const vector& x) // To modify with deep copy
+		vector&	operator=(const vector& x)
 		{
-			_data = x._data;
-			_size = x._size;
-			_capacity = x._capacity;
-			_alloc = x._alloc;
+			if (x._capacity > 0)
+			{
+				reserve(x._capacity);
+				assign(x.begin(), x.end());
+			}
 			return (*this);
 		}
 
@@ -104,11 +120,13 @@ namespace	ft
 		const value_type*		data() const {return(&_data[0]);}
 
 	//Modifiers --------------------------------------------------------------//
-		// template <class InputIterator>
-		// void					assign(InputIterator first, InputIterator last)
-		// {
-			
-		// }
+		template <class InputIterator>
+		void					assign(InputIterator first, InputIterator last)
+		{
+			clear();
+			for (; first != last; ++first)
+				push_back(*first);
+		}
 		void					assign(size_type n, const value_type& val)
 		{
 			if (n <= 0)

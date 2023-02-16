@@ -25,7 +25,7 @@ namespace	ft
 
 	public:
 //Member function ------------------------------------------------------------//
-		random_access_iterator base() const {return (_ptr);}
+		// random_access_iterator base() const {return (_ptr);}
 	//Constructor/Destructor/Assign content ----------------------------------//
 		random_access_iterator(): _ptr(NULL) {}
 		random_access_iterator(pointer ptr): _ptr(ptr) {}

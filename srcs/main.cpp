@@ -13,11 +13,11 @@ void	printVector(const ft::vector<T>& vector)
 
 int	main(void)
 {
-	std::vector<std::string> V;
-	ft::vector<std::string> strVector;
-	ft::vector<std::string> strVector2;
-	ft::vector<std::string> strVector3;
-	ft::vector<std::string> emptyVector;
+	std::vector<std::string>	V;
+	ft::vector<std::string>		strVector;
+	ft::vector<std::string>		strVector2;
+	ft::vector<std::string>		strVector3;
+	ft::vector<std::string>		emptyVector;
 
 	strVector.push_back("1rst");
 	strVector.push_back("2nd");
