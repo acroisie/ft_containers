@@ -39,9 +39,9 @@ namespace		ft
 
 	//Dereference ------------------------------------------------------------//
 		template<class U>
-		reference 			operator*() const {Iter tmp = _it; return (*--tmp);};
+		reference 			operator*() const {Iter tmp = _it; return (*--tmp);}
 		pointer 			operator->() const {return std::addressof(operator*());}
-		reference 			operator[]( difference_type n ) const {return (base()[-n - 1]);}
+		reference 			operator[](difference_type n) const {return (base()[-n - 1]);}
 
 	//Increment --------------------------------------------------------------//
 		reverse_iterator&	operator++() {return (--_it);}
@@ -56,7 +56,7 @@ namespace		ft
 			_it -= n;
 			return (*this);
 		}
-		reverse_iterator	operator+(difference_type n) const {return (_it - n);};
+		reverse_iterator	operator+(difference_type n) const {return (_it - n);}
 
 	//Decrement --------------------------------------------------------------//
 		reverse_iterator&	operator--() {return (++_it);}
@@ -71,7 +71,7 @@ namespace		ft
 			_it -= n;
 			return (*this);
 		}
-		reverse_iterator	operator-(difference_type n) const {return (_it + n);};
+		reverse_iterator	operator-(difference_type n) const {return (_it + n);}
 
 	};
 }
@@ -121,7 +121,7 @@ namespace		ft
 	operator+(typename ft::reverse_iterator<Iter>::difference_type n,
 				const ft::reverse_iterator<Iter>& it)
 	{
-		return (reverse_iterator<Iter>(it.base() - n));
+		return (ft::reverse_iterator<Iter>(it.base() - n));
 	}
 	template< class Iterator1, class Iterator2 >
 	typename ft::reverse_iterator<Iterator1>::difference_type 

@@ -19,6 +19,8 @@ namespace	ft
 		::reference			reference;
 		typedef typename ft::iterator<std::random_access_iterator_tag, T>
 		::iterator_category	iterator_category;
+		operator random_access_iterator<const T> () const
+		{return (random_access_iterator<const T>(_ptr));}
 
 	private:
 		pointer	_ptr;
@@ -49,6 +51,7 @@ namespace	ft
 	//Dereference ------------------------------------------------------------//
 		reference	operator*() const {return (*_ptr);}
 		pointer		operator->() const {return (_ptr);}
+		reference	operator[](difference_type n) const {return (*(_ptr + n));}
 
 	//Increment --------------------------------------------------------------//
 		random_access_iterator	operator++(int)
@@ -60,6 +63,11 @@ namespace	ft
 		random_access_iterator&	operator++()
 		{
 			_ptr++;
+			return (*this);
+		}
+		random_access_iterator&	operator+=(difference_type n)
+		{
+			_ptr += n;
 			return (*this);
 		}
 
@@ -75,31 +83,40 @@ namespace	ft
 			_ptr--;
 			return (*this);
 		}
+		random_access_iterator&	operator-=(difference_type n)
+		{
+			_ptr -= n;
+			return (*this);
+		}
 
 	//Arithmetic operators ---------------------------------------------------//
 		friend random_access_iterator	
 		operator+(random_access_iterator lhs, int n)
 		{
-			lhs._ptr += n;
-			return (lhs);
+			random_access_iterator	cpy(lhs);
+			cpy += n;
+			return (cpy);
 		}
 		friend random_access_iterator	
 		operator+(int n, random_access_iterator rhs)
 		{
-			rhs._ptr += n;
-			return (rhs);
+			random_access_iterator	cpy(rhs);
+			cpy += n;
+			return (cpy);
 		}
 		friend random_access_iterator	
 		operator-(random_access_iterator lhs, int n)
 		{
-			lhs._ptr -= n;
-			return (lhs);
+			random_access_iterator	cpy(lhs);
+			cpy -= n;
+			return (cpy);
 		}
 		friend random_access_iterator	
 		operator-(int n, random_access_iterator rhs)
 		{
-			rhs._ptr += n;
-			return (rhs);
+			random_access_iterator	cpy(rhs);
+			cpy -= n;
+			return (cpy);
 		}
 
 	//Inequality relational operators ----------------------------------------//

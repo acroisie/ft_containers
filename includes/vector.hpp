@@ -32,26 +32,37 @@ namespace		ft
 	public:
 //Member functions -----------------------------------------------------------//
 	//Constructor/Destructor/Assign content ----------------------------------//
-		vector() {}
+		//Default ------------------------------------------------------------//
 		explicit	vector(const allocator_type& alloc = allocator_type())
 		: _data(NULL), _size(0), _capacity(0), _alloc(alloc) {}
+
+		//Fill  --------------------------------------------------------------//
 		explicit	vector(size_type count,  const T& value = T(),
-                 const Allocator& alloc = Allocator())
+        const Allocator& alloc = Allocator())
+		: _data(NULL), _size(0), _capacity(0), _alloc(alloc)
 		{
-			assign(n, val);
+			assign(count, value);
 		}
+
+		//Range --------------------------------------------------------------//
 		template<class InputIt>	vector(InputIt first, InputIt last, 
         const Allocator& alloc = Allocator())
+		: _data(NULL), _size(0), _capacity(0), _alloc(alloc)
 		{
 			assign(first, last);
 		}
+
+		//Copy ---------------------------------------------------------------//
 		vector(const vector& other)
 		: _data(NULL), _size(other._size), _capacity(other._capacity), _alloc(other._alloc)
 		{
 			*this = other;
 		}
+
+		//Destructor ---------------------------------------------------------//
 		~vector(){}
 
+		//Assign operator ----------------------------------------------------//
 		vector&	operator=(const vector& x)
 		{
 			if (x._capacity > 0)
@@ -75,7 +86,7 @@ namespace		ft
 	//Capacity ---------------------------------------------------------------//
 		size_type				size() const {return(_size);}
 		size_type				max_size() const {return(_alloc.max_size());}
-		void					resize(size_type n, value_type val = value_type()); //To define
+		// void					resize(size_type n, value_type val = value_type()); //To define
 		size_type				capacity() const {return(_capacity);}
 		bool					empty() const
 		{
@@ -181,7 +192,7 @@ namespace		ft
 		void					clear()
 		{
 			for (size_type i = 0; i < _size; i++)
-				_alloc.destroy(_data[i]);
+				_alloc.destroy(_data + i);
 			_size = 0;
 		}
 
