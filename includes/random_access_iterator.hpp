@@ -117,6 +117,10 @@ namespace	ft
 			cpy -= n;
 			return (cpy);
 		}
+		difference_type operator-(const random_access_iterator& lhs) const
+		{
+        return (_ptr - lhs._ptr);
+		}
 
 	//Inequality relational operators ----------------------------------------//
 		friend bool	operator<(const random_access_iterator &lhs,

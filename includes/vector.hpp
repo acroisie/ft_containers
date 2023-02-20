@@ -155,7 +155,7 @@ namespace		ft
 			for (; first != last; ++first)
 				push_back(*first);
 		}
-		void					assign(size_type n, const value_type& val)
+		void					assign(size_type n, const_reference val)
 		{
 			if (n <= 0)
 				return;
@@ -180,27 +180,76 @@ namespace		ft
 			if (_size != 0)
 				_alloc.destroy((_data + _size--) - 1);
 		}
-		// iterator				insert (iterator position, const value_type& val);
-		// void					insert (iterator position, size_type n, const value_type& val);
-		// template <class InputIterator>
-		// void					insert (iterator position, InputIterator first, InputIterator last);
-		iterator				erase (iterator position)
+		iterator				insert(iterator position, const_reference val)
 		{
-			for (; position != (_data + _size); position++)
+			size_t pos = 0;
+			for (iterator it = begin(); it != end(); ++it)
 			{
-				_alloc.destroy(position);
-				_size--;
+				if (it == position)
+				{
+					insert(position, 1, val);
+					return position;
+				}
+				pos++;
+			}
+			if (pos == _size)
+				push_back(val);
+			return (end());
+		}
+		void					insert(iterator position, size_type n, const_reference val)
+		{
+			iterator it = begin();
+			size_t pos = 0;
+			for (; it != end(); ++it)
+			{
+				if (it == position)
+				{
+					for (size_t i = 0; i < n; ++i)
+						insert(position, val);
+					return;
+				}
+				++pos;
+			}
+			if (pos == size())
+			{
+				for (size_t i = 0; i < n; ++i)
+					push_back(val);
 			}
 		}
-		iterator				erase (iterator first, iterator last)
+		template <class InputIterator>
+		void					insert(iterator position, typename ft::enable_if<
+		!ft::is_integral<InputIterator>::value, InputIterator>::type first,
+		InputIterator last)
 		{
-			for (; first != last; first++)
+			while (first != last)
 			{
-				_alloc.destroy(first);
-				_size--;
+				insert(position, *first);
+				first++;
 			}
 		}
-		void					swap (vector& x)
+		iterator				erase(iterator position)
+		{
+			for (iterator it = position; it != _data + _size; it++)
+			{
+				_alloc.destroy(&(*it));
+				_alloc.construct(&(*it), (*it + 1));
+			}
+			_size--;
+			return (position);
+		}
+		iterator				erase(iterator first, iterator last)
+		{
+			size_type range = last - first;
+			for (iterator it = first; it != last; it++)
+			{
+				_alloc.destroy(&(*it));
+				_alloc.construct(&(*it), (*it + range));
+			}
+
+			_size -= range;
+			return (first);
+		}
+		void					swap(vector& x)
 		{
 			vector	tmp(*this);
 			*this = x;
