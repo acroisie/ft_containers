@@ -147,7 +147,7 @@ namespace		ft
 
 	//Modifiers --------------------------------------------------------------//
 		template <class InputIterator>
-		void					assign (typename ft::enable_if
+		void					assign(typename ft::enable_if
 		<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
 		 InputIterator last)
 		{
@@ -229,10 +229,10 @@ namespace		ft
 		}
 		iterator				erase(iterator position)
 		{
-			for (iterator it = position; it != _data + _size; it++)
+			for (iterator it = position; it != _data + _size - 1; it++)
 			{
 				_alloc.destroy(&(*it));
-				_alloc.construct(&(*it), (*it + 1));
+				_alloc.construct(&(*it), *(it + 1));
 			}
 			_size--;
 			return (position);
@@ -240,12 +240,13 @@ namespace		ft
 		iterator				erase(iterator first, iterator last)
 		{
 			size_type range = last - first;
-			for (iterator it = first; it != last; it++)
+			for (iterator it = first; it != _data + _size - range; it++)
 			{
 				_alloc.destroy(&(*it));
-				_alloc.construct(&(*it), (*it + range));
+				_alloc.construct(&(*it), *(it + (int)range));
 			}
-
+			for (iterator it = _data + _size - range; it != _data + _size; it++)
+				_alloc.destroy(&(*it));
 			_size -= range;
 			return (first);
 		}

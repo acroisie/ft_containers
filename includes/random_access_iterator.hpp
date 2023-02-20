@@ -89,37 +89,33 @@ namespace	ft
 		}
 
 	//Arithmetic operators ---------------------------------------------------//
-		friend random_access_iterator	
+		friend random_access_iterator
 		operator+(const random_access_iterator lhs, difference_type n)
 		{
 			random_access_iterator	cpy(lhs);
 			cpy += n;
 			return (cpy);
 		}
-		friend random_access_iterator	
+		friend random_access_iterator
 		operator+(difference_type n, const random_access_iterator rhs)
 		{
 			random_access_iterator	cpy(rhs);
 			cpy += n;
 			return (cpy);
 		}
-		friend random_access_iterator	
+		friend random_access_iterator
 		operator-(const random_access_iterator lhs, difference_type n)
 		{
 			random_access_iterator	cpy(lhs);
 			cpy -= n;
 			return (cpy);
 		}
-		friend random_access_iterator	
+		friend random_access_iterator
 		operator-(difference_type n, const random_access_iterator rhs)
 		{
 			random_access_iterator	cpy(rhs);
 			cpy -= n;
 			return (cpy);
-		}
-		difference_type operator-(const random_access_iterator& lhs) const
-		{
-        return (_ptr - lhs._ptr);
 		}
 
 	//Inequality relational operators ----------------------------------------//
@@ -135,6 +131,10 @@ namespace	ft
 	//Assignment operations --------------------------------------------------//
 		random_access_iterator	operator+(int n) {return (_ptr + n);}
 		random_access_iterator	operator-(int n) {return (_ptr - n);}
+		difference_type 		operator-(const random_access_iterator& lhs) const
+		{
+			return (_ptr - lhs._ptr);
+		}
 
 	};
 }

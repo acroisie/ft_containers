@@ -40,7 +40,7 @@ namespace		ft
 	//Dereference ------------------------------------------------------------//
 		template<class U>
 		reference 			operator*() const {Iter tmp = _it; return (*--tmp);}
-		pointer 			operator->() const {return std::addressof(operator*());}
+		pointer 			operator->() const {return &(operator*());}
 		reference 			operator[](difference_type n) const {return (base()[-n - 1]);}
 
 	//Increment --------------------------------------------------------------//
