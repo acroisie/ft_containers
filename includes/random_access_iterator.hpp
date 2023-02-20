@@ -27,7 +27,6 @@ namespace	ft
 
 	public:
 //Member function ------------------------------------------------------------//
-		// random_access_iterator base() const {return (_ptr);}
 	//Constructor/Destructor/Assign content ----------------------------------//
 		random_access_iterator(): _ptr(NULL) {}
 		random_access_iterator(pointer ptr): _ptr(ptr) {}
@@ -44,9 +43,9 @@ namespace	ft
 //Property -------------------------------------------------------------------//
 	//Equality/Inequality ----------------------------------------------------//
 		friend bool	operator==(const random_access_iterator &lhs,
-		random_access_iterator &rhs) {return (lhs._ptr == rhs._ptr);}
+		const random_access_iterator &rhs) {return (lhs._ptr == rhs._ptr);}
 		friend bool	operator!=(const random_access_iterator &lhs,
-		random_access_iterator &rhs) {return (lhs._ptr != rhs._ptr);}
+		const random_access_iterator &rhs) {return (lhs._ptr != rhs._ptr);}
 
 	//Dereference ------------------------------------------------------------//
 		reference	operator*() const {return (*_ptr);}
@@ -91,28 +90,28 @@ namespace	ft
 
 	//Arithmetic operators ---------------------------------------------------//
 		friend random_access_iterator	
-		operator+(random_access_iterator lhs, int n)
+		operator+(const random_access_iterator lhs, difference_type n)
 		{
 			random_access_iterator	cpy(lhs);
 			cpy += n;
 			return (cpy);
 		}
 		friend random_access_iterator	
-		operator+(int n, random_access_iterator rhs)
+		operator+(difference_type n, const random_access_iterator rhs)
 		{
 			random_access_iterator	cpy(rhs);
 			cpy += n;
 			return (cpy);
 		}
 		friend random_access_iterator	
-		operator-(random_access_iterator lhs, int n)
+		operator-(const random_access_iterator lhs, difference_type n)
 		{
 			random_access_iterator	cpy(lhs);
 			cpy -= n;
 			return (cpy);
 		}
 		friend random_access_iterator	
-		operator-(int n, random_access_iterator rhs)
+		operator-(difference_type n, const random_access_iterator rhs)
 		{
 			random_access_iterator	cpy(rhs);
 			cpy -= n;
@@ -121,13 +120,13 @@ namespace	ft
 
 	//Inequality relational operators ----------------------------------------//
 		friend bool	operator<(const random_access_iterator &lhs,
-		random_access_iterator &rhs) {return (lhs._ptr < rhs._ptr);}
+		const random_access_iterator &rhs) {return (lhs._ptr < rhs._ptr);}
 		friend bool	operator>(const random_access_iterator &lhs,
-		random_access_iterator &rhs) {return (lhs._ptr > rhs._ptr);}
+		const random_access_iterator &rhs) {return (lhs._ptr > rhs._ptr);}
 		friend bool	operator<=(const random_access_iterator &lhs,
-		random_access_iterator &rhs) {return (lhs._ptr <= rhs._ptr);}
+		const random_access_iterator &rhs) {return (lhs._ptr <= rhs._ptr);}
 		friend bool	operator>=(const random_access_iterator &lhs,
-		random_access_iterator &rhs) {return (lhs._ptr >= rhs._ptr);}
+		const random_access_iterator &rhs) {return (lhs._ptr >= rhs._ptr);}
 
 	//Assignment operations --------------------------------------------------//
 		random_access_iterator	operator+(int n) {return (_ptr + n);}
