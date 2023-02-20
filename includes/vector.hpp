@@ -1,6 +1,7 @@
 #pragma			once
 
 #include		<memory>
+#include		<algorithm>
 #include		"random_access_iterator.hpp"
 #include		"reverse_iterator.hpp"
 #include		"enable_if.hpp"
@@ -168,11 +169,7 @@ namespace		ft
 		void					push_back(const_reference value)
 		{
 			if (_size == _capacity)
-			{
-				if (_capacity == 0)
-					_capacity = 1;
-				reserve(_capacity * 2);
-			}
+				reserve(_capacity ? _capacity * 2 : 1);
 			_alloc.construct((_data + _size++), value);
 		}
 		void					pop_back()
@@ -182,50 +179,49 @@ namespace		ft
 		}
 		iterator				insert(iterator position, const_reference val)
 		{
-			size_t pos = 0;
-			for (iterator it = begin(); it != end(); ++it)
+			if (position == end())
 			{
-				if (it == position)
-				{
-					insert(position, 1, val);
-					return position;
-				}
-				pos++;
-			}
-			if (pos == _size)
 				push_back(val);
-			return (end());
+				return (end() - 1);
+			}
+			size_t index = position - begin();
+			if (_size == _capacity)
+				reserve(_capacity ? _capacity * 2 : 1);
+			_alloc.construct(_data + _size++, back());
+			for (size_t i = _size - 1; i > index; i--)
+				_data[i] = _data[i - 1];
+			_alloc.destroy(_data + index);
+			_alloc.construct(_data + index, val);
+			return iterator(_data + index);
 		}
 		void					insert(iterator position, size_type n, const_reference val)
 		{
-			iterator it = begin();
-			size_t pos = 0;
-			for (; it != end(); ++it)
-			{
-				if (it == position)
-				{
-					for (size_t i = 0; i < n; ++i)
-						insert(position, val);
-					return;
-				}
-				++pos;
-			}
-			if (pos == size())
-			{
-				for (size_t i = 0; i < n; ++i)
-					push_back(val);
-			}
+			size_t index = position - begin();
+			if (_size + n > _capacity)
+				reserve(_size + n);
+			for (size_t i = _size + n - 1; i >= index + n; i--)
+				_data[i] = _data[i - n];
+			for (size_t i = index; i < index + n; i++)
+				_alloc.construct(_data + i, val);
+			_size += n;
 		}
 		template <class InputIterator>
 		void					insert(iterator position, typename ft::enable_if<
 		!ft::is_integral<InputIterator>::value, InputIterator>::type first,
 		InputIterator last)
 		{
-			while (first != last)
+			size_t n = std::distance(first, last);
+			size_t index = position - begin();
+			if (_size + n > _capacity)
+				reserve(_size + n);
+			for (size_t i = _size + n - 1; i >= index + n; i--)
+				_data[i] = _data[i - n];
+			for (size_t i = index; i < index + n; i++)
 			{
-				insert(position, *first);
-				first++;
+				_alloc.destroy(_data + i);
+				_alloc.construct(_data + i, *first++);
 			}
+			_size += n;
 		}
 		iterator				erase(iterator position)
 		{
@@ -252,9 +248,10 @@ namespace		ft
 		}
 		void					swap(vector& x)
 		{
-			vector	tmp(*this);
-			*this = x;
-			x = tmp;
+			std::swap(_data, x._data);
+			std::swap(_size, x._size);
+			std::swap(_capacity, x._capacity);
+			std::swap(_alloc, x._alloc);
 		}
 		void					clear()
 		{
