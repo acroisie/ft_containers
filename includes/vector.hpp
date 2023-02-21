@@ -124,7 +124,6 @@ namespace		ft
 			_capacity = n;
 		}
 
-
 	//Element access ---------------------------------------------------------//
 		reference				operator[](size_type n) {return(_data[n]);}
 		const_reference			operator[](size_type n) const {return(_data[n]);}
@@ -252,10 +251,20 @@ namespace		ft
 		}
 		void					swap(vector& x)
 		{
-			std::swap(_data, x._data);
-			std::swap(_size, x._size);
-			std::swap(_capacity, x._capacity);
-			std::swap(_alloc, x._alloc);
+			value_type*		tmpData = x._data;
+			size_type		tmpCapacity = x._capacity;
+			size_type		tmpSize = x._size;
+			allocator_type	tmpAlloc = x._alloc;
+
+			x._data = _data;
+			x._capacity = _capacity;
+			x._size = _size;
+			x._alloc = _alloc;
+
+			_data = tmpData;
+			_capacity = tmpCapacity;
+			_size = tmpSize;
+			_alloc = tmpAlloc;
 		}
 		void					clear()
 		{
@@ -300,13 +309,13 @@ namespace		ft
 		bool operator<=(const ft::vector<T, Alloc>& lhs,
 						const ft::vector<T, Alloc>& rhs )
 		{
-			return (!(lhs < rhs));
+			return (!(rhs < lhs));
 		}
 		template< class T, class Alloc >
 		bool operator>(const ft::vector<T, Alloc>& lhs,
 						const ft::vector<T, Alloc>& rhs )
 		{
-			return (lhs < rhs);
+			return (rhs < lhs);
 		}
 		template< class T, class Alloc >
 		bool operator>=(const ft::vector<T, Alloc>& lhs,
