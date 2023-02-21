@@ -95,10 +95,10 @@ namespace		ft
 			if (count > _capacity)
 				reserve(count);
 			if (count > size())
-				for (size_t i = size(); i < count; ++i)
+				for (size_t i = size(); i < count; i++)
 					push_back(value);
 			else
-				for (size_t i = size(); i > count; --i)
+				for (size_t i = size(); i > count; i--)
 					pop_back();
 		}
 		size_type				capacity() const {return(_capacity);}

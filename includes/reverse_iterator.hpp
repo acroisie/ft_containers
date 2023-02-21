@@ -21,10 +21,11 @@ namespace		ft
 
 	public:
 //Member functions -----------------------------------------------------------//
-	//Constructor/Destructor/Assign content ----------------------------------//
+	// //Constructor/Destructor/Assign content ----------------------------------//
 		reverse_iterator(): _it() {}
 		explicit reverse_iterator(iterator_type it):_it(it) {}
-		reverse_iterator(const reverse_iterator<Iter>& rev_it): _it(rev_it) {}
+		template <class Ite>
+		reverse_iterator(const reverse_iterator<Ite>& rev_it): _it(rev_it.base()) {}
 		~reverse_iterator() {}
 
 		template <class U>
@@ -44,11 +45,11 @@ namespace		ft
 		reference 			operator[](difference_type n) const {return (base()[-n - 1]);}
 
 	//Increment --------------------------------------------------------------//
-		reverse_iterator&	operator++() {return (--_it);}
+		reverse_iterator&	operator++() {return (_it--);}
 		reverse_iterator	operator++(int)
 		{
 			reverse_iterator cpy(*this);
-			--_it;
+			_it--;
 			return (cpy);
 		}
 		reverse_iterator&	operator+=(difference_type n)
@@ -59,11 +60,11 @@ namespace		ft
 		reverse_iterator	operator+(difference_type n) const {return (_it - n);}
 
 	//Decrement --------------------------------------------------------------//
-		reverse_iterator&	operator--() {return (++_it);}
+		reverse_iterator&	operator--() {return (_it++);}
 		reverse_iterator	operator--(int)
 		{
 			reverse_iterator cpy(*this);
-			++_it;
+			_it++;
 			return (cpy);
 		}
 		reverse_iterator&	operator-=(difference_type n)
