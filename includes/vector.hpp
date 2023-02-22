@@ -84,8 +84,8 @@ namespace		ft
 		const_iterator			end() const {return const_iterator(_data + _size);}
 		reverse_iterator		rbegin() {return reverse_iterator(_data + _size - 1);}
 		const_reverse_iterator	rbegin() const {return const_reverse_iterator(_data + _size - 1);}
-		reverse_iterator		rend() {return reverse_iterator(_data);}
-		const_reverse_iterator	rend() const {return const_reverse_iterator(_data);}
+		reverse_iterator		rend() {return reverse_iterator(_data - 1);}
+		const_reverse_iterator	rend() const {return const_reverse_iterator(_data - 1);}
 
 	//Capacity ---------------------------------------------------------------//
 		size_type				size() const {return(_size);}
