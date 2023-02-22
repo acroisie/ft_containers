@@ -135,13 +135,13 @@ namespace		ft
 
 	//Arithmetic operators ---------------------------------------------------//
 	template<class Iter>
-	typename reverse_iterator<Iter>::difference_type
+	reverse_iterator<Iter>
 	operator+(typename reverse_iterator<Iter>::difference_type n,
 				const reverse_iterator<Iter>& it)
 	{
 		return (reverse_iterator<Iter>(it.base() - n));
 	}
-	template< class Iterator1, class Iterator2 >
+	template<class Iterator1, class Iterator2>
 	typename reverse_iterator<Iterator1>::difference_type 
 	operator-(const reverse_iterator<Iterator1>& lhs,
 				const reverse_iterator<Iterator2>& rhs)

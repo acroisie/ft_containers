@@ -84,8 +84,8 @@ namespace		ft
 		const_iterator			end() const {return const_iterator(_data + _size);}
 		reverse_iterator		rbegin() {return reverse_iterator(_data + _size - 1);}
 		const_reverse_iterator	rbegin() const {return const_reverse_iterator(_data + _size - 1);}
-		reverse_iterator		rend() {return reverse_iterator(_data - 1);}
-		const_reverse_iterator	rend() const {return const_reverse_iterator(_data - 1);}
+		reverse_iterator		rend() {return reverse_iterator(_data);}
+		const_reverse_iterator	rend() const {return const_reverse_iterator(_data);}
 
 	//Capacity ---------------------------------------------------------------//
 		size_type				size() const {return(_size);}
@@ -95,10 +95,10 @@ namespace		ft
 			if (count > _capacity)
 				reserve(count);
 			if (count > size())
-				for (size_t i = size(); i < count; i++)
+				for (size_type i = size(); i < count; i++)
 					push_back(value);
 			else
-				for (size_t i = size(); i > count; i--)
+				for (size_type i = size(); i > count; i--)
 					pop_back();
 		}
 		size_type				capacity() const {return(_capacity);}
@@ -184,11 +184,11 @@ namespace		ft
 				push_back(val);
 				return (end() - 1);
 			}
-			size_t index = position - begin();
+			size_type index = position - begin();
 			if (_size == _capacity)
 				reserve(_capacity ? _capacity * 2 : 1);
 			_alloc.construct(_data + _size++, back());
-			for (size_t i = _size - 1; i > index; i--)
+			for (size_type i = _size - 1; i > index; i--)
 				_data[i] = _data[i - 1];
 			_alloc.destroy(_data + index);
 			_alloc.construct(_data + index, val);
@@ -196,12 +196,12 @@ namespace		ft
 		}
 		void					insert(iterator position, size_type n, const_reference val)
 		{
-			size_t index = position - begin();
+			size_type index = position - begin();
 			if (_size + n > _capacity)
 				reserve(_size + n);
-			for (size_t i = _size + n - 1; i >= index + n; i--)
+			for (size_type i = _size + n - 1; i >= index + n; i--)
 				_data[i] = _data[i - n];
-			for (size_t i = index; i < index + n; i++)
+			for (size_type i = index; i < index + n; i++)
 				_alloc.construct(_data + i, val);
 			_size += n;
 		}
@@ -210,16 +210,16 @@ namespace		ft
 		!ft::is_integral<InputIterator>::value, InputIterator>::type first,
 		InputIterator last)
 		{
-			size_t n = 0;
+			size_type n = 0;
 			InputIterator temp = first;
 			while (temp++ != last)
 				n++;
-			size_t index = position - begin();
+			size_type index = position - begin();
 			if (_size + n > _capacity)
 				reserve(_size + n);
-			for (size_t i = _size + n - 1; i >= index + n; i--)
+			for (size_type i = _size + n - 1; i >= index + n; i--)
 				_data[i] = _data[i - n];
-			for (size_t i = index; i < index + n; i++)
+			for (size_type i = index; i < index + n; i++)
 			{
 				_alloc.destroy(_data + i);
 				_alloc.construct(_data + i, *first++);
