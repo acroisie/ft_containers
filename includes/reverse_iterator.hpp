@@ -37,7 +37,7 @@ namespace		ft
 		}
 
 	//Member access operator ------------------------------------------------//
-		Iter				base() const {return (_it);}
+		iterator_type		base() const {return (_it);}
 
 	//Dereference operators -------------------------------------------------//
 		reference			operator*() const
