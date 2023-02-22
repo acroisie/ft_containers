@@ -32,6 +32,7 @@ namespace	ft
 		random_access_iterator(pointer ptr): _ptr(ptr) {}
 		random_access_iterator(const random_access_iterator& cpy)
 		: _ptr(cpy._ptr) {}
+
 		~random_access_iterator() {}
 
 		random_access_iterator&	operator=(const random_access_iterator& obj)
@@ -40,31 +41,25 @@ namespace	ft
 			return (*this);
 		}
 		
-//Property -------------------------------------------------------------------//
-	//Equality/Inequality ----------------------------------------------------//
-		friend bool	operator==(const random_access_iterator &lhs,
-		const random_access_iterator &rhs) {return (lhs._ptr == rhs._ptr);}
-		friend bool	operator!=(const random_access_iterator &lhs,
-		const random_access_iterator &rhs) {return (lhs._ptr != rhs._ptr);}
-
 	//Member access operator ------------------------------------------------//
 		pointer		base() const {return (_ptr);}
-	//Dereference ------------------------------------------------------------//
+
+	//Dereference operators -------------------------------------------------//
 		reference	operator*() const {return (*_ptr);}
 		pointer		operator->() const {return (_ptr);}
 		reference	operator[](difference_type n) const {return (*(_ptr + n));}
 
-	//Increment --------------------------------------------------------------//
+	//Increment/decrement operators -----------------------------------------//
+		random_access_iterator&	operator++()
+		{
+			_ptr++;
+			return (*this);
+		}
 		random_access_iterator	operator++(int)
 		{
 			random_access_iterator cpy(*this);
 			_ptr++;
 			return (cpy);
-		}
-		random_access_iterator&	operator++()
-		{
-			_ptr++;
-			return (*this);
 		}
 		random_access_iterator&	operator+=(difference_type n)
 		{
@@ -72,17 +67,16 @@ namespace	ft
 			return (*this);
 		}
 
-	//Decrement --------------------------------------------------------------//
+		random_access_iterator&	operator--()
+		{
+			_ptr--;
+			return (*this);
+		}
 		random_access_iterator	operator--(int)
 		{
 			random_access_iterator cpy = *this;
 			_ptr--;
 			return (cpy);
-		}
-		random_access_iterator&	operator--()
-		{
-			_ptr--;
-			return (*this);
 		}
 		random_access_iterator&	operator-=(difference_type n)
 		{
@@ -121,12 +115,16 @@ namespace	ft
 		}
 
 	//Inequality relational operators ----------------------------------------//
+		friend bool	operator==(const random_access_iterator &lhs,
+		const random_access_iterator &rhs) {return (lhs._ptr == rhs._ptr);}
+		friend bool	operator!=(const random_access_iterator &lhs,
+		const random_access_iterator &rhs) {return (lhs._ptr != rhs._ptr);}
 		friend bool	operator<(const random_access_iterator &lhs,
 		const random_access_iterator &rhs) {return (lhs._ptr < rhs._ptr);}
-		friend bool	operator>(const random_access_iterator &lhs,
-		const random_access_iterator &rhs) {return (lhs._ptr > rhs._ptr);}
 		friend bool	operator<=(const random_access_iterator &lhs,
 		const random_access_iterator &rhs) {return (lhs._ptr <= rhs._ptr);}
+		friend bool	operator>(const random_access_iterator &lhs,
+		const random_access_iterator &rhs) {return (lhs._ptr > rhs._ptr);}
 		friend bool	operator>=(const random_access_iterator &lhs,
 		const random_access_iterator &rhs) {return (lhs._ptr >= rhs._ptr);}
 
@@ -148,4 +146,5 @@ namespace	ft
 	{
 		return (lhs.base() - rhs.base());
 	}
+	
 }
