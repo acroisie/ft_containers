@@ -47,6 +47,8 @@ namespace	ft
 		friend bool	operator!=(const random_access_iterator &lhs,
 		const random_access_iterator &rhs) {return (lhs._ptr != rhs._ptr);}
 
+	//Member access operator ------------------------------------------------//
+		pointer		base() const {return (_ptr);}
 	//Dereference ------------------------------------------------------------//
 		reference	operator*() const {return (*_ptr);}
 		pointer		operator->() const {return (_ptr);}
@@ -137,4 +139,13 @@ namespace	ft
 		}
 
 	};
+//Non-ember functions --------------------------------------------------------//
+	//Arithmetic operator ---------------------------------------------------//
+	template<typename Iterator1, typename Iterator2>
+	typename random_access_iterator<Iterator1>::difference_type
+	operator-(const random_access_iterator<Iterator1> lhs,
+				const random_access_iterator<Iterator2> rhs)
+	{
+		return (lhs.base() - rhs.base());
+	}
 }
