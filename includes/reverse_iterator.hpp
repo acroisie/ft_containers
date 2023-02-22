@@ -9,12 +9,12 @@ namespace		ft
 	class		reverse_iterator
 	{
 	public:
-		typedef				Iter iterator_type;
-		typedef typename	iterator_traits<Iter>::difference_type difference_type;
-		typedef typename	iterator_traits<Iter>::value_type value_type;
-		typedef typename	iterator_traits<Iter>::pointer pointer;
-		typedef typename	iterator_traits<Iter>::reference reference;
-		typedef typename	iterator_traits<Iter>::iterator_category iterator_category;
+		typedef Iter iterator_type;	
+		typedef typename iterator_traits<Iter>::difference_type		difference_type;
+		typedef typename iterator_traits<Iter>::value_type			value_type;
+		typedef typename iterator_traits<Iter>::pointer				pointer;
+		typedef typename iterator_traits<Iter>::reference			reference;
+		typedef typename iterator_traits<Iter>::iterator_category	iterator_category;
 
 	protected:
 		Iter _it;
@@ -30,14 +30,14 @@ namespace		ft
 
 		~reverse_iterator() {}
 
-		reverse_iterator &operator=(const reverse_iterator<Iter> &other)
+		reverse_iterator	&operator=(const reverse_iterator<Iter> &other)
 		{
 			_it = other._it;
 			return (*this);
 		}
 
 	//Member access operator ------------------------------------------------//
-		Iter base() const {return (_it);}
+		Iter				base() const {return (_it);}
 
 	//Dereference operators -------------------------------------------------//
 		reference			operator*() const
