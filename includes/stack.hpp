@@ -14,7 +14,7 @@ namespace	ft
         typedef typename Container::reference		reference;
         typedef typename Container::const_reference	const_reference;
 
-    private:
+    protected:
         container_type _data;
 
     public:
@@ -46,45 +46,37 @@ namespace	ft
         void				push(const value_type& value) {_data.push_back(value);}
         void				pop() {_data.pop_back();}
 
-    };
-
-//Non-member functions -------------------------------------------------------//
 	//Operators --------------------------------------------------------------//
-	template< class T, class Container >
-	bool operator==(const stack<T, Container>& lhs,
-					const stack<T, Container>& rhs)
-	{
-		return (lhs == rhs);
-	}
-	template< class T, class Container >
-	bool operator!=(const stack<T, Container>& lhs,
-					const stack<T, Container>& rhs)
-	{
-		return (!(lhs == rhs));
-	}
-	template< class T, class Container >
-	bool operator<(const stack<T, Container>& lhs,
-					const stack<T, Container>& rhs)
-	{
-		return (lhs < rhs);
-	}
-	template< class T, class Container >
-	bool operator<=(const stack<T, Container>& lhs,
-					const stack<T, Container>& rhs)
-	{
-		return (lhs <= rhs);
-	}
-	template< class T, class Container >
-	bool operator>(const stack<T, Container>& lhs,
-					const stack<T, Container>& rhs)
-	{
-		return (lhs > rhs);
-	}
-	template< class T, class Container >
-	bool operator>=(const stack<T, Container>& lhs,
-					const stack<T, Container>& rhs)
-	{
-		return (lhs >= rhs);
-	}
+		friend bool			operator==(const stack<value_type, container_type>& lhs,
+						const stack<value_type, container_type>& rhs)
+		{
+			return (lhs._data == rhs._data);
+		}
+		friend bool			operator!=(const stack<value_type, container_type>& lhs,
+						const stack<value_type, container_type>& rhs)
+		{
+			return (!(lhs._data == rhs._data));
+		}
+		friend bool			operator<(const stack<value_type, container_type>& lhs,
+						const stack<value_type, container_type>& rhs)
+		{
+			return (lhs._data < rhs._data);
+		}
+		friend bool			operator<=(const stack<value_type, container_type>& lhs,
+						const stack<value_type, container_type>& rhs)
+		{
+			return (lhs._data <= rhs._data);
+		}
+		friend bool			operator>(const stack<value_type, container_type>& lhs,
+						const stack<value_type, container_type>& rhs)
+		{
+			return (lhs._data > rhs._data);
+		}
+		friend bool			operator>=(const stack<value_type, container_type>& lhs,
+						const stack<value_type, container_type>& rhs)
+		{
+			return (lhs._data >= rhs._data);
+		}
+    };
 
 }
