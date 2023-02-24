@@ -30,8 +30,26 @@ namespace	ft
 	private:
 		/* data */
 	public:
-		map(/* args */);
+//Member functions -----------------------------------------------------------//
+	//Constructor/Destructor/Assign operator ---------------------------------//
+		map() {}
+
+		explicit map(const Compare& comp,
+					const Allocator& alloc = Allocator()) {}
+
+		template< class InputIt >
+		map(InputIt first, InputIt last,
+			const Compare& comp = Compare(),
+			const Allocator& alloc = Allocator());
+
+		map(const map& other);
+
 		~map();
+
+		map& operator=(const map& other)
+		{
+			return *this;
+		}
 	};
 	
 }

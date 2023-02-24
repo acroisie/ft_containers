@@ -92,6 +92,7 @@ namespace		ft
 		{
 			return (reverse_iterator(_it + n));
 		}
+
 	};
 
 //Non-ember functions --------------------------------------------------------//
