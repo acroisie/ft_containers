@@ -36,6 +36,25 @@ namespace	ft
 		allocator_type	_alloc;
 
 	public:
+//Member class ---------------------------------------------------------------//
+        class value_compare
+		{
+            friend class map;
+
+		public:
+			typedef bool		result_type;
+			typedef	value_type	first_argument_type;
+			typedef value_type	second_argument_type;
+		
+		protected:
+			Compare	comp;
+			value_compare(Compare c): comp(c) {}
+			bool operator()(const value_type& lhs, const value_type& rhs) const
+			{
+				return (comp(lhs.first, rhs.first));
+			}
+
+        };
 //Member functions -----------------------------------------------------------//
 	//Constructor/Destructor/Assign operator ---------------------------------//
 		//Default ------------------------------------------------------------//
@@ -112,7 +131,7 @@ namespace	ft
 		iterator				upper_bound(const Key& key) {}
 		const_iterator			upper_bound(const Key& key) const {}
 
-	//Lookup -----------------------------------------------------------------//
+	//Observers --------------------------------------------------------------//
 		key_compare				key_comp() const {}
 		map::value_compare		value_comp() const {}
 
