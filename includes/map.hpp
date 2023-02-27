@@ -2,6 +2,7 @@
 
 #include	<memory>
 #include	<map>
+#include	"pair.hpp"
 
 namespace	ft
 {
@@ -67,9 +68,9 @@ namespace	ft
 		allocator_type			get_allocator() const {return (_alloc);}
 
 	//Element access ---------------------------------------------------------//
-		mapped_type&			at( const Key& key ) {}
-		const mapped_type&		at( const Key& key ) const {}
-		mapped_type&			operator[]( const Key& key ) {}
+		mapped_type&			at(const Key& key) {}
+		const mapped_type&		at(const Key& key) const {}
+		mapped_type&			operator[](const Key& key) {}
 
 	//Iterators --------------------------------------------------------------//
 		iterator				begin() {return iterator(_data.begin());}
