@@ -4,6 +4,7 @@
 #include	<map>
 #include	"pair.hpp"
 #include	"equal.hpp"
+#include	"reverse_iterator.hpp"
 
 namespace	ft
 {
@@ -12,25 +13,25 @@ namespace	ft
 	> class map
 	{
 	public:
-		typedef Key                                      key_type;
-		typedef T                                        mapped_type;
-		typedef pair<const key_type, mapped_type>        value_type;
-		typedef Compare                                  key_compare;
-		typedef Allocator                                allocator_type;
-		typedef typename allocator_type::reference       reference;
-		typedef typename allocator_type::const_reference const_reference;
-		typedef typename allocator_type::pointer         pointer;
-		typedef typename allocator_type::const_pointer   const_pointer;
-		typedef typename allocator_type::size_type       size_type;
-		typedef typename allocator_type::difference_type difference_type;
+		typedef Key                                     	key_type;
+		typedef T                                       	mapped_type;
+		typedef pair<const key_type, mapped_type>       	value_type;
+		typedef Compare                                 	key_compare;
+		typedef Allocator                               	allocator_type;
+		typedef typename allocator_type::reference      	reference;
+		typedef typename allocator_type::const_reference	const_reference;
+		typedef typename allocator_type::pointer        	pointer;
+		typedef typename allocator_type::const_pointer  	const_pointer;
+		typedef typename allocator_type::size_type      	size_type;
+		typedef typename allocator_type::difference_type	difference_type;
 
-		// typedef implementation-defined                   iterator;
-		// typedef implementation-defined                   const_iterator;
-		// typedef reverse_iterator<iterator>          reverse_iterator;
-		// typedef reverse_iterator<const_iterator>    const_reverse_iterator;
+		typedef implementation-defined						iterator;
+		typedef implementation-defined						const_iterator;
+		typedef reverse_iterator<iterator>      			reverse_iterator;
+		typedef reverse_iterator<const_iterator>			const_reverse_iterator;
 
 	private:
-		value_type*		_data;
+		value_type*		_data; //node list
 		size_type		_size;
 		size_type		_capacity;
 		allocator_type	_alloc;
