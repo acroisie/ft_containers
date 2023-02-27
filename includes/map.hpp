@@ -3,6 +3,7 @@
 #include	<memory>
 #include	<map>
 #include	"pair.hpp"
+#include	"equal.hpp"
 
 namespace	ft
 {
@@ -64,6 +65,7 @@ namespace	ft
 			_data = other._data;
 			return *this;
 		}
+
 		//Allocator ----------------------------------------------------------//
 		allocator_type			get_allocator() const {return (_alloc);}
 
@@ -88,7 +90,7 @@ namespace	ft
 		size_type				max_size() const {return (_capacity);}
 
 	//Modifiers --------------------------------------------------------------//
-		void clear();
+		void					clear() {}
 		pair<iterator, bool>	insert(const value_type& value) {}
 		iterator				insert(iterator pos, const value_type& value) {}
 		template<class InputIt>
@@ -115,15 +117,16 @@ namespace	ft
 		map::value_compare		value_comp() const {}
 
 	};
-	
+
+//Non-member functions -------------------------------------------------------//
+	//Operators --------------------------------------------------------------//
 	template< class Key, class T, class Compare, class Alloc >
 	bool operator==(const map<Key, T, Compare, Alloc>& lhs,
 					const map<Key, T, Compare, Alloc>& rhs)
 	{
 		if (lhs.size() != rhs.size())
 			return (false);
-		//equal to do ...
-		return (true);
+		return (equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
 	template< class Key, class T, class Compare, class Alloc >
 	bool operator!=(const map<Key, T, Compare, Alloc>& lhs,
