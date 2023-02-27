@@ -280,12 +280,12 @@ namespace		ft
 //Non-member functions -------------------------------------------------------//
 	//Operators --------------------------------------------------------------//
 		template< class T, class Alloc >
-		bool operator==(const ft::vector<T, Alloc>& lhs,
-						const ft::vector<T, Alloc>& rhs)
+		bool operator==(const vector<T, Alloc>& lhs,
+						const vector<T, Alloc>& rhs)
 		{
 			if (lhs.size() != rhs.size())
 				return (false);
-			for (typename ft::vector<T, Alloc>::size_type i = 0; i < lhs.size(); i++)
+			for (typename vector<T, Alloc>::size_type i = 0; i < lhs.size(); i++)
 			{
 				if (lhs[i] != rhs[i])
 					return (false);
@@ -293,33 +293,33 @@ namespace		ft
 			return (true);
 		}
 		template< class T, class Alloc >
-		bool operator!=(const ft::vector<T, Alloc>& lhs,
-						const ft::vector<T, Alloc>& rhs)
+		bool operator!=(const vector<T, Alloc>& lhs,
+						const vector<T, Alloc>& rhs)
 		{
 			return (!(lhs == rhs));
 		}
 		template< class T, class Alloc >
-		bool operator<(const ft::vector<T, Alloc>& lhs,
-						const ft::vector<T, Alloc>& rhs)
+		bool operator<(const vector<T, Alloc>& lhs,
+						const vector<T, Alloc>& rhs)
 		{
-			return (ft::lexicographical_compare(lhs.begin(), lhs.end(),
+			return (lexicographical_compare(lhs.begin(), lhs.end(),
 			rhs.begin(), rhs.end()));
 		}
 		template< class T, class Alloc >
-		bool operator<=(const ft::vector<T, Alloc>& lhs,
-						const ft::vector<T, Alloc>& rhs)
+		bool operator<=(const vector<T, Alloc>& lhs,
+						const vector<T, Alloc>& rhs)
 		{
 			return (!(rhs < lhs));
 		}
 		template< class T, class Alloc >
-		bool operator>(const ft::vector<T, Alloc>& lhs,
-						const ft::vector<T, Alloc>& rhs)
+		bool operator>(const vector<T, Alloc>& lhs,
+						const vector<T, Alloc>& rhs)
 		{
 			return (rhs < lhs);
 		}
 		template< class T, class Alloc >
-		bool operator>=(const ft::vector<T, Alloc>& lhs,
-						const ft::vector<T, Alloc>& rhs)
+		bool operator>=(const vector<T, Alloc>& lhs,
+						const vector<T, Alloc>& rhs)
 		{
 			return (!(lhs < rhs));
 		}

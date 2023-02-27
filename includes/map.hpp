@@ -25,8 +25,8 @@ namespace	ft
 
 		// typedef implementation-defined                   iterator;
 		// typedef implementation-defined                   const_iterator;
-		// typedef std::reverse_iterator<iterator>          reverse_iterator;
-		// typedef std::reverse_iterator<const_iterator>    const_reverse_iterator;
+		// typedef reverse_iterator<iterator>          reverse_iterator;
+		// typedef reverse_iterator<const_iterator>    const_reverse_iterator;
 
 	private:
 		value_type*		_data;
@@ -41,8 +41,8 @@ namespace	ft
 		map(): _data(NULL) {}
 
 		//Empty --------------------------------------------------------------//
-		explicit map(const Compare& comp,
-					const Allocator& alloc = Allocator()): _data(NULL) {}
+		explicit map(const Compare& comp, const Allocator& alloc = Allocator())
+		: _data(NULL) {}
 
 		//Range --------------------------------------------------------------//
 		template< class InputIt >
@@ -112,27 +112,33 @@ namespace	ft
 
 	//Lookup -----------------------------------------------------------------//
 		key_compare				key_comp() const {}
-		std::map::value_compare value_comp() const {}
+		map::value_compare		value_comp() const {}
 
 	};
 	
 	template< class Key, class T, class Compare, class Alloc >
-	bool operator==(const std::map<Key, T, Compare, Alloc>& lhs,
-					const std::map<Key, T, Compare, Alloc>& rhs) {}
-					template< class Key, class T, class Compare, class Alloc >
-	bool operator!=(const std::map<Key, T, Compare, Alloc>& lhs,
-					const std::map<Key, T, Compare, Alloc>& rhs) {}
+	bool operator==(const map<Key, T, Compare, Alloc>& lhs,
+					const map<Key, T, Compare, Alloc>& rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return (false);
+		//equal to do ...
+		return (true);
+	}
 	template< class Key, class T, class Compare, class Alloc >
-	bool operator<(const std::map<Key, T, Compare, Alloc>& lhs,
-					const std::map<Key, T, Compare, Alloc>& rhs) {}
+	bool operator!=(const map<Key, T, Compare, Alloc>& lhs,
+					const map<Key, T, Compare, Alloc>& rhs) {}
 	template< class Key, class T, class Compare, class Alloc >
-	bool operator<=(const std::map<Key, T, Compare, Alloc>& lhs,
-					const std::map<Key, T, Compare, Alloc>& rhs) {}
+	bool operator<(const map<Key, T, Compare, Alloc>& lhs,
+					const map<Key, T, Compare, Alloc>& rhs) {}
 	template< class Key, class T, class Compare, class Alloc >
-	bool operator>(const std::map<Key, T, Compare, Alloc>& lhs,
-					const std::map<Key, T, Compare, Alloc>& rhs) {}
+	bool operator<=(const map<Key, T, Compare, Alloc>& lhs,
+					const map<Key, T, Compare, Alloc>& rhs) {}
 	template< class Key, class T, class Compare, class Alloc >
-	bool operator>=(const std::map<Key, T, Compare, Alloc>& lhs,
-					const std::map<Key, T, Compare, Alloc>& rhs) {}
+	bool operator>(const map<Key, T, Compare, Alloc>& lhs,
+					const map<Key, T, Compare, Alloc>& rhs) {}
+	template< class Key, class T, class Compare, class Alloc >
+	bool operator>=(const map<Key, T, Compare, Alloc>& lhs,
+					const map<Key, T, Compare, Alloc>& rhs) {}
 
 }
