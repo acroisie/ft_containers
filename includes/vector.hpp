@@ -7,6 +7,7 @@
 #include		"enable_if.hpp"
 #include		"is_integral.hpp"
 #include		"lexicographical_compare.hpp"
+#include		"equal.hpp"
 
 namespace		ft
 {
@@ -285,12 +286,7 @@ namespace		ft
 		{
 			if (lhs.size() != rhs.size())
 				return (false);
-			for (typename vector<T, Alloc>::size_type i = 0; i < lhs.size(); i++)
-			{
-				if (lhs[i] != rhs[i])
-					return (false);
-			}
-			return (true);
+			return (equal(lhs.begin(), lhs.end(), rhs.begin()));
 		}
 		template< class T, class Alloc >
 		bool operator!=(const vector<T, Alloc>& lhs,
