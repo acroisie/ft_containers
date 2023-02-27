@@ -150,7 +150,7 @@ namespace		ft
 	//Modifiers --------------------------------------------------------------//
 		template <class InputIterator>
 		void					assign(typename ft::enable_if
-		<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
+		<!is_integral<InputIterator>::value, InputIterator>::type first,
 		 InputIterator last)
 		{
 			clear();
@@ -207,8 +207,8 @@ namespace		ft
 			_size += n;
 		}
 		template <class InputIterator>
-		void					insert(iterator position, typename ft::enable_if<
-		!ft::is_integral<InputIterator>::value, InputIterator>::type first,
+		void					insert(iterator position, typename enable_if<
+		!is_integral<InputIterator>::value, InputIterator>::type first,
 		InputIterator last)
 		{
 			size_type n = 0;
