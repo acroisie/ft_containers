@@ -4,11 +4,13 @@
 #include	<map>
 #include	"pair.hpp"
 #include	"equal.hpp"
+#include	"bidirectional_iterator.hpp"
 #include	"reverse_iterator.hpp"
+#include	"node.hpp"
 
 namespace	ft
 {
-	template<class Key, class T, class Compare = std::less<Key>,
+	template <class Key, class T, class Compare = std::less<Key>,
 	class Allocator = std::allocator<ft::pair<const Key, T> >
 	> class map
 	{
@@ -25,8 +27,8 @@ namespace	ft
 		typedef typename allocator_type::size_type      	size_type;
 		typedef typename allocator_type::difference_type	difference_type;
 
-		typedef implementation-defined						iterator;
-		typedef implementation-defined						const_iterator;
+		// typedef implementation-defined						iterator;
+		// typedef implementation-defined						const_iterator;
 		typedef reverse_iterator<iterator>      			reverse_iterator;
 		typedef reverse_iterator<const_iterator>			const_reverse_iterator;
 
@@ -67,7 +69,7 @@ namespace	ft
 		: _data(NULL) {}
 
 		//Range --------------------------------------------------------------//
-		template< class InputIt >
+		template<class InputIt>
 		map(InputIt first, InputIt last, const Compare& comp = Compare(),
 			const Allocator& alloc = Allocator()): _data(NULL) {}
 

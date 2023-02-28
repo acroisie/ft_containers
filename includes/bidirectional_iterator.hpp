@@ -18,5 +18,6 @@ namespace	ft
 		::reference			reference;
 		typedef typename ft::iterator<std::bidirectional_iterator_tag, I>
 		::iterator_category	iterator_category;
-	}
+	};
+
 }
