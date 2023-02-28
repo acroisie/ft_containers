@@ -1,4 +1,5 @@
 #pragma		once
+
 #include	"iterator.hpp"
 
 namespace	ft
@@ -18,6 +19,12 @@ namespace	ft
 		::reference			reference;
 		typedef typename ft::iterator<std::bidirectional_iterator_tag, I>
 		::iterator_category	iterator_category;
+		operator bidirectional_iterator<const I> () const
+		{return (bidirectional_iterator<const I>(_ptr));}
+
+	private:
+		pointer	_ptr;
+
 	};
 
 }
