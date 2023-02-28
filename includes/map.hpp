@@ -33,7 +33,7 @@ namespace	ft
 		typedef reverse_iterator<const_iterator>			const_reverse_iterator;
 
 	private:
-		value_type*		_data; //node list
+		// value_type*		_data; Replace tree
 		size_type		_size;
 		size_type		_capacity;
 		allocator_type	_alloc;

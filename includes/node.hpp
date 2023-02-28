@@ -44,6 +44,7 @@ namespace	ft
 
         int					getHeight() const {return (_height);}
         void				setHeight(int height) {_height = height;}
+
     };
 
 }
