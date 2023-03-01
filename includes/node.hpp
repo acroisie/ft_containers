@@ -83,6 +83,9 @@ namespace	ft
         int					getHeight() const {return (_height);}
         void				setHeight(int height) {_height = height;}
 
+        void                first() const {return (_pair.first)}
+        void                second() const {return (_pair.second)}
+
     };
 
 }
