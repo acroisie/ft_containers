@@ -29,6 +29,44 @@ namespace	ft
 		//Destructor ---------------------------------------------------------//
         ~node() {}
 
+	//Increment/decrement operators -----------------------------------------//
+        node&   operator++()
+        {
+            if (_rChild)
+            {
+                node* current = _rChild;
+                while (current->_lChild)
+                    current = current->_lChild;
+                return (*current);
+            }
+            node* current = this;
+            node* parent = _parent;
+            while (parent != NULL && current == parent->_rChild)
+            {
+                current = parent;
+                parent = parent->_parent;
+            }
+            return (*parent);
+        }
+        node&   operator--()
+        {
+            if (_lChild)
+            {
+                node* current = _lChild;
+                while (current->_rChild)
+                    current = current->_rChild;
+                return (*current);
+            }
+            node* current = this;
+            node* parent = _parent;
+            while (parent != NULL && current == parent->_lChild)
+            {
+                current = parent;
+                parent = parent->_parent;
+            }
+            return (*parent);
+        }
+
 	//Getters/Setters --------------------------------------------------------//
         const pair<T1, T2>&	getPair() const {return (_pair);}
         void				setPair(const pair<T1, T2>& pair) {_pair = pair;}
