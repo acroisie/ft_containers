@@ -30,7 +30,7 @@ namespace	ft
         ~node() {}
 
 	//Increment/decrement operators -----------------------------------------//
-        node&   operator++()
+        node&               operator++()
         {
             if (_rChild)
             {
@@ -48,7 +48,7 @@ namespace	ft
             }
             return (*parent);
         }
-        node&   operator--()
+        node&               operator--()
         {
             if (_lChild)
             {
