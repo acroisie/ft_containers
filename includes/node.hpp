@@ -29,7 +29,7 @@ namespace	ft
 		//Destructor ---------------------------------------------------------//
         ~node() {}
 
-	//Increment/decrement operators -----------------------------------------//
+	//Increment/decrement operators ------------------------------------------//
         node&               operator++()
         {
             if (_rChild)
@@ -83,8 +83,8 @@ namespace	ft
         int					getHeight() const {return (_height);}
         void				setHeight(int height) {_height = height;}
 
-        void                first() const {return (_pair.first)}
-        void                second() const {return (_pair.second)}
+        void                first() const {return (_pair.first);}
+        void                second() const {return (_pair.second);}
 
     };
 
