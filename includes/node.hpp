@@ -69,6 +69,8 @@ namespace	ft
 
 	//Getters/Setters --------------------------------------------------------//
         const pair<T1, T2>&	getPair() const {return (_pair);}
+        const pair<T1, T2>&	getFirst() const {return (_pair.first);}
+        const pair<T1, T2>&	getSecond() const {return (_pair.second);}
         void				setPair(const pair<T1, T2>& pair) {_pair = pair;}
 
         node*				getParent() const {return (_parent);}
