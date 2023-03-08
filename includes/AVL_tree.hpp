@@ -6,20 +6,20 @@
 
 namespace	ft
 {
-	template	<class Key,class Value, class Compare = std::less<Key> >
+	template	<class Key, class Value, class Compare = std::less<Key> >
 	class		AVL_tree
 	{
 	public :
 		typedef Compare									key_compare;
 		typedef pair<const Key, Value>					pair_type;
-		typedef typename ft::node<pair_type>		 	node_type;
-		typedef typename ft::node<pair_type>*			node_ptr;
+		typedef typename ft::node<const Key, Value>		node_type;
+		typedef typename ft::node<const Key, Value>*	node_ptr;
 		typedef typename std::allocator<node_type>		allocator_type;
 
-		key_compare										_keyComp;
-		node_ptr 										_root;
-		size_t											_size;
-		allocator_type									_alloc;
+		key_compare										keyComp;
+		node_ptr 										root;
+		size_t											size;
+		allocator_type									alloc;
 
 	public:
 //Member functions -----------------------------------------------------------//
@@ -27,47 +27,47 @@ namespace	ft
 		//Default ------------------------------------------------------------//
 		AVL_tree(const key_compare& comp = key_compare(),
 		const allocator_type& alloc = std::allocator<node_type>())
-		:_keyComp(comp), _root(NULL), _size(0), _alloc(alloc){}
+		:keyComp(comp), root(NULL), size(0), alloc(alloc){}
 
 		//Destructor ---------------------------------------------------------//
-		~AVL_tree() {deleteAll();}
+		~AVL_tree() {deleteAll(root);}
 
 	//Getters ----------------------------------------------------------------//
 		node_ptr		minValue(node_ptr node) const
 		{
 			node_ptr current = node;
-			while (current.getLeftChild())
-				current = current.getLeftChild();
+			while (current->getLeftChild())
+				current = current->getLeftChild();
 			return (current);
 		}
 		node_ptr		maxValue(node_ptr node) const
 		{
 			node_ptr current = node;
-			while (current.getRightChild())
-				current = current.getRightChild();
+			while (current->getRightChild())
+				current = current->getRightChild();
 			return (current);
 		}
 		int				balanceFactor(node_ptr node)
 		{
 			if (node == NULL)
 				return (0);
-			return (height(node.getLeftChild()) - height(node->right));
+			return (height(node->getLeftChild()) - height(node->right));
 		}
 		int				height(node_ptr node)
 		{
 			if (node == NULL)
 				return 0;
-			return (node.getHeight());
+			return (node->getHeight());
 		}
 
 	//New node ---------------------------------------------------------------//
 		node_ptr		newNode(Key key, Value value)
 		{
-			node_ptr node = _alloc.allocate(1);
-			_alloc.construct(node, make_pair(key, value)); 
-			node.getFirst() = key;
-			node.getLeftChild() = NULL;
-			node.getRightChild() = NULL;
+			node_ptr node = alloc.allocate(1);
+			alloc.construct(node, make_pair(key, value)); 
+			node->getFirst() = key;
+			node->getLeftChild() = NULL;
+			node->getRightChild() = NULL;
 			node->height = 1;
 			return (node);
 		}
@@ -103,37 +103,37 @@ namespace	ft
 		{
 			if (node == NULL)
 				return (newNode(key, value));
-			if (key < node.getFirst())
-				node.getLeftChild() = insertNode(node.getLeftChild(), key);
-			else if (key > node.getFirst())
-				node.getRightChild() = insertNode(node.getRightChild(), key);
+			if (key < node->getFirst())
+				node->getLeftChild() = insertNode(node->getLeftChild(), key);
+			else if (key > node->getFirst())
+				node->getRightChild() = insertNode(node->getRightChild(), key);
 			else
 				return (node);
 
-			node->height = 1 + max(height(node.getLeftChild()),
-						height(node.getRightChild()));
+			node->height = 1 + max(height(node->getLeftChild()),
+						height(node->getRightChild()));
 			int balanceFactor = getBalanceFactor(node);
 			if (balanceFactor > 1)
 			{
-				if (key < node.getLeftChild()->key)
+				if (key < node->getLeftChild()->key)
 				{
 					return (rightRotate(node));
 				}
-				else if (key > node.getLeftChild()->key)
+				else if (key > node->getLeftChild()->key)
 				{
-					node.getLeftChild() = leftRotate(node.getLeftChild());
+					node->getLeftChild() = leftRotate(node->getLeftChild());
 					return (rightRotate(node));
 				}
 			}
 			if (balanceFactor < -1)
 			{
-				if (key > node.getRightChild()->key)
+				if (key > node->getRightChild()->key)
 				{
 					return (leftRotate(node));
 				}
-				else if (key < node.getRightChild()->key)
+				else if (key < node->getRightChild()->key)
 				{
-					node.getRightChild() = rightRotate(node.getRightChild());
+					node->getRightChild() = rightRotate(node->getRightChild());
 					return (leftRotate(node));
 				}
 			}
@@ -141,30 +141,30 @@ namespace	ft
 		}
 
 	//Deletion --------------------------------------------------------------//
-		void			deleteAll(void)
+		void			deleteFrom(node_type node)
 		{
-			_size = 0;
-			if(_root)
+			size = 0;
+			if(node)
 			{
-				clearTree(_root->getRightChild());
-				clearTree(_root->getLeftChild());
-				_alloc.destroy(_root);
-				_alloc.deallocate(_root, 1);
+				deleteFrom(node->getRightChild());
+				deleteFrom(node->getLeftChild());
+				alloc.destroy(node);
+				alloc.deallocate(node, 1);
 			}
 		}
 		node_ptr		deleteNode(node_ptr root, Key key)
 		{
 			if (root == NULL)
 				return (root);
-			if (key < root.getFirst())
-				root.getLeftChild() = deleteNode(root.getLeftChild(), key);
-			else if (key > root.getFirst())
-				root.geRightChild() = deleteNode(root.geRightChild(), key);
+			if (key < root->getFirst())
+				root->getLeftChild() = deleteNode(root->getLeftChild(), key);
+			else if (key > root->getFirst())
+				root->geRightChild() = deleteNode(root->geRightChild(), key);
 			else
 			{
-				if ((root.getLeftChild() == NULL) || (root.geRightChild() == NULL))
+				if ((root->getLeftChild() == NULL) || (root->geRightChild() == NULL))
 				{
-					node_ptr temp = root.getLeftChild() ? root.getLeftChild() : root.geRightChild();
+					node_ptr temp = root->getLeftChild() ? root->getLeftChild() : root->geRightChild();
 					if (temp == NULL)
 					{
 						temp = root;
@@ -172,43 +172,43 @@ namespace	ft
 					} 
 					else
 						*root = *temp;
-					_alloc.destroy(temp);
-					_alloc.deallocate(temp, 1);
+					alloc.destroy(temp);
+					alloc.deallocate(temp, 1);
 				}
 				else
 				{
-					node_ptr temp = nodeWithMimumValue(root.geRightChild());
-					root.getFirst() = temp.getFirst();
-					root.geRightChild() = deleteNode(root.geRightChild(), temp.getFirst());
+					node_ptr temp = nodeWithMimumValue(root->geRightChild());
+					root->getFirst() = temp->getFirst();
+					root->geRightChild() = deleteNode(root->geRightChild(), temp->getFirst());
 				}
 			}
 
 			if (root == NULL)
 				return (root);
 
-			root->height = 1 + max(height(root.getLeftChild()), height(root.geRightChild()));
+			root->height = 1 + max(height(root->getLeftChild()), height(root->geRightChild()));
 			int balanceFactor = getBalanceFactor(root);
 			if (balanceFactor > 1)
 			{
-				if (getBalanceFactor(root.getLeftChild()) >= 0)
+				if (getBalanceFactor(root->getLeftChild()) >= 0)
 				{
 					return rightRotate(root);
 				}
 				else
 				{
-					root.getLeftChild() = leftRotate(root.getLeftChild());
+					root->getLeftChild() = leftRotate(root->getLeftChild());
 					return rightRotate(root);
 				}
 			}
 			if (balanceFactor < -1)
 			{
-				if (getBalanceFactor(root.geRightChild()) <= 0)
+				if (getBalanceFactor(root->geRightChild()) <= 0)
 				{
 					return leftRotate(root);
 				}
 				else
 				{
-					root.geRightChild() = rightRotate(root.geRightChild());
+					root->geRightChild() = rightRotate(root->geRightChild());
 					return leftRotate(root);
 				}
 			}
@@ -216,6 +216,19 @@ namespace	ft
 
 		}
 
+		node_ptr		search(node_ptr node, const Key key) const
+		{
+			if (node)
+			{
+				if (key == node->key.first)
+					return (node);
+				else if (key_compare(key, node->key.first))
+					return (search(node->left, key));
+				else
+					return (search(node->right, key));
+			}
+			return (NULL);
+		}
 	};
 
 }
