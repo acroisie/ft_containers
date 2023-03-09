@@ -27,8 +27,10 @@ namespace	ft
 		typedef typename allocator_type::const_pointer  				const_pointer;
 		typedef typename allocator_type::size_type      				size_type;
 		typedef typename allocator_type::difference_type				difference_type;
-		typedef typename ft::bidirectional_iterator<value_type>			iterator;
-		typedef typename ft::bidirectional_iterator<const value_type>	const_iterator;
+		typedef	node<key_type, value_type>								node_type;
+		typedef	node<key_type, value_type>*								node_ptr;
+		typedef typename ft::bidirectional_iterator<value_type, node_type>			iterator;
+		typedef typename ft::bidirectional_iterator<const value_type, node_type>	const_iterator;
 		typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
 		typedef typename ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 		typedef typename ft::AVL_tree<key_type, mapped_type>			tree_type;

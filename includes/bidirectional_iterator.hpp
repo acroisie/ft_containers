@@ -1,10 +1,12 @@
 #pragma		once
 
 #include	"iterator.hpp"
+#include	"iterator_traits.hpp"
+#include	"node.hpp"
 
 namespace	ft
 {
-	template	<class I>
+	template	<class I, class node>
 	class		bidirectional_iterator:
 	public		ft::iterator<std::bidirectional_iterator_tag, I>
 	{
@@ -19,11 +21,16 @@ namespace	ft
 		::reference			reference;
 		typedef typename ft::iterator<std::bidirectional_iterator_tag, I>
 		::iterator_category	iterator_category;
-		operator bidirectional_iterator<const I> () const
-		{return (bidirectional_iterator<const I>(_ptr));}
+
+		typedef	node													node_type;
+		typedef	iterator<std::bidirectional_iterator_tag, node_type>	node_it;
+		typedef typename iterator_traits<node_it>::pointer 				node_pointer;
+
+		operator bidirectional_iterator<const I, node> () const
+		{return (bidirectional_iterator<const I, node>(_ptr));}
 
 	private:
-		pointer	_ptr;
+		node_pointer	_ptr;
 
 	public:
 //Member function ------------------------------------------------------------//
