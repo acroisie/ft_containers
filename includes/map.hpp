@@ -34,7 +34,6 @@ namespace	ft
 		typedef typename ft::AVL_tree<key_type, mapped_type>			tree_type;
 
 	private:
-		size_type		_size;
 		key_compare		_comp;
 		allocator_type	_alloc;
 		tree_type		_tree;
@@ -62,29 +61,39 @@ namespace	ft
 
 //Member functions -----------------------------------------------------------//
 	//Constructor/Destructor/Assign operator ---------------------------------//
-		//Default ------------------------------------------------------------//
-		map(): _tree(NULL) {}
-
 		//Empty --------------------------------------------------------------//
-		explicit map(const Compare& comp = key_compare(), const Allocator& alloc = allocator_type())
-		: _size(0), _comp(comp), _alloc(alloc), _tree(NULL) {}
+		explicit map(const Compare& comp = key_compare(),
+		const Allocator& alloc = allocator_type())
+		: _comp(comp), _alloc(alloc) {}
 
 		//Range --------------------------------------------------------------//
-		// template<class InputIt>
+		template<class InputIt>
+		map(InputIt first, InputIt last, const Compare& comp = Compare(),
+		const Allocator& alloc = Allocator())
+		: _comp(comp), _alloc(alloc)
+		{
+			insert(first, last);
+		}
+
 		//Copy ---------------------------------------------------------------//
-		map(const map& other): _tree(NULL)
+		map(const map& other, const Compare& comp = key_compare(),
+		const Allocator& alloc = allocator_type())
+		: _comp(comp), _alloc(alloc), _tree(NULL)
 		{
 			*this = other;
 		}
 
 		//Destructor ---------------------------------------------------------//
-		~map() {_tree.deleteAll();}
+		~map() {}
 
 		//Assign operator ----------------------------------------------------//
 		map& operator=(const map& other)
 		{
-			_tree = other._tree;
-			return *this;
+			clear();
+			const_iterator it = other.begin();
+			while(it != other.end())
+				insert(*it++);
+			return( *this );
 		}
 
 		//Allocator ----------------------------------------------------------//
@@ -108,59 +117,210 @@ namespace	ft
 			if (_tree.search(key))
 				return (_tree.search(key)->_pair.second);
 			_tree.insertPair(make_pair(key, T()));
-			_size++;
+			_tree.size++;
 			return (_tree.search(key)->_pair.second);
 		}
 
 	//Iterators --------------------------------------------------------------//
-		iterator				begin() {return iterator(_tree.minValue(_tree.root));}
-		const_iterator			begin() const {return iterator(_tree.minValue(_tree.root));}
-		iterator				end() {return iterator(_tree.maxValue(_tree.root));}
-		const_iterator			end() const {return iterator(_tree.maxValue(_tree.root));}
-		reverse_iterator		rbegin() {return reverse_iterator(_tree.maxValue(_tree.root));}
-		const_reverse_iterator	rbegin() const {return const_reverse_iterator(_tree.maxValue(_tree.root));}
-		reverse_iterator		rend() {return reverse_iterator(_tree.minValue(_tree.root));}
-		const_reverse_iterator	rend() const {return const_reverse_iterator(_tree.minValue(_tree.root));}
+		iterator				begin()
+		{
+			return iterator(_tree.minValue(_tree.root));
+		}
+		const_iterator			begin() const
+		{
+			return iterator(_tree.minValue(_tree.root));
+		}
+		iterator				end()
+		{
+			return iterator(_tree.maxValue(_tree.root));
+		}
+		const_iterator			end() const
+		{
+			return iterator(_tree.maxValue(_tree.root));
+		}
+		reverse_iterator		rbegin()
+		{
+			return reverse_iterator(_tree.maxValue(_tree.root));
+		}
+		const_reverse_iterator	rbegin() const
+		{
+			return const_reverse_iterator(_tree.maxValue(_tree.root));
+		}
+		reverse_iterator		rend()
+		{
+			return reverse_iterator(_tree.minValue(_tree.root));
+		}
+		const_reverse_iterator	rend() const
+		{
+			return const_reverse_iterator(_tree.minValue(_tree.root));
+		}
 
 	//Capacity ---------------------------------------------------------------//
 		bool					empty() const {return (begin() == end());}
-		size_type				size() const {return (_size);}
+		size_type				size() const {return (_tree.size);}
 		size_type				max_size() const {return (_alloc.max_size());}
 
 	//Modifiers --------------------------------------------------------------//
-		void					clear() {_tree.deleteAll();}
+		void					clear() {_tree.deleteFrom(_tree.root);}
 		pair<iterator, bool>	insert(const value_type& value)
 		{
-			_tree.insertNode(_tree, value);
+			iterator tmp(_tree.search(_tree.root, value.first));
+			_tree.insertPair(value);
+			iterator it(_tree.search(_tree.root, value.first));
+			if (it != NULL && tmp == NULL)
+			{
+				_tree.size++;
+				return (ft::make_pair<iterator, bool>(it, true));
+			}
+			return (ft::make_pair<iterator, bool>(it, false));
 		}
 		iterator				insert(iterator pos, const value_type& value)
 		{
-			_tree.insertNode(pos, value);
+				(void) pos;
+				insert(value);
+				return (iterator(_tree.search(value.first), &_tree));
 		}
-		// template<class InputIt>
-		// void 					insert(InputIt first, InputIt last) {}
+		template<class InputIt>
+		void 					insert(InputIt first, InputIt last)
+		{
+			for (; first != last; first++)
+				insert(*first);
+		}
 		iterator				erase(iterator pos)
 		{
 			_tree.deleteNode(pos);
 		}
-		// iterator				erase(iterator first, iterator last) {}
+		iterator				erase(iterator first, iterator last)
+		{
+			for (; first != last;)
+			{
+				_tree.deleteNode((*first++).first);	
+				_tree.size--;
+			}
+		}
 		size_type				erase(const Key& key)
 		{
 			_tree.deleteNode(_tree, key);
 		}
-		// void					swap(map& other) {}
+		void					swap(map& other)
+		{
+			_tree.swap(other._tree);
+			std::swap(_alloc, other._alloc);
+			std::swap(_comp, other._comp);
+		}
 
 	//Lookup -----------------------------------------------------------------//
-		// size_type				count(const Key& key) const {}
-		// iterator				find(const Key& key) {}
-		// const_iterator			find(const Key& key) const {}
-		// pair<iterator,iterator>	equal_range(const Key& key) {}
-		// pair<const_iterator,
-		// const_iterator>			equal_range(const Key& key) const {}
-		// iterator				lower_bound(const Key& key) {}
-		// const_iterator			lower_bound(const Key& key) const {}
-		// iterator				upper_bound(const Key& key) {}
-		// const_iterator			upper_bound(const Key& key) const {}
+		size_type				count(const Key& key) const
+		{
+			if (find(key))
+				return (1);
+			return (0);
+		}
+		iterator				find(const Key& key)
+		{
+			return (iterator(_tree.search(key), &_tree));
+		}
+		const_iterator			find(const Key& key) const
+		{
+			return (const_iterator(_tree.search(key), &_tree));
+		}
+		pair<iterator,iterator>	equal_range(const Key& key)
+		{
+			iterator	tmpBeginIt = end();
+			iterator	tmpEndIt = end();
+
+			iterator it = begin();
+
+			for (; it != end(); it++)
+			{
+				if (!comp(it->first, key))
+				{
+					tmpBeginIt = it;
+					break ;
+				}
+			}
+			it = begin();
+			for (; it != end(); it++)
+			{
+				if (comp(key, it->first))
+				{
+					tmpEndIt = it;
+					break ;
+				}
+			}
+			return (ft::make_pair(tmpBeginIt, tmpEndIt));
+		}
+		pair<const_iterator,
+		const_iterator>			equal_range(const Key& key) const
+		{
+			iterator	tmpBeginIt = end();
+			iterator	tmpEndIt = end();
+
+			iterator it = begin();
+
+			for (; it != end(); it++)
+			{
+				if (!comp(it->first, key))
+				{
+					tmpBeginIt = it;
+					break ;
+				}
+			}
+			it = begin();
+			for (; it != end(); it++)
+			{
+				if (comp(key, it->first))
+				{
+					tmpEndIt = it;
+					break ;
+				}
+			}
+			return (ft::make_pair(tmpBeginIt, tmpEndIt));
+		}
+		iterator				lower_bound(const Key& key)
+		{
+			iterator it = begin();
+
+			for (; it != end(); it++)
+			{
+				if (!comp(it->first, key))
+					return (it);
+			}
+			return (it);
+		}
+		const_iterator			lower_bound(const Key& key) const
+		{
+			iterator it = begin();
+
+			for (; it != end(); it++)
+			{
+				if (!comp(it->first, key))
+					return (it);
+			}
+			return (it);
+		}
+		iterator				upper_bound(const Key& key)
+		{
+			iterator it = begin();
+
+			for (; it != end(); it++)
+			{
+				if (!comp(key, it->first))
+					return (it);
+			}
+			return (it);
+		}
+		const_iterator			upper_bound(const Key& key) const
+		{
+			iterator it = begin();
+
+			for (; it != end(); it++)
+			{
+				if (!comp(key, it->first))
+					return (it);
+			}
+			return (it);
+		}
 
 	//Observers --------------------------------------------------------------//
 		key_compare				key_comp() const {return (_comp);}

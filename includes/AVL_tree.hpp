@@ -22,17 +22,26 @@ namespace	ft
 		allocator_type									alloc;
 
 	public:
-//Member functions -----------------------------------------------------------//
-	//Constructor/Destructor -------------------------------------------------//
-		//Default ------------------------------------------------------------//
+//Member functions ----------------------------------------------------------//
+	//Constructor/Destructor ------------------------------------------------//
+		//Default -----------------------------------------------------------//
 		AVL_tree(const key_compare& comp = key_compare(),
-		const allocator_type& alloc = std::allocator<node_type>())
-		:keyComp(comp), root(NULL), size(0), alloc(alloc){}
+		const allocator_type& allocator = std::allocator<node_type>())
+		: keyComp(comp), root(NULL), size(0), alloc(allocator) {}
 
-		//Destructor ---------------------------------------------------------//
-		~AVL_tree() {deleteAll(root);}
+		//Default -----------------------------------------------------------//
+		AVL_tree(Key key, Value value, 
+		const key_compare& comp = key_compare(),
+		const allocator_type& allocator = std::allocator<node_type>())
+		: keyComp(comp), root(NULL), size(0), alloc(allocator)
+		{
+			insertNode(key, value);
+		}
 
-	//Getters ----------------------------------------------------------------//
+		//Destructor --------------------------------------------------------//
+		~AVL_tree() {}
+
+	//Getters ---------------------------------------------------------------//
 		node_ptr		minValue(node_ptr node) const
 		{
 			node_ptr current = node;
@@ -60,7 +69,7 @@ namespace	ft
 			return (node->getHeight());
 		}
 
-	//New node ---------------------------------------------------------------//
+	//New node --------------------------------------------------------------//
 		node_ptr		newNode(Key key, Value value)
 		{
 			node_ptr node = alloc.allocate(1);
@@ -99,39 +108,43 @@ namespace	ft
 		}
 
 	//Insertion -------------------------------------------------------------//
+		node_ptr		insertNode(pair_type const& pair)
+		{
+			return (insertNode(root, pair.first, pair.second));
+		}
 		node_ptr		insertNode(node_ptr node, Key key, Value value)
 		{
 			if (node == NULL)
 				return (newNode(key, value));
 			if (key < node->getFirst())
-				node->getLeftChild() = insertNode(node->getLeftChild(), key);
+				node->getLeftChild() = insertNode(node->getLeftChild(), key, value);
 			else if (key > node->getFirst())
-				node->getRightChild() = insertNode(node->getRightChild(), key);
+				node->getRightChild() = insertNode(node->getRightChild(), key, value);
 			else
 				return (node);
 
 			node->height = 1 + max(height(node->getLeftChild()),
 						height(node->getRightChild()));
-			int balanceFactor = getBalanceFactor(node);
-			if (balanceFactor > 1)
+			int balance = balanceFactor(node);
+			if (balance > 1)
 			{
-				if (key < node->getLeftChild()->key)
+				if (key < node->getLeftChild()->getFirst())
 				{
 					return (rightRotate(node));
 				}
-				else if (key > node->getLeftChild()->key)
+				else if (key > node->getLeftChild()->getFirst())
 				{
 					node->getLeftChild() = leftRotate(node->getLeftChild());
 					return (rightRotate(node));
 				}
 			}
-			if (balanceFactor < -1)
+			if (balance < -1)
 			{
-				if (key > node->getRightChild()->key)
+				if (key > node->getRightChild()->getFirst())
 				{
 					return (leftRotate(node));
 				}
-				else if (key < node->getRightChild()->key)
+				else if (key < node->getRightChild()->getFirst())
 				{
 					node->getRightChild() = rightRotate(node->getRightChild());
 					return (leftRotate(node));
@@ -146,8 +159,8 @@ namespace	ft
 			size = 0;
 			if(node)
 			{
-				deleteFrom(node->getRightChild());
-				deleteFrom(node->getLeftChild());
+				deleteFrom(node.getRightChild());
+				deleteFrom(node.getLeftChild());
 				alloc.destroy(node);
 				alloc.deallocate(node, 1);
 			}
@@ -215,7 +228,6 @@ namespace	ft
 			return (root);
 
 		}
-
 		node_ptr		search(node_ptr node, const Key key) const
 		{
 			if (node)
@@ -229,6 +241,7 @@ namespace	ft
 			}
 			return (NULL);
 		}
+
 	};
 
 }
