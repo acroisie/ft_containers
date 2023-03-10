@@ -12,7 +12,6 @@ namespace	ft
         typedef typename pair_type::first_type   first;
         typedef typename pair_type::second_type  second;
 
-    private:
         pair_type       _pair;
         node*			_parent;
         node*			_lChild;
@@ -26,7 +25,7 @@ namespace	ft
         node(): _parent(NULL), _lChild(NULL), _rChild(NULL), _height(0) {}
 
 		//Pair ---------------------------------------------------------------//
-        node(const pair<T1, T2>& data, node* parent = NULL,
+        node(pair_type data, node* parent = NULL,
 		node* lChild = NULL, node* rChild = NULL, int height = 0)
         : _pair(data), _parent(parent), _lChild(lChild),
 		_rChild(rChild), _height(height) {}

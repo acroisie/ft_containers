@@ -29,28 +29,31 @@ namespace	ft
 	public:
 //Member function ------------------------------------------------------------//
 	//Constructor/Destructor/Assign content ----------------------------------//
+		//Default ------------------------------------------------------------//
 		bidirectional_iterator(): _ptr(NULL) {}
-		// bidirectional_iterator(const bidirectional_iterator& cpy)
-		// : _ptr(cpy._ptr) {}
-		bidirectional_iterator(const iterator_traits<bidirectional_iterator<I, node> > &cpy)
+
+		//Copy ---------------------------------------------------------------//
+		bidirectional_iterator(const bidirectional_iterator<I, node>& cpy)
 		: _ptr(cpy._ptr) {}
 
+		//Destructor ---------------------------------------------------------//
 		~bidirectional_iterator() {}
 
+		//Assign operator ----------------------------------------------------//
 		bidirectional_iterator&	operator=(const bidirectional_iterator& obj)
 		{
 			_ptr = obj._ptr;
 			return (*this);
 		}
 		
-	//Member access operator ------------------------------------------------//
+	//Member access operator -------------------------------------------------//
 		pointer					base() const {return (_ptr);}
 
-	//Dereference operators -------------------------------------------------//
-		reference				operator*() const {return (*_ptr->_pair);}
-		pointer					operator->() const {return (&(_ptr->_pair));}
+	//Dereference operators --------------------------------------------------//
+		reference				operator*() const {return (*_ptr->pair);}
+		pointer					operator->() const {return (&(_ptr->pair));}
 
-	//Increment/decrement operators -----------------------------------------//
+	//Increment/decrement operators ------------------------------------------//
 		bidirectional_iterator&	operator++()
 		{
 			_ptr++;
@@ -74,7 +77,7 @@ namespace	ft
 			return (cpy);
 		}
 
-	//Inequality relational operators ---------------------------------------//
+	//Inequality relational operators ----------------------------------------//
 		friend bool	operator==(const bidirectional_iterator &lhs,
 		const bidirectional_iterator &rhs) {return (lhs._ptr == rhs._ptr);}
 		friend bool	operator!=(const bidirectional_iterator &lhs,
