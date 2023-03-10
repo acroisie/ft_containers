@@ -164,7 +164,7 @@ namespace	ft
 
 	//Modifiers --------------------------------------------------------------//
 		void					clear() {_tree.deleteFrom(_tree.root);}
-		pair<iterator,bool>	insert (const value_type& val)
+		pair<iterator,bool>		insert (const value_type& val)
 		{
 			iterator tmp(_tree.search(val.first));
 			_tree.insertPair(val);
@@ -176,15 +176,14 @@ namespace	ft
 			}
 			return (ft::make_pair<iterator, bool>(it, false));
 		}
-		iterator			insert (iterator position, const value_type& val)
+		iterator				insert (iterator position, const value_type& val)
 		{
 			(void) position;
 			insert(val);
 			return (iterator(_tree.search(val.first), &_tree));
 		}
-
-		template <class InputIterator> 
-		void insert (InputIterator first, InputIterator last)
+		template <class iterator> 
+		void					insert (iterator first, iterator last)
 		{
 			while (first != last)
 			{
