@@ -7,8 +7,13 @@ namespace	ft
     template	<class T1, class T2>
     class		node
     {
+    public:
+        typedef pair<T1, T2>                     pair_type;
+        typedef typename pair_type::first_type   first;
+        typedef typename pair_type::second_type  second;
+
     private:
-        pair<T1, T2>	_pair;
+        pair_type       _pair;
         node*			_parent;
         node*			_lChild;
         node*			_rChild;
@@ -69,8 +74,8 @@ namespace	ft
 
 	//Getters/Setters --------------------------------------------------------//
         const pair<T1, T2>&	getPair() const {return (_pair);}
-        const pair<T1, T2>&	getFirst() const {return (_pair.first);}
-        const pair<T1, T2>&	getSecond() const {return (_pair.second);}
+        const first     	getFirst() const {return (_pair.first);}
+        const second    	getSecond() const {return (_pair.second);}
         void				setPair(const pair<T1, T2>& pair) {_pair = pair;}
 
         node*				getParent() const {return (_parent);}

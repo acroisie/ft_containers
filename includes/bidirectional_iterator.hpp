@@ -20,8 +20,8 @@ namespace	ft
 		typedef	iterator<std::bidirectional_iterator_tag, node_type>	node_it;
 		typedef typename iterator_traits<node_it>::pointer 				node_pointer;
 
-		operator bidirectional_iterator<const I, node_type> () const
-		{return (bidirectional_iterator<const I, node_type>(_ptr));}
+		operator bidirectional_iterator<const I, const node_type> () const
+		{return (bidirectional_iterator<const I, const node_type>(_ptr));}
 
 	private:
 		node_pointer	_ptr;
@@ -30,8 +30,9 @@ namespace	ft
 //Member function ------------------------------------------------------------//
 	//Constructor/Destructor/Assign content ----------------------------------//
 		bidirectional_iterator(): _ptr(NULL) {}
-		bidirectional_iterator(node_pointer ptr): _ptr(ptr) {}
-		bidirectional_iterator(const bidirectional_iterator& cpy)
+		// bidirectional_iterator(const bidirectional_iterator& cpy)
+		// : _ptr(cpy._ptr) {}
+		bidirectional_iterator(const iterator_traits<bidirectional_iterator<I, node> > &cpy)
 		: _ptr(cpy._ptr) {}
 
 		~bidirectional_iterator() {}
@@ -46,8 +47,8 @@ namespace	ft
 		pointer					base() const {return (_ptr);}
 
 	//Dereference operators -------------------------------------------------//
-		reference				operator*() const {return (*_ptr);}
-		pointer					operator->() const {return (_ptr);}
+		reference				operator*() const {return (*_ptr->_pair);}
+		pointer					operator->() const {return (&(_ptr->_pair));}
 
 	//Increment/decrement operators -----------------------------------------//
 		bidirectional_iterator&	operator++()

@@ -74,10 +74,10 @@ namespace	ft
 		{
 			node_ptr node = alloc.allocate(1);
 			alloc.construct(node, make_pair(key, value)); 
-			node->getFirst() = key;
-			node->getLeftChild() = NULL;
-			node->getRightChild() = NULL;
-			node->height = 1;
+			node->setFirst(key);
+			node->setLeftChild(NULL);
+			node->setRightChild(NULL);
+			node->setHeight(1);
 			return (node);
 		}
 
@@ -88,12 +88,12 @@ namespace	ft
 		}
 		node_ptr		rightRotate(node_ptr y)
 		{
-			node_ptr x = y->left;
-			node_ptr T2 = x->right;
-			x->right = y;
-			y->left = T2;
-			y->height = max(height(y->left), height(y->right)) + 1;
-			x->height = max(height(x->left), height(x->right)) + 1;
+			node_ptr x = y->getLeftChild();
+			node_ptr T2 = x->getRightChild();
+			x->setRightChild(y);
+			y->setLeftChild(T2);
+			y->setHeight(max(height(y->left), height(y->right)) + 1);
+			x->setHeight(max(height(x->left), height(x->right)) + 1);
 			return (x);
 		}
 		node_ptr		leftRotate(node_ptr x)
@@ -102,8 +102,8 @@ namespace	ft
 			node_ptr T2 = y->left;
 			y->left = x;
 			x->right = T2;
-			x->height = max(height(x->left), height(x->right)) + 1;
-			y->height = max(height(y->left), height(y->right)) + 1;
+			x->setHeight(max(height(x->left), height(x->right)) + 1);
+			y->setHeight(max(height(y->left), height(y->right)) + 1);
 			return (y);
 		}
 
@@ -112,7 +112,7 @@ namespace	ft
 		{
 			root = insertNode(root, pair.first, pair.second);
 			if (root)
-				root->up = NULL;
+				root->setParent(NULL);
 		}
 		node_ptr		insertNode(pair_type const& pair)
 		{
@@ -123,9 +123,9 @@ namespace	ft
 			if (node == NULL)
 				return (newNode(key, value));
 			if (key < node->getFirst())
-				node->getLeftChild() = insertNode(node->getLeftChild(), key, value);
+				node->setLeftChild(insertNode(node->getLeftChild(), key, value));
 			else if (key > node->getFirst())
-				node->getRightChild() = insertNode(node->getRightChild(), key, value);
+				node->setRightChild(insertNode(node->getRightChild(), key, value));
 			else
 				return (node);
 
@@ -140,7 +140,7 @@ namespace	ft
 				}
 				else if (key > node->getLeftChild()->getFirst())
 				{
-					node->getLeftChild() = leftRotate(node->getLeftChild());
+					node->setLeftChild(leftRotate(node->getLeftChild()));
 					return (rightRotate(node));
 				}
 			}
@@ -152,7 +152,7 @@ namespace	ft
 				}
 				else if (key < node->getRightChild()->getFirst())
 				{
-					node->getRightChild() = rightRotate(node->getRightChild());
+					node->setRightChild(rightRotate(node->getRightChild()));
 					return (leftRotate(node));
 				}
 			}
@@ -176,9 +176,9 @@ namespace	ft
 			if (root == NULL)
 				return (root);
 			if (key < root->getFirst())
-				root->getLeftChild() = deleteNode(root->getLeftChild(), key);
+				root->setLeftChild(deleteNode(root->getLeftChild(), key));
 			else if (key > root->getFirst())
-				root->geRightChild() = deleteNode(root->geRightChild(), key);
+				root->seRightChild(deleteNode(root->geRightChild(), key));
 			else
 			{
 				if ((root->getLeftChild() == NULL) || (root->geRightChild() == NULL))
@@ -196,16 +196,16 @@ namespace	ft
 				}
 				else
 				{
-					node_ptr temp = nodeWithMimumValue(root->geRightChild());
-					root->getFirst() = temp->getFirst();
-					root->geRightChild() = deleteNode(root->geRightChild(), temp->getFirst());
+					node_ptr temp = minValue(root->geRightChild());
+					root->getFirst(temp->getFirst());
+					root->geRightChild(deleteNode(root->geRightChild(), temp->getFirst()));
 				}
 			}
 
 			if (root == NULL)
 				return (root);
 
-			root->height = 1 + max(height(root->getLeftChild()), height(root->geRightChild()));
+			root->setHeight(1 + max(height(root->getLeftChild()), height(root->geRightChild())));
 			int balanceFactor = getBalanceFactor(root);
 			if (balanceFactor > 1)
 			{
@@ -215,7 +215,7 @@ namespace	ft
 				}
 				else
 				{
-					root->getLeftChild() = leftRotate(root->getLeftChild());
+					root->setLeftChild(leftRotate(root->getLeftChild()));
 					return rightRotate(root);
 				}
 			}
@@ -227,7 +227,7 @@ namespace	ft
 				}
 				else
 				{
-					root->geRightChild() = rightRotate(root->geRightChild());
+					root->seRightChild(rightRotate(root->geRightChild()));
 					return leftRotate(root);
 				}
 			}
@@ -245,9 +245,9 @@ namespace	ft
 				if (key == node->key.first)
 					return (node);
 				else if (key_compare(key, node->key.first))
-					return (search(node->left, key));
+					return (search(node->getLeftChild(), key));
 				else
-					return (search(node->right, key));
+					return (search(node->getRightChild(), key));
 			}
 			return (NULL);
 		}
