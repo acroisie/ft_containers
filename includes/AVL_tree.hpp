@@ -60,7 +60,7 @@ namespace	ft
 		{
 			if (node == NULL)
 				return (0);
-			return (height(node->getLeftChild()) - height(node->right));
+			return (height(node->getLeftChild()) - height(node->getRightChild()));
 		}
 		int				height(node_ptr node)
 		{
@@ -74,7 +74,7 @@ namespace	ft
 		{
 			node_ptr node = alloc.allocate(1);
 			alloc.construct(node, make_pair(key, value)); 
-			node->setFirst(key);
+			node->_pair.first = key;
 			node->setLeftChild(NULL);
 			node->setRightChild(NULL);
 			node->setHeight(1);
@@ -92,18 +92,18 @@ namespace	ft
 			node_ptr T2 = x->getRightChild();
 			x->setRightChild(y);
 			y->setLeftChild(T2);
-			y->setHeight(max(height(y->left), height(y->right)) + 1);
-			x->setHeight(max(height(x->left), height(x->right)) + 1);
+			y->setHeight(max(height(y->getLeftChild()), height(y->getRightChild())) + 1);
+			x->setHeight(max(height(x->getLeftChild()), height(x->getRightChild())) + 1);
 			return (x);
 		}
 		node_ptr		leftRotate(node_ptr x)
 		{
-			node_ptr y = x->right;
-			node_ptr T2 = y->left;
-			y->left = x;
-			x->right = T2;
-			x->setHeight(max(height(x->left), height(x->right)) + 1);
-			y->setHeight(max(height(y->left), height(y->right)) + 1);
+			node_ptr y = x->getRightChild();
+			node_ptr T2 = y->getLeftChild();
+			y->setLeftChild(x);
+			x->setRightChild(T2);
+			x->setHeight(max(height(x->getLeftChild()), height(x->getRightChild())) + 1);
+			y->setHeight(max(height(y->getLeftChild()), height(y->getRightChild())) + 1);
 			return (y);
 		}
 
@@ -129,8 +129,8 @@ namespace	ft
 			else
 				return (node);
 
-			node->height = 1 + max(height(node->getLeftChild()),
-						height(node->getRightChild()));
+			node->setHeight(1 + max(height(node->getLeftChild()),
+			height(node->getRightChild())));
 			int balance = balanceFactor(node);
 			if (balance > 1)
 			{
@@ -242,9 +242,9 @@ namespace	ft
 		{
 			if (node)
 			{
-				if (key == node->key.first)
+				if (key == node->getPair().first)
 					return (node);
-				else if (key_compare(key, node->key.first))
+				else if (keyComp(key, node->getPair().first))
 					return (search(node->getLeftChild(), key));
 				else
 					return (search(node->getRightChild(), key));

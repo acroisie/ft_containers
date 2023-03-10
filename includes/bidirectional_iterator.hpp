@@ -50,8 +50,8 @@ namespace	ft
 		pointer					base() const {return (_ptr);}
 
 	//Dereference operators --------------------------------------------------//
-		reference				operator*() const {return (*_ptr->pair);}
-		pointer					operator->() const {return (&(_ptr->pair));}
+		reference				operator*() const {return (*_ptr->_pair);}
+		pointer					operator->() const {return (&(_ptr->_pair));}
 
 	//Increment/decrement operators ------------------------------------------//
 		bidirectional_iterator&	operator++()

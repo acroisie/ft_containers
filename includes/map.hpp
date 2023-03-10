@@ -169,7 +169,7 @@ namespace	ft
 			iterator tmp(_tree.search(val.first));
 			_tree.insertPair(val);
 			iterator it(_tree.search(val.first));
-			if (it != NULL && tmp == NULL)
+			if ((it != NULL) && (tmp == NULL))
 			{
 				_tree.size++;
 				return (ft::make_pair<iterator, bool>(it, true));
