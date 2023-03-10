@@ -16,24 +16,24 @@ namespace	ft
 	> class map
 	{
 	public:
-		typedef Key                                     				key_type;
-		typedef T                                       				mapped_type;
-		typedef pair<const key_type, mapped_type>       				value_type;
-		typedef Compare                                 				key_compare;
-		typedef Allocator                               				allocator_type;
-		typedef typename allocator_type::reference      				reference;
-		typedef typename allocator_type::const_reference				const_reference;
-		typedef typename allocator_type::pointer        				pointer;
-		typedef typename allocator_type::const_pointer  				const_pointer;
-		typedef typename allocator_type::size_type      				size_type;
-		typedef typename allocator_type::difference_type				difference_type;
-		typedef	node<key_type, value_type>								node_type;
-		typedef	node<key_type, value_type>*								node_ptr;
+		typedef Key                                     							key_type;
+		typedef T                                       							mapped_type;
+		typedef pair<const key_type, mapped_type>       							value_type;
+		typedef Compare                                 							key_compare;
+		typedef Allocator                               							allocator_type;
+		typedef typename allocator_type::reference      							reference;
+		typedef typename allocator_type::const_reference							const_reference;
+		typedef typename allocator_type::pointer        							pointer;
+		typedef typename allocator_type::const_pointer  							const_pointer;
+		typedef typename allocator_type::size_type      							size_type;
+		typedef typename allocator_type::difference_type							difference_type;
+		typedef	node<key_type, value_type>											node_type;
+		typedef	node<key_type, value_type>*											node_ptr;
 		typedef typename ft::bidirectional_iterator<value_type, node_type>			iterator;
 		typedef typename ft::bidirectional_iterator<const value_type, node_type>	const_iterator;
-		typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
-		typedef typename ft::reverse_iterator<const_iterator>			const_reverse_iterator;
-		typedef typename ft::AVL_tree<key_type, mapped_type>			tree_type;
+		typedef typename ft::reverse_iterator<iterator>								reverse_iterator;
+		typedef typename ft::reverse_iterator<const_iterator>						const_reverse_iterator;
+		typedef typename ft::AVL_tree<key_type, mapped_type>						tree_type;
 
 	private:
 		key_compare		_comp;
@@ -69,8 +69,8 @@ namespace	ft
 		: _comp(comp), _alloc(alloc) {}
 
 		//Range --------------------------------------------------------------//
-		template<class InputIt>
-		map(InputIt first, InputIt last, const Compare& comp = Compare(),
+		template<class iterator>
+		map(iterator first, iterator last, const Compare& comp = Compare(),
 		const Allocator& alloc = Allocator())
 		: _comp(comp), _alloc(alloc)
 		{
@@ -164,11 +164,11 @@ namespace	ft
 
 	//Modifiers --------------------------------------------------------------//
 		void					clear() {_tree.deleteFrom(_tree.root);}
-		pair<iterator, bool>	insert(const value_type& value)
+		pair<iterator,bool>	insert (const value_type& val)
 		{
-			iterator tmp(_tree.search(_tree.root, value.first));
-			_tree.insertPair(value);
-			iterator it(_tree.search(_tree.root, value.first));
+			iterator tmp(_tree.search(val.first));
+			_tree.insertPair(val);
+			iterator it(_tree.search(val.first));
 			if (it != NULL && tmp == NULL)
 			{
 				_tree.size++;
@@ -176,17 +176,21 @@ namespace	ft
 			}
 			return (ft::make_pair<iterator, bool>(it, false));
 		}
-		iterator				insert(iterator pos, const value_type& value)
+		iterator			insert (iterator position, const value_type& val)
 		{
-				(void) pos;
-				insert(value);
-				return (iterator(_tree.search(value.first), &_tree));
+			(void) position;
+			insert(val);
+			return (iterator(_tree.search(val.first), &_tree));
 		}
-		template<class InputIt>
-		void 					insert(InputIt first, InputIt last)
+
+		template <class InputIterator> 
+		void insert (InputIterator first, InputIterator last)
 		{
-			for (; first != last; first++)
+			while (first != last)
+			{
 				insert(*first);
+				first++;
+			}
 		}
 		iterator				erase(iterator pos)
 		{

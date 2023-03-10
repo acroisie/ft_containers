@@ -6,28 +6,22 @@
 
 namespace	ft
 {
-	template	<class I, class node>
-	class		bidirectional_iterator:
-	public		ft::iterator<std::bidirectional_iterator_tag, I>
+	template<class I, class node>
+	class bidirectional_iterator : public iterator<std::bidirectional_iterator_tag, I>
 	{
 	public:
-		typedef typename ft::iterator<std::bidirectional_iterator_tag, I>
-		::difference_type	difference_type;
-		typedef typename ft::iterator<std::bidirectional_iterator_tag, I>
-		::value_type		value_type;
-		typedef typename ft::iterator<std::bidirectional_iterator_tag, I>
-		::pointer			pointer;
-		typedef typename ft::iterator<std::bidirectional_iterator_tag, I>
-		::reference			reference;
-		typedef typename ft::iterator<std::bidirectional_iterator_tag, I>
-		::iterator_category	iterator_category;
+		typedef typename bidirectional_iterator::difference_type		difference_type;
+		typedef typename bidirectional_iterator::value_type				value_type;
+		typedef typename bidirectional_iterator::pointer				pointer;
+		typedef typename bidirectional_iterator::reference				reference;
+		typedef typename bidirectional_iterator::iterator_category		iterator_category;
 
 		typedef	node													node_type;
 		typedef	iterator<std::bidirectional_iterator_tag, node_type>	node_it;
 		typedef typename iterator_traits<node_it>::pointer 				node_pointer;
 
-		operator bidirectional_iterator<const I, node> () const
-		{return (bidirectional_iterator<const I, node>(_ptr));}
+		operator bidirectional_iterator<const I, node_type> () const
+		{return (bidirectional_iterator<const I, node_type>(_ptr));}
 
 	private:
 		node_pointer	_ptr;
@@ -36,7 +30,7 @@ namespace	ft
 //Member function ------------------------------------------------------------//
 	//Constructor/Destructor/Assign content ----------------------------------//
 		bidirectional_iterator(): _ptr(NULL) {}
-		bidirectional_iterator(pointer ptr): _ptr(ptr) {}
+		bidirectional_iterator(node_pointer ptr): _ptr(ptr) {}
 		bidirectional_iterator(const bidirectional_iterator& cpy)
 		: _ptr(cpy._ptr) {}
 

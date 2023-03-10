@@ -108,6 +108,12 @@ namespace	ft
 		}
 
 	//Insertion -------------------------------------------------------------//
+		void			insertPair(pair_type pair)
+		{
+			root = insertNode(root, pair.first, pair.second);
+			if (root)
+				root->up = NULL;
+		}
 		node_ptr		insertNode(pair_type const& pair)
 		{
 			return (insertNode(root, pair.first, pair.second));
@@ -227,6 +233,10 @@ namespace	ft
 			}
 			return (root);
 
+		}
+		node_ptr		search(const Key key) const
+		{
+			return (search(root, key));
 		}
 		node_ptr		search(node_ptr node, const Key key) const
 		{
