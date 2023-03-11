@@ -12,82 +12,60 @@ namespace	ft
         typedef typename pair_type::first_type   first;
         typedef typename pair_type::second_type  second;
 
-        pair_type       _pair;
-        node*			_parent;
-        node*			_lChild;
-        node*			_rChild;
-        int				_height;
+        pair_type       m_pair;
+        node*			m_parent;
+        node*			m_lChild;
+        node*			m_rChild;
 
     public:
 //Member functions -----------------------------------------------------------//
 	//Constructor/Destructor -------------------------------------------------//
-		//Default ------------------------------------------------------------//
-        node(): _parent(NULL), _lChild(NULL), _rChild(NULL), _height(0) {}
-
 		//Pair ---------------------------------------------------------------//
-        node(pair_type data, node* parent = NULL,
-		node* lChild = NULL, node* rChild = NULL, int height = 0)
-        : _pair(data), _parent(parent), _lChild(lChild),
-		_rChild(rChild), _height(height) {}
+        node(pair_type data = NULL, node* parent = NULL,
+		node* lChild = NULL, node* rChild = NULL)
+        : m_pair(data), m_parent(parent), m_lChild(lChild),
+		m_rChild(rChild) {}
 
 		//Destructor ---------------------------------------------------------//
-        ~node() {}
+        ~node(){}
 
 	//Increment/decrement operators ------------------------------------------//
         node&               operator++()
         {
-            if (_rChild)
+            if (m_rChild)
             {
-                node* current = _rChild;
-                while (current->_lChild)
-                    current = current->_lChild;
+                node* current = m_rChild;
+                while (current->m_lChild)
+                    current = current->m_lChild;
                 return (*current);
             }
             node* current = this;
-            node* parent = _parent;
-            while (parent != NULL && current == parent->_rChild)
+            node* parent = m_parent;
+            while (parent != NULL && current == parent->m_rChild)
             {
                 current = parent;
-                parent = parent->_parent;
+                parent = parent->m_parent;
             }
             return (*parent);
         }
         node&               operator--()
         {
-            if (_lChild)
+            if (m_lChild)
             {
-                node* current = _lChild;
-                while (current->_rChild)
-                    current = current->_rChild;
+                node* current = m_lChild;
+                while (current->m_rChild)
+                    current = current->m_rChild;
                 return (*current);
             }
             node* current = this;
-            node* parent = _parent;
-            while (parent != NULL && current == parent->_lChild)
+            node* parent = m_parent;
+            while (parent != NULL && current == parent->m_lChild)
             {
                 current = parent;
-                parent = parent->_parent;
+                parent = parent->m_parent;
             }
             return (*parent);
         }
-
-	//Getters/Setters --------------------------------------------------------//
-        const pair<T1, T2>&	getPair() const {return (_pair);}
-        const first     	getFirst() const {return (_pair.first);}
-        const second    	getSecond() const {return (_pair.second);}
-        void				setPair(const pair<T1, T2>& pair) {_pair = pair;}
-
-        node*				getParent() const {return (_parent);}
-        void				setParent(node* parent) {_parent = parent;}
-
-        node*				getLeftChild() const {return (_lChild);}
-        void				setLeftChild(node* lChild) {_lChild = lChild;}
-
-        node*				getRightChild() const {return (_rChild);}
-        void				setRightChild(node* rChild) {_rChild = rChild;}
-
-        int					getHeight() const {return (_height);}
-        void				setHeight(int height) {_height = height;}
 
     };
 
