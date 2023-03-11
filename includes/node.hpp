@@ -13,18 +13,19 @@ namespace	ft
         typedef typename pair_type::second_type  second;
 
         pair_type       m_pair;
-        node*			m_parent;
-        node*			m_lChild;
-        node*			m_rChild;
+        node*			m_up;
+        node*			m_left;
+        node*			m_right;
+        size_t			m_height;
 
     public:
 //Member functions -----------------------------------------------------------//
 	//Constructor/Destructor -------------------------------------------------//
 		//Pair ---------------------------------------------------------------//
-        node(pair_type data = NULL, node* parent = NULL,
-		node* lChild = NULL, node* rChild = NULL)
-        : m_pair(data), m_parent(parent), m_lChild(lChild),
-		m_rChild(rChild) {}
+        node(pair_type data = NULL, node* up = NULL,
+		node* left = NULL, node* right = NULL, size_t height = 1)
+        : m_pair(data), m_up(up), m_left(left),
+		m_right(right), m_height(height) {}
 
 		//Destructor ---------------------------------------------------------//
         ~node(){}
@@ -32,37 +33,37 @@ namespace	ft
 	//Increment/decrement operators ------------------------------------------//
         node&               operator++()
         {
-            if (m_rChild)
+            if (m_right)
             {
-                node* current = m_rChild;
-                while (current->m_lChild)
-                    current = current->m_lChild;
+                node* current = m_right;
+                while (current->m_left)
+                    current = current->m_left;
                 return (*current);
             }
             node* current = this;
-            node* parent = m_parent;
-            while (parent != NULL && current == parent->m_rChild)
+            node* parent = m_up;
+            while (parent != NULL && current == parent->m_right)
             {
                 current = parent;
-                parent = parent->m_parent;
+                parent = parent->m_up;
             }
             return (*parent);
         }
         node&               operator--()
         {
-            if (m_lChild)
+            if (m_left)
             {
-                node* current = m_lChild;
-                while (current->m_rChild)
-                    current = current->m_rChild;
+                node* current = m_left;
+                while (current->m_right)
+                    current = current->m_right;
                 return (*current);
             }
             node* current = this;
-            node* parent = m_parent;
-            while (parent != NULL && current == parent->m_lChild)
+            node* parent = m_up;
+            while (parent != NULL && current == parent->m_left)
             {
                 current = parent;
-                parent = parent->m_parent;
+                parent = parent->m_up;
             }
             return (*parent);
         }
