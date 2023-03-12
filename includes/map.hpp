@@ -84,28 +84,76 @@ namespace	ft
 		}
 
 		//Destructor ---------------------------------------------------------//
-		~map() {}
+		~map() {clearTree();}
 
 		//Assign operator ----------------------------------------------------//
-		map&					operator=(const map& other) {}
+		map&	operator=(const map& other) 
+		{
+			clear();
+			const_iterator beg = other.begin();
+			while(beg != other.end())
+				insert(*beg++);
+			return (*this);
+		}
 
 		//Allocator ----------------------------------------------------------//
 		allocator_type			get_allocator() const {return (_alloc);}
 
 	//Element access ---------------------------------------------------------//
-		mapped_type&			at(const Key& key) {}
-		const mapped_type&		at(const Key& key) const {}
-		mapped_type&			operator[](const Key& key) {}
+		mapped_type&			at (const key_type& key)
+		{ 
+			if (search(key))
+				return (search(key));
+			throw std::out_of_range("map"); 
+		}
+		const mapped_type&		at (const key_type& k) const
+		{
+			if (search(k))
+				return (search(k));
+			throw std::out_of_range("map"); 
+		}
+		mapped_type&			operator[](const Key& key)
+		{
+			if (search(key))
+				return (search(key)->m_pair.second);
+			insertPair(ft::make_pair(key, T()));
+			_size++;
+			return (search(key)->m_pair.second);
+		}
 
 	//Iterators --------------------------------------------------------------//
-		iterator				begin() {}
-		const_iterator			begin() const {}
-		iterator				end() {}
-		const_iterator			end() const {}
-		reverse_iterator		rbegin() {}
-		const_reverse_iterator	rbegin() const {}
-		reverse_iterator		rend() {}
-		const_reverse_iterator	rend() const {}
+		iterator				begin()
+		{
+			return iterator(nodeWithMimumValue(_root));
+		}
+		const_iterator			begin() const
+		{
+			return iterator(nodeWithMimumValue(_root));
+		}
+		iterator				end()
+		{
+			return (iterator(nodeWithMaxmumValue(_root)));
+		}
+		const_iterator			end() const
+		{
+			return (iterator(nodeWithMaxmumValue(_root)));
+		}
+		reverse_iterator		rbegin()
+		{
+			return reverse_iterator(begin());
+		}
+		const_reverse_iterator	rbegin() const
+		{
+			return const_reverse_iterator(begin());
+		}
+		reverse_iterator		rend()
+		{
+			return reverse_iterator(end());
+		}
+		const_reverse_iterator	rend() const
+			{
+				return const_reverse_iterator(end());
+			}
 
 	//Capacity ---------------------------------------------------------------//
 		bool					empty() const {return (begin() == end());}
@@ -136,7 +184,10 @@ namespace	ft
 		const_iterator			upper_bound(const Key& key) const {}
 	//Observers --------------------------------------------------------------//
 		key_compare				key_comp() const {return (_comp);}
-		// map::value_compare		value_comp() const {}
+		value_compare			value_comp() const
+		{
+			return (value_compare(key_comp()));
+		}
 	
 	private:
 //Public member functions ----------------------------------------------------//
@@ -339,6 +390,23 @@ namespace	ft
 					return (search(N->right, key));
 			}
 			return (NULL);
+		}
+		void					clearFrom(node_ptr N)
+		{
+			if (N == NULL)
+				return;
+			if (N->m_left)
+				clearFrom(N->m_left);
+			if (N->m_right)
+				clearFrom(N->m_right);
+			_alloc.destroy(N);
+			_alloc.deallocate(N, 1);
+		}
+		void					clearTree()
+		{
+			_size = 0;
+			clearForm(_root);
+			_root = NULL;
 		}
 
 	};
