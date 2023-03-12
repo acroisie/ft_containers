@@ -64,13 +64,13 @@ namespace	ft
 		//Empty --------------------------------------------------------------//
 		explicit map(const Compare& comp = key_compare(),
 		const Allocator& alloc = allocator_type())
-		: _comp(comp), _alloc(alloc) {}
+		: _root(NULL), _size(0), _comp(comp), _alloc(alloc) {}
 
 		//Range --------------------------------------------------------------//
 		template<class iterator>
 		map(iterator first, iterator last, const Compare& comp = Compare(),
 		const Allocator& alloc = Allocator())
-		: _comp(comp), _alloc(alloc)
+		: _root(NULL), _size(0), _comp(comp), _alloc(alloc)
 		{
 			insert(first, last);
 		}
@@ -78,7 +78,7 @@ namespace	ft
 		//Copy ---------------------------------------------------------------//
 		map(const map& other, const Compare& comp = key_compare(),
 		const Allocator& alloc = allocator_type())
-		: _comp(comp), _alloc(alloc), _tree(NULL)
+		: _root(NULL), _size(0), _comp(comp), _alloc(alloc)
 		{
 			*this = other;
 		}
@@ -161,27 +161,150 @@ namespace	ft
 		size_type				max_size() const {return (_alloc.max_size());}
 
 	//Modifiers --------------------------------------------------------------//
-		void					clear() {}
-		pair<iterator,bool>		insert (const value_type& val) {}
-		iterator				insert (iterator position, const value_type& val) {}
+		void					clear() {clearTree();}
+		pair<iterator,bool>		insert (const value_type& val)
+		{
+			iterator tmp(search(val.first));
+			insertPair(val);
+			iterator it(search(val.first));
+			if (it != NULL && tmp == NULL)
+			{
+				_size++;
+				return (ft::make_pair<iterator, bool>(it, true));
+			}
+			return (ft::make_pair<iterator, bool>(it, false));
+		}
+		iterator				insert (iterator position, const value_type& val)
+		{
+			(void) position;
+			insert(val);
+			return (iterator(search(val.first), _root));
+		}
 		template <class iterator> 
-		void					insert (iterator first, iterator last) {}
-		iterator				erase(iterator pos) {}
-		iterator				erase(iterator first, iterator last) {}
-		size_type				erase(const Key& key) {}
-		void					swap(map& other) {}
+		void					insert (iterator first, iterator last)
+		{
+			for (; first != last; first++)
+				insert(*first);
+		}
+		iterator				erase(iterator pos)
+		{
+			iterator tmp = pos;
+			deleteNode(_root,(*pos).first);
+			return (pos);
+		}
+		iterator				erase(iterator first, iterator last)
+		{
+			while(first != last)
+			{
+				if (first->first)
+				{
+					iterator tmp = first;
+					erase((first++)->first);
+					return (tmp);
+				}
+			}
+			return (NULL);
+		}
+		size_type				erase(const Key& key)
+		{
+			if(search(key))
+				{
+					deleteNode(_root, key);
+					return (1);
+				}
+				return(0);
+		}
+		void					swap(map& other)
+		{
+			node_pointer 	root = other._root;
+			size_type 		size = other._size;
+			key_compare		comp = other._comp;
+			allocator_type	alloc = other._alloc;
+
+			other._size = size;
+			other._root = root;
+			other._comp = comp;
+			other._alloc = alloc;
+
+			_size = size;
+			_root = root;
+			_comp = comp;
+			_alloc = alloc;
+		}
 
 	//Lookup -----------------------------------------------------------------//
-		size_type				count(const Key& key) const {}
-		iterator				find(const Key& key) {}
-		const_iterator			find(const Key& key) const {}
-		pair<iterator,iterator>	equal_range(const Key& key) {}
+		size_type				count(const Key& key) const
+		{
+			if (find(key) != NULL)
+				return (1);
+			return (0);
+		}
+		iterator				find(const Key& key)
+		{
+			return (iterator(search(key)));
+		}
+		const_iterator			find(const Key& key) const
+		{
+			return (const_iterator(search(key)));
+		}
+		pair<iterator,iterator>	equal_range(const Key& key)
+		{
+			return(ft::make_pair<iterator, iterator>(lower_bound(key),upper_bound(key)));
+		}
 		pair<const_iterator,
-		const_iterator>			equal_range(const Key& key) const {}
-		iterator				lower_bound(const Key& key) {}
-		const_iterator			lower_bound(const Key& key) const {}
-		iterator				upper_bound(const Key& key) {}
-		const_iterator			upper_bound(const Key& key) const {}
+		const_iterator>			equal_range(const Key& key) const
+		{
+			return(ft::make_pair<const_iterator, const_iterator>(lower_bound(key),upper_bound(key)));			
+		}
+		iterator				lower_bound(const Key& key)
+		{
+			iterator it = begin();
+			while (it != end())
+			{
+				if (_keycomp(it->first, key))
+					it++;
+				else
+					return(it);
+			}
+			return( it );
+		}
+		const_iterator			lower_bound(const Key& key) const
+		{
+			const_iterator it = begin();
+			while (it != end())
+			{
+				if (_keycomp(it->first, key))
+					it++;
+				else
+					return(it);
+			}
+			return( it );
+		}
+		iterator				upper_bound(const Key& key) 
+		{
+			iterator it = begin();
+			while (it != end())
+			{
+				if (_keycomp(it->first, key) || key == it->first)
+					it++;
+				else
+					return(it);
+			}
+			return( it );
+		}
+		const_iterator			upper_bound(const Key& key) const 
+		{
+			const_iterator it = begin();
+			while (it != end())
+			{
+				if (_keycomp(it->first, key) || key == it->first)
+					it++;
+				else
+					return(it);
+			}
+			return( it );
+		}
+
 	//Observers --------------------------------------------------------------//
 		key_compare				key_comp() const {return (_comp);}
 		value_compare			value_comp() const
@@ -301,84 +424,77 @@ namespace	ft
 				current = current->m_right;
 			return (current);
 		}
-		node_pointer 			deleteNode(node_pointer root, key_type key)
+		node_pointer			deleteNode(node_pointer root, key_type key)
 		{
-			// Find the node and delete it
 			if (root == NULL)
-				return (root);
+				return NULL;
+
 			if (_comp(key, root->m_pair.first))
 			{
 				root->m_left = deleteNode(root->m_left, key);
-				if (root->m_left)
-					root->m_left->up = root;
 			}
 			else if (_comp(root->m_pair.first, key))
 			{
 				root->m_right = deleteNode(root->m_right, key);
-				if (root->m_right)
-					root->m_right->up = root;
 			}
 			else
 			{
-				if ((root->m_left == NULL) || (root->m_right == NULL))
+				if (root->m_left == NULL)
 				{
-					node_pointer temp = root->m_left ? root->m_left : root->m_right;
-					if (temp == NULL)
-					{
-						temp = root;
-						root = NULL;
-					}
+					node_pointer temp = root->m_right;
+					delete root;
+					return temp;
+				}
+				else if (root->m_right == NULL)
+				{
+					node_pointer temp = root->m_left;
+					delete root;
+					return temp;
 				}
 				else
-					*root = *temp;
-				_alloc.destroy(temp);
-				_alloc.deallocate(temp, 1);
+				{
+					node_pointer temp = nodeWithMinimumValue(root->m_right);
+					root->m_pair = temp->m_pair;
+					root->m_right = deleteNode(root->m_right, temp->m_pair.first);
+				}
 			}
-			else
-			{
-				node_pointer temp = nodeWithMimumValue(root->m_right);
-				root->m_pair = temp->m_pair;
-				root->m_right = deleteNode(root->m_right, temp->key);
-			}
+
 			if (root == NULL)
-				return (root);
+				return NULL;
 
-			// Update the balance factor of each node and
-			// balance the tree
-			root->m_height = 1 + max(m_height(root->m_left), m_height(root->m_right));
+			root->m_height = 1 + max(getHeight(root->m_left), getHeight(root->m_right));
+
 			int balanceFactor = getBalanceFactor(root);
-			if (balanceFactor > 1)
-			{
-				if (getBalanceFactor(root->m_left) >= 0)
-				{
-					return rightRotate(root);
-				}
-				else
-				{
-					root->m_left = leftRotate(root->m_left);
-					return rightRotate(root);
-				}
-			}
-			if (balanceFactor < -1)
-			{
-				if (getBalanceFactor(root->m_right) <= 0)
-				{
-					return leftRotate(root);
-				}
-				else
-				{
-					root->m_right = rightRotate(root->m_right);
-					return leftRotate(root);
-				}
-			}
-			return (root);
 
+			if (balanceFactor > 1 && getBalanceFactor(root->m_left) >= 0)
+			{
+				return rightRotate(root);
+			}
+
+			if (balanceFactor < -1 && getBalanceFactor(root->m_right) <= 0)
+			{
+				return leftRotate(root);
+			}
+
+			if (balanceFactor > 1 && getBalanceFactor(root->m_left) < 0)
+			{
+				root->m_left = leftRotate(root->m_left);
+				return rightRotate(root);
+			}
+
+			if (balanceFactor < -1 && getBalanceFactor(root->m_right) > 0)
+			{
+				root->m_right = rightRotate(root->m_right);
+				return leftRotate(root);
+			}
+
+			return (root);
 		}
-		node_ptr				search(const key_type key) const
+		node_pointer			search(const key_type key) const
 		{
 			return (search(_root, key));
 		}
-		node_ptr				search(node_ptr N, const key_type key) const
+		node_pointer			search(node_pointer N, const key_type key) const
 		{
 			if (N)
 			{
@@ -391,7 +507,7 @@ namespace	ft
 			}
 			return (NULL);
 		}
-		void					clearFrom(node_ptr N)
+		void					clearFrom(node_pointer N)
 		{
 			if (N == NULL)
 				return;
