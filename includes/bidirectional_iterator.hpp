@@ -32,26 +32,34 @@ namespace	ft
 		//Default ------------------------------------------------------------//
 		bidirectional_iterator(): _ptr(NULL) {}
 
+		//Node ---------------------------------------------------------------//
+		bidirectional_iterator(node_pointer begin) : _ptr(begin) {}
+
 		//Copy ---------------------------------------------------------------//
-		bidirectional_iterator(const bidirectional_iterator<I, node>& cpy)
-		: _ptr(cpy._ptr) {}
+		bidirectional_iterator(const bidirectional_iterator &obj)
+		{
+			_ptr = obj._ptr;
+		}
+		bidirectional_iterator(const iterator_traits<bidirectional_iterator<I, node> >&obj)
+		:_ptr(obj._ptr) {}
 
 		//Destructor ---------------------------------------------------------//
 		~bidirectional_iterator() {}
 
 		//Assign operator ----------------------------------------------------//
-		bidirectional_iterator&	operator=(const bidirectional_iterator& obj)
+		bidirectional_iterator	&operator=(const bidirectional_iterator &obj)
 		{
-			_ptr = obj._ptr;
-			return (*this);
+			if (this != &obj)
+				_ptr = obj._ptr;
+			return *this;
 		}
-		
+
 	//Member access operator -------------------------------------------------//
 		pointer					base() const {return (_ptr);}
 
 	//Dereference operators --------------------------------------------------//
-		reference				operator*() const {return (*_ptr->_pair);}
-		pointer					operator->() const {return (&(_ptr->_pair));}
+		reference				operator*() const {return (*_ptr->m_pair);}
+		pointer					operator->() const {return (&(_ptr->m_pair));}
 
 	//Increment/decrement operators ------------------------------------------//
 		bidirectional_iterator&	operator++()

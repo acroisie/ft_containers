@@ -33,7 +33,7 @@ namespace	ft
 		typedef typename ft::reverse_iterator<const_iterator>							const_reverse_iterator;
 
 	private:
-		node_type		_root;
+		node_pointer	_root;
 		size_type		_size;
 		key_compare		_comp;
 		allocator_type	_alloc;
@@ -261,7 +261,7 @@ namespace	ft
 			iterator it = begin();
 			while (it != end())
 			{
-				if (_keycomp(it->first, key))
+				if (_comp(it->first, key))
 					it++;
 				else
 					return(it);
@@ -273,7 +273,7 @@ namespace	ft
 			const_iterator it = begin();
 			while (it != end())
 			{
-				if (_keycomp(it->first, key))
+				if (_comp(it->first, key))
 					it++;
 				else
 					return(it);
@@ -285,7 +285,7 @@ namespace	ft
 			iterator it = begin();
 			while (it != end())
 			{
-				if (_keycomp(it->first, key) || key == it->first)
+				if (_comp(it->first, key) || key == it->first)
 					it++;
 				else
 					return(it);
@@ -297,7 +297,7 @@ namespace	ft
 			const_iterator it = begin();
 			while (it != end())
 			{
-				if (_keycomp(it->first, key) || key == it->first)
+				if (_comp(it->first, key) || key == it->first)
 					it++;
 				else
 					return(it);
@@ -325,10 +325,10 @@ namespace	ft
 		{
 			return ((a > b) ? a : b);
 		}
-		node_pointer			newNode(key_type key, value_type value)
+		node_pointer			newNode(key_type key, mapped_type value)
 		{
 			node_pointer N = _alloc.allocate(1);
-			_alloc.construct(N, node_type(key, value));
+			_alloc.construct(N, node<const key_type, mapped_type>(key, value));
 			return (N);
 		}
 		node_pointer			rightRotate(node_pointer y)
@@ -337,8 +337,8 @@ namespace	ft
 			node_pointer T2 = x->m_right;
 			x->m_right = y;
 			y->m_left = T2;
-			y->m_height = max(m_height(y->m_left), m_height(y->m_right)) + 1;
-			x->m_height = max(m_height(x->m_left), m_height(x->m_right)) + 1;
+			y->m_height = max(height(y->m_left), height(y->m_right)) + 1;
+			x->m_height = max(height(x->m_left), height(x->m_right)) + 1;
 			return (x);
 		}
 		node_pointer			leftRotate(node_pointer x)
@@ -347,30 +347,30 @@ namespace	ft
 			node_pointer T2 = y->m_left;
 			y->m_left = x;
 			x->m_right = T2;
-			x->m_height = max(m_height(x->m_left), m_height(x->m_right)) + 1;
-			y->m_height = max(m_height(y->m_left), m_height(y->m_right)) + 1;
+			x->m_height = max(height(x->m_left), height(x->m_right)) + 1;
+			y->m_height = max(height(y->m_left), height(y->m_right)) + 1;
 			return (y);
 		}
 		int						getBalanceFactor(node_pointer N)
 		{
 			if (N == NULL)
 				return (0);
-			return (m_height(N->m_left) - m_height(N->m_right));
+			return (height(N->m_left) - height(N->m_right));
 		}
-		node_pointer			insertNode(node_pointer N, key_type key, value_type value)
+		node_pointer			insertNode(node_pointer N, key_type key, mapped_type value)
 		{
 			//Find the correct postion and insert the node
 			if (N == NULL)
 				return (newNode(key, value));
 			if (_comp(key, N->m_pair.first))
 			{
-				N->m_left = insertNode(N->m_left, key);
+				N->m_left = insertNode(N->m_left, key, value);
 				if (N->m_left)
 					N->m_left->m_up = N;
 			}
 			else if (_comp(N->m_pair.first, key))
 			{
-				N->m_right = insertNode(N->m_right, key);
+				N->m_right = insertNode(N->m_right, key, value);
 				if (N->m_right)
 					N->m_right->m_up = N;
 			}
@@ -378,7 +378,7 @@ namespace	ft
 				return (N);
 
 			//Update the balance factor of each node and balance the tree
-			N->m_height = 1 + max(m_height(N->m_left), m_height(N->m_right));
+			N->m_height = 1 + max(height(N->m_left), height(N->m_right));
 			int balanceFactor = getBalanceFactor(N);
 			if (balanceFactor > 1)
 			{
@@ -398,17 +398,23 @@ namespace	ft
 			{
 				if (_comp(N->m_right->m_pair.first, key))
 				{
-					return leftRotate(N);
+					return (leftRotate(N));
 				}
 				else if (_comp(key, N->m_right->m_pair.first))
 				{
 					N->m_right = rightRotate(N->m_right);
 					if (N->m_right)
 						N->m_right->m_up = NULL;
-					return leftRotate(N);
+					return (leftRotate(N));
 				}
 			}
 			return (N);
+		}
+		void					insertPair(value_type pair)
+		{
+			_root = insertNode(_root, pair.first, pair.second);
+			if (_root)
+				_root->m_up = NULL;
 		}
 		node_pointer			nodeWithMimumValue(node_pointer N)
 		{
@@ -417,7 +423,21 @@ namespace	ft
 				current = current->m_left;
 			return (current);
 		}
+		node_pointer			nodeWithMimumValue(node_pointer N) const
+		{
+			node_pointer current = N;
+			while (current->m_left != NULL)
+				current = current->m_left;
+			return (current);
+		}
 		node_pointer			nodeWithMaxmumValue(node_pointer N)
+		{
+			node_pointer current = N;
+			while (current->m_right != NULL)
+				current = current->m_right;
+			return (current);
+		}
+		node_pointer			nodeWithMaxmumValue(node_pointer N) const
 		{
 			node_pointer current = N;
 			while (current->m_right != NULL)
@@ -494,16 +514,16 @@ namespace	ft
 		{
 			return (search(_root, key));
 		}
-		node_pointer			search(node_pointer N, const key_type key) const
+		node_pointer			search(node_pointer node, const key_type key) const
 		{
-			if (N)
+			if (node)
 			{
-				if (key == N->key.first)
-					return (N);
-				else if (_comp(key, N->key.first))
-					return (search(N->left, key));
+				if (key == node->m_pair.first)
+					return (node);
+				else if (_comp(key, node->m_pair.first))
+					return (search(node->m_left, key));
 				else
-					return (search(N->right, key));
+					return (search(node->m_right, key));
 			}
 			return (NULL);
 		}
@@ -521,7 +541,7 @@ namespace	ft
 		void					clearTree()
 		{
 			_size = 0;
-			clearForm(_root);
+			clearFrom(_root);
 			_root = NULL;
 		}
 
