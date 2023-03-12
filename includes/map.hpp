@@ -178,7 +178,7 @@ namespace	ft
 		{
 			(void) position;
 			insert(val);
-			return (iterator(search(val.first), _root));
+			return (iterator(search(val.first)));
 		}
 		template <class iterator> 
 		void					insert (iterator first, iterator last)

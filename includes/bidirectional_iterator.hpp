@@ -58,7 +58,7 @@ namespace	ft
 		pointer					base() const {return (_ptr);}
 
 	//Dereference operators --------------------------------------------------//
-		reference				operator*() const {return (*_ptr->m_pair);}
+		reference				operator*() const {return (_ptr->m_pair);}
 		pointer					operator->() const {return (&(_ptr->m_pair));}
 
 	//Increment/decrement operators ------------------------------------------//
