@@ -22,18 +22,13 @@ namespace	ft
 //Member functions -----------------------------------------------------------//
 	//Constructor/Destructor -------------------------------------------------//
 		//Pair ---------------------------------------------------------------//
-        // node(pair_type data = NULL, node* up = NULL,
-		// node* left = NULL, node* right = NULL, size_t height = 1)
-        // : m_pair(data), m_up(up), m_left(left),
-		// m_right(right), m_height(height) {}
-        node(pair_type &content) : 
-                m_pair(content), m_height(1), m_up(NULL), m_left(NULL), m_right(NULL) {}
-        node(pair_type &content, node *parent) : 
-                m_pair(content), m_height(1), m_up(parent), m_left(NULL), m_right(NULL) {}
-
+        node(pair_type &content)
+        : m_pair(content), m_height(1), m_up(NULL), m_left(NULL), m_right(NULL) {}
+        node(pair_type &content, node *parent)
+        : m_pair(content), m_height(1), m_up(parent), m_left(NULL), m_right(NULL) {}
 
 		//Destructor ---------------------------------------------------------//
-        ~node(){}
+        ~node() {}
 
 	//Increment/decrement operators ------------------------------------------//
         node&               operator++()
