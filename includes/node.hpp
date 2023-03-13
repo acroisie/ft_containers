@@ -4,13 +4,13 @@
 
 namespace	ft
 {
-    template	<class T1, class T2>
+    template	<class T>
     class		node
     {
     public:
-        typedef pair<T1, T2>                     pair_type;
-        typedef typename pair_type::first_type   first;
-        typedef typename pair_type::second_type  second;
+        typedef T                                   pair_type;
+        typedef typename pair_type::first_type      first;
+        typedef typename pair_type::second_type     second;
 
         pair_type       m_pair;
         node*			m_up;
@@ -22,10 +22,10 @@ namespace	ft
 //Member functions -----------------------------------------------------------//
 	//Constructor/Destructor -------------------------------------------------//
 		//Pair ---------------------------------------------------------------//
-        node(pair_type &content)
-        : m_pair(content), m_height(1), m_up(NULL), m_left(NULL), m_right(NULL) {}
-        node(pair_type &content, node *parent)
-        : m_pair(content), m_height(1), m_up(parent), m_left(NULL), m_right(NULL) {}
+        node(const pair_type &content)
+        : m_pair(content), m_up(NULL), m_left(NULL), m_right(NULL), m_height(1) {}
+        node(const pair_type &content, const node *parent)
+        : m_pair(content), m_up(parent), m_left(NULL), m_right(NULL), m_height(1) {}
 
 		//Destructor ---------------------------------------------------------//
         ~node() {}

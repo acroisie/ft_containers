@@ -10,14 +10,14 @@
 namespace	ft
 {
 	template <class Key, class T, class Compare = std::less<Key>,
-	class Allocator = std::allocator<pair<const Key, T> >
+	class Allocator = std::allocator<node<ft::pair<const Key, T> > >
 	> class map
 	{
 	public:
 		typedef Key                                     								key_type;
 		typedef T                                       								mapped_type;
 		typedef pair<const key_type, mapped_type>       								value_type;
-		typedef Compare                                 								key_compare;
+		typedef Compare		                            								key_compare;
 		typedef Allocator                               								allocator_type;
 		typedef typename allocator_type::reference      								reference;
 		typedef typename allocator_type::const_reference								const_reference;
@@ -25,8 +25,8 @@ namespace	ft
 		typedef typename allocator_type::const_pointer  								const_pointer;
 		typedef typename allocator_type::size_type      								size_type;
 		typedef typename allocator_type::difference_type								difference_type;
-		typedef	node<const key_type, mapped_type>										node_type;
-		typedef	node<const key_type, mapped_type>*										node_pointer;
+		typedef	node<value_type>														node_type;
+		typedef	node<value_type>*														node_pointer;
 		typedef typename ft::bidirectional_iterator<value_type, node_type>				iterator;
 		typedef typename ft::bidirectional_iterator<const value_type, const node_type>	const_iterator;
 		typedef typename ft::reverse_iterator<iterator>									reverse_iterator;
@@ -328,7 +328,7 @@ namespace	ft
 		node_pointer			newNode(key_type key, mapped_type value)
 		{
 			node_pointer N = _alloc.allocate(1);
-			_alloc.construct(N, node<const key_type, mapped_type>(key, value));
+			_alloc.construct(N, node<value_type>(ft::make_pair(key, value)));
 			return (N);
 		}
 		node_pointer			rightRotate(node_pointer y)
