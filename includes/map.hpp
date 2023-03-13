@@ -112,7 +112,7 @@ namespace	ft
 				return (search(k));
 			throw std::out_of_range("map"); 
 		}
-		mapped_type&			operator[](const Key& key)
+		mapped_type&			operator[](const key_type& key)
 		{
 			if (search(key))
 				return (search(key)->m_pair.second);

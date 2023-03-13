@@ -32,7 +32,7 @@ namespace	ft
 		//Default ------------------------------------------------------------//
 		bidirectional_iterator(): _ptr(NULL) {}
 
-		//Node ---------------------------------------------------------------//
+		//node ---------------------------------------------------------------//
 		bidirectional_iterator(node_pointer begin) : _ptr(begin) {}
 
 		//Copy ---------------------------------------------------------------//
@@ -62,28 +62,50 @@ namespace	ft
 		pointer					operator->() const {return (&(_ptr->m_pair));}
 
 	//Increment/decrement operators ------------------------------------------//
-		bidirectional_iterator&	operator++()
-		{
-			_ptr++;
-			return (*this);
-		}
-		bidirectional_iterator	operator++(int)
-		{
-			bidirectional_iterator cpy(*this);
-			_ptr++;
-			return (cpy);
-		}
-		bidirectional_iterator&	operator--()
-		{
-			_ptr--;
-			return (*this);
-		}
-		bidirectional_iterator	operator--(int)
-		{
-			bidirectional_iterator cpy = *this;
-			_ptr--;
-			return (cpy);
-		}
+	    bidirectional_iterator&	operator++()
+        {
+            if (_ptr->m_right)
+            {
+                _ptr = _ptr->m_right;
+                while (_ptr->m_left)
+                    _ptr = _ptr->m_left;
+            }
+            else
+            {
+                while (_ptr->m_up && _ptr->m_up->m_right == _ptr)
+                    _ptr = _ptr->m_up;
+                _ptr = _ptr->m_up;
+            }
+            return (*this);
+        }
+        bidirectional_iterator	operator++(int)
+        {
+            bidirectional_iterator tmp(*this);
+            operator++();
+            return (tmp);
+        }
+        bidirectional_iterator&	operator--()
+        {
+            if (_ptr->m_left)
+            {
+                _ptr = _ptr->m_left;
+                while (_ptr->m_right)
+                    _ptr = _ptr->m_right;
+            }
+            else
+            {
+                while (_ptr->m_up && _ptr->m_up->m_left == _ptr)
+                    _ptr = _ptr->m_up;
+                _ptr = _ptr->m_up;
+            }
+            return (*this);
+        }
+        bidirectional_iterator	operator--(int)
+        {
+            bidirectional_iterator tmp(*this);
+            operator--();
+            return (tmp);
+        }
 
 	//Inequality relational operators ----------------------------------------//
 		friend bool	operator==(const bidirectional_iterator &lhs,

@@ -30,44 +30,6 @@ namespace	ft
 		//Destructor ---------------------------------------------------------//
         ~node() {}
 
-	//Increment/decrement operators ------------------------------------------//
-        node&               operator++()
-        {
-            if (m_right)
-            {
-                node* current = m_right;
-                while (current->m_left)
-                    current = current->m_left;
-                return (*current);
-            }
-            node* current = this;
-            node* parent = m_up;
-            while (parent != NULL && current == parent->m_right)
-            {
-                current = parent;
-                parent = parent->m_up;
-            }
-            return (*parent);
-        }
-        node&               operator--()
-        {
-            if (m_left)
-            {
-                node* current = m_left;
-                while (current->m_right)
-                    current = current->m_right;
-                return (*current);
-            }
-            node* current = this;
-            node* parent = m_up;
-            while (parent != NULL && current == parent->m_left)
-            {
-                current = parent;
-                parent = parent->m_up;
-            }
-            return (*parent);
-        }
-
     };
 
 }
