@@ -3,6 +3,7 @@
 #include	<memory>
 #include	"pair.hpp"
 #include	"equal.hpp"
+#include	"lexicographical_compare.hpp"
 #include	"bidirectional_iterator.hpp"
 #include	"reverse_iterator.hpp"
 #include	"node.hpp"
@@ -49,7 +50,6 @@ namespace	ft
 			typedef	value_type	first_argument_type;
 			typedef value_type	second_argument_type;
 		
-		protected:
 			Compare	comp;
 			value_compare(Compare c): comp(c) {}
 			bool operator()(const value_type& lhs, const value_type& rhs) const
@@ -444,86 +444,67 @@ namespace	ft
 				current = current->m_right;
 			return (current);
 		}
-		node_pointer			deleteNode(node_pointer root, key_type key)
+		node_pointer			deleteNode(node_pointer N, key_type key)
 		{
-			if (root == NULL)
-				return NULL;
+			if (N == NULL)
+				return (NULL);
 
-			if (_comp(key, root->m_pair.first))
-			{
-				root->m_left = deleteNode(root->m_left, key);
-			}
-			else if (_comp(root->m_pair.first, key))
-			{
-				root->m_right = deleteNode(root->m_right, key);
-			}
+			if (_comp(key, N->m_pair.first))
+				N->m_left = deleteNode(N->m_left, key);
+			else if (_comp(N->m_pair.first, key))
+				N->m_right = deleteNode(N->m_right, key);
 			else
 			{
-				if (root->m_left == NULL)
-				{
-					node_pointer temp = root->m_right;
-					delete root;
-					return temp;
-				}
-				else if (root->m_right == NULL)
-				{
-					node_pointer temp = root->m_left;
-					delete root;
-					return temp;
-				}
+				if (N->m_left == NULL)
+					return (N->m_right);
+				else if (N->m_right == NULL)
+					return (N->m_left);
 				else
 				{
-					node_pointer temp = nodeWithMinimumValue(root->m_right);
-					root->m_pair = temp->m_pair;
-					root->m_right = deleteNode(root->m_right, temp->m_pair.first);
+					node_pointer temp = nodeWithMimumValue(N->m_right);
+					N->m_pair = temp->m_pair;
+					N->m_right = deleteNode(N->m_right, temp->m_pair.first);
 				}
 			}
 
-			if (root == NULL)
-				return NULL;
+			N->m_height = 1 + max(height(N->m_left), height(N->m_right));
 
-			root->m_height = 1 + max(getHeight(root->m_left), getHeight(root->m_right));
+			int balanceFactor = getBalanceFactor(N);
 
-			int balanceFactor = getBalanceFactor(root);
+			if (balanceFactor > 1 && getBalanceFactor(N->m_left) >= 0)
+				return (rightRotate(N));
 
-			if (balanceFactor > 1 && getBalanceFactor(root->m_left) >= 0)
+			if (balanceFactor < -1 && getBalanceFactor(N->m_right) <= 0)
+				return (leftRotate(N));
+
+			if (balanceFactor > 1 && getBalanceFactor(N->m_left) < 0)
 			{
-				return rightRotate(root);
+				N->m_left = leftRotate(N->m_left);
+				return (rightRotate(N));
 			}
 
-			if (balanceFactor < -1 && getBalanceFactor(root->m_right) <= 0)
+			if (balanceFactor < -1 && getBalanceFactor(N->m_right) > 0)
 			{
-				return leftRotate(root);
+				N->m_right = rightRotate(N->m_right);
+				return (leftRotate(N));
 			}
 
-			if (balanceFactor > 1 && getBalanceFactor(root->m_left) < 0)
-			{
-				root->m_left = leftRotate(root->m_left);
-				return rightRotate(root);
-			}
-
-			if (balanceFactor < -1 && getBalanceFactor(root->m_right) > 0)
-			{
-				root->m_right = rightRotate(root->m_right);
-				return leftRotate(root);
-			}
-
-			return (root);
+			return (N);
 		}
 		node_pointer			search(const key_type key) const
 		{
 			return (search(_root, key));
 		}
-		node_pointer			search(node_pointer node, const key_type key) const
+		node_pointer			search(node_pointer N, const key_type key) const
 		{
-			if (node)
+			if (N)
 			{
-				if (key == node->m_pair.first)
-					return (node);
-				else if (_comp(key, node->m_pair.first))
-					return (search(node->m_left, key));
+				if (key == N->m_pair.first)
+					return (N);
+				else if (_comp(key, N->m_pair.first))
+					return (search(N->m_left, key));
 				else
-					return (search(node->m_right, key));
+					return (search(N->m_right, key));
 			}
 			return (NULL);
 		}
