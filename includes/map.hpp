@@ -462,7 +462,7 @@ namespace	ft
 				else
 				{
 					node_pointer temp = nodeWithMimumValue(N->m_right);
-					N->m_pair = temp->m_pair;
+					N= temp;
 					N->m_right = deleteNode(N->m_right, temp->m_pair.first);
 				}
 			}
