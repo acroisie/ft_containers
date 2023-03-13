@@ -235,9 +235,7 @@ namespace	ft
 	//Lookup -----------------------------------------------------------------//
 		size_type				count(const Key& key) const
 		{
-			if (find(key) != NULL)
-				return (1);
-			return (0);
+			return ((find(key) != end()) ? 1 : 0);
 		}
 		iterator				find(const Key& key)
 		{
@@ -249,12 +247,12 @@ namespace	ft
 		}
 		pair<iterator,iterator>	equal_range(const Key& key)
 		{
-			return(ft::make_pair<iterator, iterator>(lower_bound(key),upper_bound(key)));
+			return (make_pair<iterator, iterator>(lower_bound(key),upper_bound(key)));
 		}
 		pair<const_iterator,
 		const_iterator>			equal_range(const Key& key) const
 		{
-			return(ft::make_pair<const_iterator, const_iterator>(lower_bound(key),upper_bound(key)));			
+			return (make_pair<const_iterator, const_iterator>(lower_bound(key),upper_bound(key)));			
 		}
 		iterator				lower_bound(const Key& key)
 		{
@@ -264,9 +262,9 @@ namespace	ft
 				if (_comp(it->first, key))
 					it++;
 				else
-					return(it);
+					return (it);
 			}
-			return( it );
+			return (it);
 		}
 		const_iterator			lower_bound(const Key& key) const
 		{
@@ -278,7 +276,7 @@ namespace	ft
 				else
 					return(it);
 			}
-			return( it );
+			return (it);
 		}
 		iterator				upper_bound(const Key& key) 
 		{
@@ -288,9 +286,9 @@ namespace	ft
 				if (_comp(it->first, key) || key == it->first)
 					it++;
 				else
-					return(it);
+					return (it);
 			}
-			return( it );
+			return (it);
 		}
 		const_iterator			upper_bound(const Key& key) const 
 		{
@@ -300,9 +298,9 @@ namespace	ft
 				if (_comp(it->first, key) || key == it->first)
 					it++;
 				else
-					return(it);
+					return (it);
 			}
-			return( it );
+			return (it);
 		}
 
 	//Observers --------------------------------------------------------------//
