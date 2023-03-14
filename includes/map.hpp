@@ -117,7 +117,6 @@ namespace	ft
 			if (search(key))
 				return (search(key)->m_pair.second);
 			insertPair(ft::make_pair(key, T()));
-			_size++;
 			return (search(key)->m_pair.second);
 		}
 
@@ -132,11 +131,11 @@ namespace	ft
 		}
 		iterator				end()
 		{
-			return (iterator(nodeWithMaxmumValue(_root)));
+			return (iterator(nodeWithMaximumValue(_root)->m_right));
 		}
 		const_iterator			end() const
 		{
-			return (iterator(nodeWithMaxmumValue(_root)));
+			return (iterator(nodeWithMaximumValue(_root)->m_right));
 		}
 		reverse_iterator		rbegin()
 		{
@@ -151,9 +150,9 @@ namespace	ft
 			return reverse_iterator(end());
 		}
 		const_reverse_iterator	rend() const
-			{
-				return const_reverse_iterator(end());
-			}
+		{
+			return const_reverse_iterator(end());
+		}
 
 	//Capacity ---------------------------------------------------------------//
 		bool					empty() const {return (begin() == end());}
@@ -162,19 +161,15 @@ namespace	ft
 
 	//Modifiers --------------------------------------------------------------//
 		void					clear() {clearTree();}
-		pair<iterator,bool>		insert (const value_type& val)
+		pair<iterator,bool>		insert(const value_type& val)
 		{
-			iterator tmp(search(val.first));
 			insertPair(val);
 			iterator it(search(val.first));
-			if (it != NULL && tmp == NULL)
-			{
-				_size++;
-				return (ft::make_pair<iterator, bool>(it, true));
-			}
-			return (ft::make_pair<iterator, bool>(it, false));
+			if (it != end() && !key_comp()(it->first, val.first) && !key_comp()(val.first, it->first))
+				return ft::make_pair(it, false);
+			return ft::make_pair(it, true);
 		}
-		iterator				insert (iterator position, const value_type& val)
+		iterator				insert(iterator position, const value_type& val)
 		{
 			(void) position;
 			insert(val);
@@ -327,6 +322,7 @@ namespace	ft
 		{
 			node_pointer N = _alloc.allocate(1);
 			_alloc.construct(N, node<value_type>(ft::make_pair(key, value)));
+			_size++;
 			return (N);
 		}
 		node_pointer			rightRotate(node_pointer y)
@@ -408,11 +404,41 @@ namespace	ft
 			}
 			return (N);
 		}
-		void					insertPair(value_type pair)
+		void					insertPair(const value_type& val)
 		{
-			_root = insertNode(_root, pair.first, pair.second);
-			if (_root)
-				_root->m_up = NULL;
+			node_pointer tmp = newNode(val.first, val.second);
+			node_pointer y = NULL;
+			node_pointer x = _root;
+
+			while (x != NULL)
+			{
+				y = x;
+				if (_comp(val.first, x->m_pair.first))
+					x = x->m_left;
+				else if (_comp(x->m_pair.first, val.first))
+					x = x->m_right;
+				else
+				{
+					delete tmp;
+					return;
+				}
+			}
+
+			tmp->m_up = y;
+			if (y == NULL)
+				_root = tmp;
+			else if (_comp(tmp->m_pair.first, y->m_pair.first))
+				y->m_left = tmp;
+			else
+				y->m_right = tmp;
+
+			while (tmp != _root)
+			{
+				if (_comp(tmp->m_pair.first, tmp->m_up->m_pair.first))
+					tmp = tmp->m_up;
+				else
+					break;
+			}
 		}
 		node_pointer			nodeWithMimumValue(node_pointer N)
 		{
@@ -428,24 +454,24 @@ namespace	ft
 				current = current->m_left;
 			return (current);
 		}
-		node_pointer			nodeWithMaxmumValue(node_pointer N)
+		node_pointer			nodeWithMaximumValue(node_pointer N)
 		{
 			node_pointer current = N;
 			while (current->m_right != NULL)
 				current = current->m_right;
 			return (current);
 		}
-		node_pointer			nodeWithMaxmumValue(node_pointer N) const
+		node_pointer			nodeWithMaximumValue(node_pointer N) const
 		{
 			node_pointer current = N;
 			while (current->m_right != NULL)
 				current = current->m_right;
 			return (current);
 		}
-		node_pointer			deleteNode(node_pointer N, key_type key)
+		node_pointer			deleteNode(node_pointer N, const key_type& key)
 		{
 			if (N == NULL)
-				return (NULL);
+				return NULL;
 
 			if (_comp(key, N->m_pair.first))
 				N->m_left = deleteNode(N->m_left, key);
@@ -453,41 +479,44 @@ namespace	ft
 				N->m_right = deleteNode(N->m_right, key);
 			else
 			{
-				if (N->m_left == NULL)
-					return (N->m_right);
-				else if (N->m_right == NULL)
-					return (N->m_left);
-				else
-				{
-					node_pointer temp = nodeWithMimumValue(N->m_right);
-					N= temp;
-					N->m_right = deleteNode(N->m_right, temp->m_pair.first);
-				}
+				// Remove the pair from the tree
+				ft::map<key_type, mapped_type> temp_map;
+				temp_map.insert(N->m_pair);
+				iterator it = temp_map.find(key);
+				temp_map.erase(it);
+
+				// Delete the node from memory
+				_alloc.destroy(N);
+				_alloc.deallocate(N, 1);
+
+				// Return the new root of the tree
+				return temp_map._root;
 			}
 
+			// Balance the tree
 			N->m_height = 1 + max(height(N->m_left), height(N->m_right));
 
 			int balanceFactor = getBalanceFactor(N);
 
 			if (balanceFactor > 1 && getBalanceFactor(N->m_left) >= 0)
-				return (rightRotate(N));
+				return rightRotate(N);
 
 			if (balanceFactor < -1 && getBalanceFactor(N->m_right) <= 0)
-				return (leftRotate(N));
+				return leftRotate(N);
 
 			if (balanceFactor > 1 && getBalanceFactor(N->m_left) < 0)
 			{
 				N->m_left = leftRotate(N->m_left);
-				return (rightRotate(N));
+				return rightRotate(N);
 			}
 
 			if (balanceFactor < -1 && getBalanceFactor(N->m_right) > 0)
 			{
 				N->m_right = rightRotate(N->m_right);
-				return (leftRotate(N));
+				return leftRotate(N);
 			}
 
-			return (N);
+			return N;
 		}
 		node_pointer			search(const key_type key) const
 		{
