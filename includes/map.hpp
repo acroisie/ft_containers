@@ -406,39 +406,9 @@ namespace	ft
 		}
 		void					insertPair(const value_type& val)
 		{
-			node_pointer tmp = newNode(val.first, val.second);
-			node_pointer y = NULL;
-			node_pointer x = _root;
-
-			while (x != NULL)
-			{
-				y = x;
-				if (_comp(val.first, x->m_pair.first))
-					x = x->m_left;
-				else if (_comp(x->m_pair.first, val.first))
-					x = x->m_right;
-				else
-				{
-					delete tmp;
-					return;
-				}
-			}
-
-			tmp->m_up = y;
-			if (y == NULL)
-				_root = tmp;
-			else if (_comp(tmp->m_pair.first, y->m_pair.first))
-				y->m_left = tmp;
-			else
-				y->m_right = tmp;
-
-			while (tmp != _root)
-			{
-				if (_comp(tmp->m_pair.first, tmp->m_up->m_pair.first))
-					tmp = tmp->m_up;
-				else
-					break;
-			}
+			_root = insertNode(_root, val.first, val.second);
+			if (_root)	
+				_root->m_up = NULL;
 		}
 		node_pointer			nodeWithMimumValue(node_pointer N)
 		{
