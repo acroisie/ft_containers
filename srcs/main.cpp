@@ -17,20 +17,20 @@ void	printVector(const ft::vector<T>& vector)
 
 int	main(void)
 {
-	srand(time(NULL));
+	// srand(time(NULL));
 	ft::map<int, std::string> test;
 
-	test[rand()] = "blabla";
-	test[rand()] = "foo";
-	test[rand()] = "bar";
-	test[rand()] = "lol";
-	test[rand()] = "prout";
-	test[rand()] = "caca";
-	test[rand()] = "pop";
-	test[rand()] = "poupi";
-	test[rand()] = "koko1";
-	test[rand()] = "koko2";
-	test[rand()] = "koko3";
+	test[34] = "blabla";
+	test[654] = "foo";
+	test[4] = "bar";
+	test[3] = "lol";
+	test[56] = "prout";
+	test[7] = "caca";
+	test[89] = "pop";
+	test[3] = "poupi";
+	test[45] = "koko1";
+	test[7] = "koko2";
+	test[10] = "koko3";
 
 	ft::map<int, std::string>::iterator it = test.begin();
 	ft::map<int, std::string>::iterator it_end = test.end();

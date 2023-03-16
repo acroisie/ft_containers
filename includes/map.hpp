@@ -35,7 +35,7 @@ namespace	ft
 		typedef typename ft::reverse_iterator<iterator>									reverse_iterator;
 		typedef typename ft::reverse_iterator<const_iterator>							const_reverse_iterator;
 
-	public: //temporary public
+	private:
 		node_pointer	_meta;
 		node_pointer	_root;
 		size_type		_size;
@@ -91,6 +91,9 @@ namespace	ft
 		const Allocator& alloc = allocator_type())
 		: _root(NULL), _size(0), _comp(comp), _alloc(alloc)
 		{
+			value_type tmp;
+			_meta = _alloc.allocate(1);	
+			_alloc.construct(_meta, node<value_type>(tmp));	
 			*this = other;
 		}
 
@@ -101,9 +104,7 @@ namespace	ft
 		map&	operator=(const map& other) 
 		{
 			clear();
-			const_iterator beg = other.begin();
-			while(beg != other.end())
-				insert(*beg++);
+			insert(other.begin(), other.end());
 			return (*this);
 		}
 
@@ -340,23 +341,31 @@ namespace	ft
 			_size++;
 			return (N);
 		}
-		node_pointer			rightRotate(node_pointer y)
+		node_pointer			rightRotate(node_pointer N)
 		{
-			node_pointer x = y->m_left;
-			node_pointer T2 = x->m_right;
-			x->m_right = y;
-			y->m_left = T2;
-			y->m_height = max(height(y->m_left), height(y->m_right)) + 1;
+			node_pointer x = N->m_left;
+			node_pointer tmp = x->m_right;
+			x->m_right = N;
+			x->m_up = N->m_up;
+			N->m_up = x;
+			N->m_left = tmp;
+			if (tmp)
+				tmp->m_up = N;
+			N->m_height = max(height(N->m_left), height(N->m_right)) + 1;
 			x->m_height = max(height(x->m_left), height(x->m_right)) + 1;
 			return (x);
 		}
-		node_pointer			leftRotate(node_pointer x)
+		node_pointer			leftRotate(node_pointer N)
 		{
-			node_pointer y = x->m_right;
-			node_pointer T2 = y->m_left;
-			y->m_left = x;
-			x->m_right = T2;
-			x->m_height = max(height(x->m_left), height(x->m_right)) + 1;
+			node_pointer y = N->m_right;
+			node_pointer tmp = y->m_left;
+			y->m_left = N;
+			N->m_right = tmp;
+			y->m_up = N->m_up;
+			N->m_up = y;
+			if (tmp)
+				tmp->m_up = N;
+			N->m_height = max(height(N->m_left), height(N->m_right)) + 1;
 			y->m_height = max(height(y->m_left), height(y->m_right)) + 1;
 			return (y);
 		}
@@ -374,10 +383,7 @@ namespace	ft
 			{
 				N->m_left = insertNode(N->m_left, key, value);
 				if (N->m_left)
-				{
 					N->m_left->m_up = N;
-					std::cout << "PARENT Left " << N->m_left->m_up->m_pair.first << "Child-> " << N->m_pair.first << std::endl;
-				}
 
 			}
 			else if (_comp(N->m_pair.first, key))
@@ -386,7 +392,7 @@ namespace	ft
 				if (N->m_right)
 				{
 					N->m_right->m_up = N;
-					std::cout << "PARENT Right " << N->m_right->m_up->m_pair.first << "Child-> " << N->m_pair.first << std::endl;
+					// std::cout << "PARENT Right " << N->m_right->m_up->m_pair.first << "Child-> " << N->m_pair.first << std::endl;
 
 				}
 			}
@@ -432,25 +438,11 @@ namespace	ft
 			if (_root)	
 				_root->m_up = NULL;
 		}
-		node_pointer			nodeWithMimumValue(node_pointer N)
-		{
-			node_pointer current = N;
-			while (current->m_left != NULL)
-				current = current->m_left;
-			return (current);
-		}
 		node_pointer			nodeWithMimumValue(node_pointer N) const
 		{
 			node_pointer current = N;
 			while (current->m_left != NULL)
 				current = current->m_left;
-			return (current);
-		}
-		node_pointer			nodeWithMaximumValue(node_pointer N)
-		{
-			node_pointer current = N;
-			while (current->m_right != NULL)
-				current = current->m_right;
 			return (current);
 		}
 		node_pointer			nodeWithMaximumValue(node_pointer N) const
@@ -543,18 +535,6 @@ namespace	ft
 			_size = 0;
 			clearFrom(_root);
 			_root = NULL;
-		}
-	public:
-		void					printTree(node_pointer root, std::string indent, bool last)
-		{
-			if (root != NULL)
-			{
-				std::cout << indent;
-				std::cout << (last ? "├──" : "└──");
-				std::cout << "[" << root->m_pair.first << "]" << std::endl;
-				printTree(root->m_left, indent + (last ? "│   " : "    "), true);
-				printTree(root->m_right, indent + (last ? "│   " : "    "), false);
-			}
 		}
 
 	};
