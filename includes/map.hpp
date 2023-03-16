@@ -1,6 +1,8 @@
 #pragma		once
 
 #include	<memory>
+#include	<iostream> // to delete
+#include	<algorithm>
 #include	"pair.hpp"
 #include	"equal.hpp"
 #include	"lexicographical_compare.hpp"
@@ -33,7 +35,8 @@ namespace	ft
 		typedef typename ft::reverse_iterator<iterator>									reverse_iterator;
 		typedef typename ft::reverse_iterator<const_iterator>							const_reverse_iterator;
 
-	private:
+	public: //temporary public
+		node_pointer	_meta;
 		node_pointer	_root;
 		size_type		_size;
 		key_compare		_comp;
@@ -64,7 +67,12 @@ namespace	ft
 		//Empty --------------------------------------------------------------//
 		explicit map(const Compare& comp = key_compare(),
 		const Allocator& alloc = allocator_type())
-		: _root(NULL), _size(0), _comp(comp), _alloc(alloc) {}
+		: _root(NULL), _size(0), _comp(comp), _alloc(alloc)
+		{
+			value_type tmp;
+			_meta = _alloc.allocate(1);	
+			_alloc.construct(_meta, node<value_type>(tmp));
+		}
 
 		//Range --------------------------------------------------------------//
 		template<class iterator>
@@ -72,6 +80,9 @@ namespace	ft
 		const Allocator& alloc = Allocator())
 		: _root(NULL), _size(0), _comp(comp), _alloc(alloc)
 		{
+			value_type tmp;
+			_meta = _alloc.allocate(1);	
+			_alloc.construct(_meta, node<value_type>(tmp));
 			insert(first, last);
 		}
 
@@ -103,13 +114,13 @@ namespace	ft
 		mapped_type&			at (const key_type& key)
 		{ 
 			if (search(key))
-				return (search(key));
+				return (search(key).m_pair->second);
 			throw std::out_of_range("map"); 
 		}
-		const mapped_type&		at (const key_type& k) const
+		const mapped_type&		at (const key_type& key) const
 		{
-			if (search(k))
-				return (search(k));
+			if (search(key))
+				return (search(key).m_pair->second);
 			throw std::out_of_range("map"); 
 		}
 		mapped_type&			operator[](const key_type& key)
@@ -123,19 +134,23 @@ namespace	ft
 	//Iterators --------------------------------------------------------------//
 		iterator				begin()
 		{
-			return iterator(nodeWithMimumValue(_root));
+			return (iterator(nodeWithMimumValue(_root)));
 		}
 		const_iterator			begin() const
 		{
-			return iterator(nodeWithMimumValue(_root));
+			return (const_iterator(nodeWithMimumValue(_root)));
 		}
 		iterator				end()
 		{
-			return (iterator(nodeWithMaximumValue(_root)->m_right));
+			_meta->m_left = _root;
+			_root->m_up = _meta;
+			return (iterator(_meta));
 		}
 		const_iterator			end() const
 		{
-			return (iterator(nodeWithMaximumValue(_root)->m_right));
+			_meta->m_left = _root;
+			_root->m_up = _meta;
+			return (const_iterator(_meta));
 		}
 		reverse_iterator		rbegin()
 		{
@@ -176,7 +191,7 @@ namespace	ft
 			return (iterator(search(val.first)));
 		}
 		template <class iterator> 
-		void					insert (iterator first, iterator last)
+		void					insert(iterator first, iterator last)
 		{
 			for (; first != last; first++)
 				insert(*first);
@@ -353,20 +368,27 @@ namespace	ft
 		}
 		node_pointer			insertNode(node_pointer N, key_type key, mapped_type value)
 		{
-			//Find the correct postion and insert the node
 			if (N == NULL)
 				return (newNode(key, value));
 			if (_comp(key, N->m_pair.first))
 			{
 				N->m_left = insertNode(N->m_left, key, value);
 				if (N->m_left)
+				{
 					N->m_left->m_up = N;
+					std::cout << "PARENT Left " << N->m_left->m_up->m_pair.first << "Child-> " << N->m_pair.first << std::endl;
+				}
+
 			}
 			else if (_comp(N->m_pair.first, key))
 			{
 				N->m_right = insertNode(N->m_right, key, value);
 				if (N->m_right)
+				{
 					N->m_right->m_up = N;
+					std::cout << "PARENT Right " << N->m_right->m_up->m_pair.first << "Child-> " << N->m_pair.first << std::endl;
+
+				}
 			}
 			else
 				return (N);
@@ -521,6 +543,18 @@ namespace	ft
 			_size = 0;
 			clearFrom(_root);
 			_root = NULL;
+		}
+	public:
+		void					printTree(node_pointer root, std::string indent, bool last)
+		{
+			if (root != NULL)
+			{
+				std::cout << indent;
+				std::cout << (last ? "├──" : "└──");
+				std::cout << "[" << root->m_pair.first << "]" << std::endl;
+				printTree(root->m_left, indent + (last ? "│   " : "    "), true);
+				printTree(root->m_right, indent + (last ? "│   " : "    "), false);
+			}
 		}
 
 	};
