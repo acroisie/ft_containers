@@ -233,16 +233,19 @@ namespace	ft
 		}
 		void					swap(map& other)
 		{
+			node_pointer 	meta = other._meta;
 			node_pointer 	root = other._root;
 			size_type 		size = other._size;
 			key_compare		comp = other._comp;
 			allocator_type	alloc = other._alloc;
 
-			other._size = size;
-			other._root = root;
-			other._comp = comp;
-			other._alloc = alloc;
+			other._meta = _meta;
+			other._root = _root;
+			other._size = _size;
+			other._comp = _comp;
+			other._alloc = _alloc;
 
+			_meta = meta;
 			_size = size;
 			_root = root;
 			_comp = comp;
