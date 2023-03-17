@@ -135,10 +135,14 @@ namespace	ft
 	//Iterators --------------------------------------------------------------//
 		iterator				begin()
 		{
+			if (!_root)
+				return (iterator(_meta));
 			return (iterator(nodeWithMimumValue(_root)));
 		}
 		const_iterator			begin() const
 		{
+			if (!_root)
+				return (const_iterator(_meta));
 			return (const_iterator(nodeWithMimumValue(_root)));
 		}
 		iterator				end()
