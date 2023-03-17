@@ -17,47 +17,48 @@ void	printVector(const ft::vector<T>& vector)
 
 int	main(void)
 {
-	// srand(time(NULL));
-	ft::map<int, std::string> test;
+	srand(time(NULL));
+	std::map<int, std::string> test;
 
-	test[34] = "blabla";
-	test[654] = "foo";
-	test[4] = "bar";
-	test[3] = "lol";
-	test[56] = "prout";
-	test[7] = "caca";
-	test[89] = "pop";
-	test[3] = "poupi";
-	test[45] = "koko1";
-	test[7] = "koko2";
-	test[10] = "koko3";
+	// test[rand()] = "blabla";
+	// test[rand()] = "foo";
+	// test[rand()] = "bar";
+	// test[rand()] = "lol";
+	// test[rand()] = "prout";
+	// test[rand()] = "caca";
+	// test[rand()] = "pop";
+	// test[rand()] = "poupi";
+	// test[rand()] = "koko1";
+	// test[rand()] = "koko2";
+	// test[rand()] = "koko3";
 
-	ft::map<int, std::string>::iterator it = test.begin();
-	ft::map<int, std::string>::iterator it_end = test.end();
-	test.printTree(test._meta, "	", false);
+
+	std::map<int, std::string>::iterator it = test.begin();
+	std::map<int, std::string>::iterator it_end = test.end();
+	// test.printTree(test._meta, "	", false);
 	std::cout << "Key: " << it->first << "| Value: " << it->second << std::endl;
-	++it;
-	std::cout << "Key: " << it->first << "| Value: " << it->second << std::endl;
-	it++;
-	std::cout << "Key: " << it->first << "| Value: " << it->second << std::endl;
-	it++;
-	std::cout << "Key: " << it->first << "| Value: " << it->second << std::endl;
-	it++;
-	std::cout << "Key: " << it->first << "| Value: " << it->second << std::endl;
-	it++;
+	// ++it;
+	// std::cout << "Key: " << it->first << "| Value: " << it->second << std::endl;
+	// it++;
+	// std::cout << "Key: " << it->first << "| Value: " << it->second << std::endl;
+	// it++;
+	// std::cout << "Key: " << it->first << "| Value: " << it->second << std::endl;
+	// it++;
+	// std::cout << "Key: " << it->first << "| Value: " << it->second << std::endl;
+	// it++;
 	std::cout << "Key: END " << it_end->first << "| Value: " << it_end->second << std::endl;
-	it_end--;
-	std::cout << "Key: " << it_end->first << "| Value: " << it_end->second << std::endl;
-	it_end--;
-	std::cout << "Key: " << it_end->first << "| Value: " << it_end->second << std::endl;
-	it_end--;
-	std::cout << "Key: " << it_end->first << "| Value: " << it_end->second << std::endl;
-	it_end--;
-	std::cout << "Key: " << it_end->first << "| Value: " << it_end->second << std::endl;
-	it_end--;
-	std::cout << "Key: " << it_end->first << "| Value: " << it_end->second << std::endl;
-	it_end--;
-	std::cout << "Key: " << it_end->first << "| Value: " << it_end->second << std::endl;
+	// it_end--;
+	// std::cout << "Key: " << it_end->first << "| Value: " << it_end->second << std::endl;
+	// it_end--;
+	// std::cout << "Key: " << it_end->first << "| Value: " << it_end->second << std::endl;
+	// it_end--;
+	// std::cout << "Key: " << it_end->first << "| Value: " << it_end->second << std::endl;
+	// it_end--;
+	// std::cout << "Key: " << it_end->first << "| Value: " << it_end->second << std::endl;
+	// it_end--;
+	// std::cout << "Key: " << it_end->first << "| Value: " << it_end->second << std::endl;
+	// it_end--;
+	// std::cout << "Key: " << it_end->first << "| Value: " << it_end->second << std::endl;
 
 	return (0);
 }

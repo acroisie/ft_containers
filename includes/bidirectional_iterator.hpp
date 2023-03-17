@@ -51,7 +51,7 @@ namespace	ft
 		{
 			if (this != &obj)
 				_ptr = obj._ptr;
-			return *this;
+			return (*this);
 		}
 
 	//Member access operator -------------------------------------------------//

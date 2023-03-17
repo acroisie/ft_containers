@@ -35,7 +35,7 @@ namespace	ft
 		typedef typename ft::reverse_iterator<iterator>									reverse_iterator;
 		typedef typename ft::reverse_iterator<const_iterator>							const_reverse_iterator;
 
-	private:
+	public: //temporary public
 		node_pointer	_meta;
 		node_pointer	_root;
 		size_type		_size;
@@ -144,13 +144,15 @@ namespace	ft
 		iterator				end()
 		{
 			_meta->m_left = _root;
-			_root->m_up = _meta;
+			if (_root)
+				_root->m_up = _meta;
 			return (iterator(_meta));
 		}
 		const_iterator			end() const
 		{
 			_meta->m_left = _root;
-			_root->m_up = _meta;
+			if (_root)
+				_root->m_up = _meta;
 			return (const_iterator(_meta));
 		}
 		reverse_iterator		rbegin()
@@ -440,6 +442,8 @@ namespace	ft
 		}
 		node_pointer			nodeWithMimumValue(node_pointer N) const
 		{
+			if (!N)
+				return (NULL);
 			node_pointer current = N;
 			while (current->m_left != NULL)
 				current = current->m_left;
@@ -447,6 +451,8 @@ namespace	ft
 		}
 		node_pointer			nodeWithMaximumValue(node_pointer N) const
 		{
+			if (!N)
+				return (NULL);
 			node_pointer current = N;
 			while (current->m_right != NULL)
 				current = current->m_right;
@@ -537,6 +543,18 @@ namespace	ft
 			_root = NULL;
 		}
 
+	public: //temporary public
+		void					printTree(node_pointer node, std::string indent, bool last) const
+		{
+			if (node != NULL)
+			{
+				std::cout << indent;
+				std::cout << (last ? "├──" : "└──");
+				std::cout << "[" << node->m_pair.first << "]" << std::endl;
+				printTree(node->m_left, indent + (last ? "│   " : "    "), true);
+				printTree(node->m_right, indent + (last ? "│   " : "    "), false);
+			}
+		}
 	};
 
 //Non-member functions -------------------------------------------------------//
