@@ -185,11 +185,12 @@ namespace	ft
 		void					clear() {clearTree();}
 		pair<iterator,bool>		insert(const value_type& val)
 		{
-			insertPair(val);
-			iterator it(search(val.first));
-			if (it != end() && !key_comp()(it->first, val.first) && !key_comp()(val.first, it->first))
-				return ft::make_pair(it, false);
-			return ft::make_pair(it, true);
+				iterator tmp(search(val.first));
+				insertPair(val);
+				iterator it(search(val.first));
+				if (it != NULL && tmp == NULL)
+					return (ft::make_pair<iterator, bool>(it, true));
+				return (ft::make_pair<iterator, bool>(it, false));
 		}
 		iterator				insert(iterator position, const value_type& val)
 		{
