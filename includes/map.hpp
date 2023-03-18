@@ -161,19 +161,19 @@ namespace	ft
 		}
 		reverse_iterator		rbegin()
 		{
-			return reverse_iterator(end());
+			return (reverse_iterator(end()));
 		}
 		const_reverse_iterator	rbegin() const
 		{
-			return const_reverse_iterator(end());
+			return (const_reverse_iterator(end()));
 		}
 		reverse_iterator		rend()
 		{
-			return reverse_iterator(begin());
+			return (reverse_iterator(begin()));
 		}
 		const_reverse_iterator	rend() const
 		{
-			return const_reverse_iterator(begin());
+			return (const_reverse_iterator(begin()));
 		}
 
 	//Capacity ---------------------------------------------------------------//
@@ -185,12 +185,12 @@ namespace	ft
 		void					clear() {clearTree();}
 		pair<iterator,bool>		insert(const value_type& val)
 		{
-				iterator tmp(search(val.first));
-				insertPair(val);
-				iterator it(search(val.first));
-				if (it != NULL && tmp == NULL)
-					return (ft::make_pair<iterator, bool>(it, true));
-				return (ft::make_pair<iterator, bool>(it, false));
+			iterator tmp(search(val.first));
+			insertPair(val);
+			iterator it(search(val.first));
+			if (it != NULL && tmp == NULL)
+				return (ft::make_pair<iterator, bool>(it, true));
+			return (ft::make_pair<iterator, bool>(it, false));
 		}
 		iterator				insert(iterator position, const value_type& val)
 		{
@@ -260,16 +260,17 @@ namespace	ft
 		}
 		iterator				find(const Key& key)
 		{
-			if (search(key))
-				return (iterator(search(key)));
+			node_pointer tmp = search(key);
+			if (tmp)
+				return (iterator(tmp));
 			return (end());
 		}
 		const_iterator			find(const Key& key) const
 		{
-			if (search(key))
-				return (const_iterator(search(key)));
+			node_pointer tmp = search(key);
+			if (tmp)
+				return (const_iterator(tmp));
 			return (end());
-
 		}
 		pair<iterator,iterator>	equal_range(const Key& key)
 		{
