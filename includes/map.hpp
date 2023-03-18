@@ -260,11 +260,16 @@ namespace	ft
 		}
 		iterator				find(const Key& key)
 		{
-			return (iterator(search(key)));
+			if (search(key))
+				return (iterator(search(key)));
+			return (end());
 		}
 		const_iterator			find(const Key& key) const
 		{
-			return (const_iterator(search(key)));
+			if (search(key))
+				return (const_iterator(search(key)));
+			return (end());
+
 		}
 		pair<iterator,iterator>	equal_range(const Key& key)
 		{
