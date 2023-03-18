@@ -212,12 +212,12 @@ namespace	ft
 		}
 		iterator				erase(iterator first, iterator last)
 		{
-			while(first != last)
+			for (; first != last; first++)
 			{
 				if (first->first)
 				{
 					iterator tmp = first;
-					erase((first++)->first);
+					erase(first->first);
 					return (tmp);
 				}
 			}
@@ -230,7 +230,7 @@ namespace	ft
 					deleteNode(_root, key);
 					return (1);
 				}
-				return(0);
+				return (0);
 		}
 		void					swap(map& other)
 		{
@@ -394,17 +394,12 @@ namespace	ft
 				N->m_left = insertNode(N->m_left, key, value);
 				if (N->m_left)
 					N->m_left->m_up = N;
-
 			}
 			else if (_comp(N->m_pair.first, key))
 			{
 				N->m_right = insertNode(N->m_right, key, value);
 				if (N->m_right)
-				{
 					N->m_right->m_up = N;
-					// std::cout << "PARENT Right " << N->m_right->m_up->m_pair.first << "Child-> " << N->m_pair.first << std::endl;
-
-				}
 			}
 			else
 				return (N);
@@ -471,10 +466,18 @@ namespace	ft
 			if (N == NULL)
 				return NULL;
 
-			if (_comp(key, N->m_pair.first))
+				if (_comp(key, N->m_pair.first))
+			{
 				N->m_left = deleteNode(N->m_left, key);
+				if (N->m_left)
+					N->m_left->m_up = N;
+			}
 			else if (_comp(N->m_pair.first, key))
+			{
 				N->m_right = deleteNode(N->m_right, key);
+				if (N->m_right)
+					N->m_right->m_up = N;
+			}
 			else
 			{
 				// Remove the pair from the tree
@@ -498,23 +501,24 @@ namespace	ft
 
 			if (balanceFactor > 1 && getBalanceFactor(N->m_left) >= 0)
 				return rightRotate(N);
-
 			if (balanceFactor < -1 && getBalanceFactor(N->m_right) <= 0)
 				return leftRotate(N);
-
 			if (balanceFactor > 1 && getBalanceFactor(N->m_left) < 0)
 			{
 				N->m_left = leftRotate(N->m_left);
-				return rightRotate(N);
+				if (N->m_left)
+					N->m_left->m_up = NULL;
+				return (rightRotate(N));
 			}
-
 			if (balanceFactor < -1 && getBalanceFactor(N->m_right) > 0)
 			{
 				N->m_right = rightRotate(N->m_right);
-				return leftRotate(N);
+				if (N->m_right)
+					N->m_right->m_up = NULL;
+				return (leftRotate(N));
 			}
 
-			return N;
+			return (N);
 		}
 		node_pointer			search(const key_type key) const
 		{
