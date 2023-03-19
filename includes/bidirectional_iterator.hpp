@@ -106,7 +106,10 @@ namespace	ft
             operator--();
             return (tmp);
         }
-
+		node_pointer getPtr()
+		{
+			return (_ptr);
+		}
 	//Inequality relational operators ----------------------------------------//
 		friend bool	operator==(const bidirectional_iterator &lhs,
 		const bidirectional_iterator &rhs) {return (lhs._ptr == rhs._ptr);}

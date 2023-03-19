@@ -204,33 +204,31 @@ namespace	ft
 			for (; first != last; first++)
 				insert(*first);
 		}
-		iterator				erase(iterator pos)
+		iterator				erase(iterator pos) 
 		{
-			iterator tmp = pos;
-			deleteNode(_root,(*pos).first);
+			deleteNode(pos.getPtr());
 			return (pos);
 		}
-		iterator				erase(iterator first, iterator last)
+		iterator				erase(iterator first, iterator last) 
 		{
-			for (; first != last; first++)
+			iterator tmp = first;
+			while(first != last)
 			{
-				if (first->first)
-				{
-					iterator tmp = first;
-					erase(first->first);
-					return (tmp);
-				}
+				++tmp;
+				deleteNode(first.getPtr());
+				first = tmp;
 			}
-			return (NULL);
+			return (tmp);
 		}
-		size_type				erase(const Key& key)
+		size_type				erase(const Key &key) 
 		{
-			if(search(key))
-				{
-					deleteNode(_root, key);
-					return (1);
-				}
-				return (0);
+			iterator it = search(key); 
+			if(it != end())
+			{
+				deleteNode(it.getPtr());
+				return (1);
+			}
+			return(0);
 		}
 		void					swap(map& other)
 		{
@@ -467,64 +465,66 @@ namespace	ft
 				current = current->m_right;
 			return (current);
 		}
-		node_pointer			deleteNode(node_pointer N, const key_type& key)
+		void					delNode(node_pointer N)
+		{
+			_alloc.destroy(N);
+			_alloc.deallocate(N, 1);
+			_size--;
+		}
+		void					relink(node_pointer N, node_pointer new_node)
+		{
+			if (N == _root)
+				_root = new_node;
+			else if (N == N->m_up->m_left)
+				N->m_up->m_left = new_node;
+			else if (N == N->m_up->m_right)
+				N->m_up->m_right = new_node;
+			if (new_node != NULL)
+				new_node->m_up = N->m_up;
+		}
+		void					nullCheck(node_pointer N)
 		{
 			if (N == NULL)
-				return NULL;
-
-				if (_comp(key, N->m_pair.first))
+				return ;
+		}
+		void					deleteNode(node_pointer N)
+		{
+			node_pointer tmp;
+			if(N == NULL)
+				return;
+			if (!N->m_left)
 			{
-				N->m_left = deleteNode(N->m_left, key);
-				if (N->m_left)
-					N->m_left->m_up = N;
+				tmp = N;
+				relink(N, N->m_right);
+				nullCheck(tmp);
 			}
-			else if (_comp(N->m_pair.first, key))
+			else if (!N->m_right)
 			{
-				N->m_right = deleteNode(N->m_right, key);
-				if (N->m_right)
-					N->m_right->m_up = N;
+				tmp = N;
+				relink(N, N->m_left);
+				nullCheck(tmp);
 			}
-			else
+			else	
 			{
-				// Remove the pair from the tree
-				ft::map<key_type, mapped_type> temp_map;
-				temp_map.insert(N->m_pair);
-				iterator it = temp_map.find(key);
-				temp_map.erase(it);
-
-				// Delete the node from memory
-				_alloc.destroy(N);
-				_alloc.deallocate(N, 1);
-
-				// Return the new root of the tree
-				return temp_map._root;
+				iterator it = begin();
+				while (it.getPtr() != N)
+					it++;
+				it++;
+				node_pointer newRoot = it.getPtr();
+				tmp = newRoot;
+				if (newRoot->m_up != N)
+				{
+					tmp = newRoot->m_up;
+					relink(newRoot, newRoot->m_right);
+					newRoot->m_right = N->m_right;
+					newRoot->m_right->m_up = newRoot;
+				}
+				relink(N, newRoot);
+				newRoot->m_left = N->m_left;
+				newRoot->m_left->m_up = newRoot;
+				nullCheck(tmp);
 			}
-
-			// Balance the tree
-			N->m_height = 1 + max(height(N->m_left), height(N->m_right));
-
-			int balanceFactor = getBalanceFactor(N);
-
-			if (balanceFactor > 1 && getBalanceFactor(N->m_left) >= 0)
-				return rightRotate(N);
-			if (balanceFactor < -1 && getBalanceFactor(N->m_right) <= 0)
-				return leftRotate(N);
-			if (balanceFactor > 1 && getBalanceFactor(N->m_left) < 0)
-			{
-				N->m_left = leftRotate(N->m_left);
-				if (N->m_left)
-					N->m_left->m_up = NULL;
-				return (rightRotate(N));
-			}
-			if (balanceFactor < -1 && getBalanceFactor(N->m_right) > 0)
-			{
-				N->m_right = rightRotate(N->m_right);
-				if (N->m_right)
-					N->m_right->m_up = NULL;
-				return (leftRotate(N));
-			}
-
-			return (N);
+			delNode(N);
 		}
 		node_pointer			search(const key_type key) const
 		{
