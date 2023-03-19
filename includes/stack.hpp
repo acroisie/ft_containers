@@ -15,14 +15,14 @@ namespace	ft
         typedef typename Container::const_reference	const_reference;
 
     protected:
-        container_type _data;
+        container_type c;
 
     public:
 //Member functions -----------------------------------------------------------//
 	//Constructor/Destructor/Assign content ----------------------------------//
 		//Default ------------------------------------------------------------//
         explicit stack(const container_type& cont = container_type())
-		: _data(cont) {}
+		: c(cont) {}
 
 		//Destructor ---------------------------------------------------------//
 		~stack() {}
@@ -30,52 +30,52 @@ namespace	ft
 		//Assign operator ----------------------------------------------------//
 		stack&				operator=(const stack& other)
 		{
-			_data = other._data;
+			c = other.c;
 			return (*this);
 		}
 
 	//Element access ---------------------------------------------------------//
-        value_type&			top() {return (_data.back());}
-        const value_type&	top() const {return (_data.back());}
+        value_type&			top() {return (c.back());}
+        const value_type&	top() const {return (c.back());}
 
 	//Capacity ---------------------------------------------------------------//
-        bool				empty() const {return (_data.empty());}
-        size_type			size() const {return (_data.size());}
+        bool				empty() const {return (c.empty());}
+        size_type			size() const {return (c.size());}
 
 	//Modifiers --------------------------------------------------------------//
-        void				push(const value_type& value) {_data.push_back(value);}
-        void				pop() {_data.pop_back();}
+        void				push(const value_type& value) {c.push_back(value);}
+        void				pop() {c.pop_back();}
 
 	//Operators --------------------------------------------------------------//
 		friend bool			operator==(const stack<value_type, container_type>& lhs,
 						const stack<value_type, container_type>& rhs)
 		{
-			return (lhs._data == rhs._data);
+			return (lhs.c == rhs.c);
 		}
 		friend bool			operator!=(const stack<value_type, container_type>& lhs,
 						const stack<value_type, container_type>& rhs)
 		{
-			return (!(lhs._data == rhs._data));
+			return (!(lhs.c == rhs.c));
 		}
 		friend bool			operator<(const stack<value_type, container_type>& lhs,
 						const stack<value_type, container_type>& rhs)
 		{
-			return (lhs._data < rhs._data);
+			return (lhs.c < rhs.c);
 		}
 		friend bool			operator<=(const stack<value_type, container_type>& lhs,
 						const stack<value_type, container_type>& rhs)
 		{
-			return (lhs._data <= rhs._data);
+			return (lhs.c <= rhs.c);
 		}
 		friend bool			operator>(const stack<value_type, container_type>& lhs,
 						const stack<value_type, container_type>& rhs)
 		{
-			return (lhs._data > rhs._data);
+			return (lhs.c > rhs.c);
 		}
 		friend bool			operator>=(const stack<value_type, container_type>& lhs,
 						const stack<value_type, container_type>& rhs)
 		{
-			return (lhs._data >= rhs._data);
+			return (lhs.c >= rhs.c);
 		}
     };
 
