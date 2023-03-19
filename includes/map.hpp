@@ -214,7 +214,7 @@ namespace	ft
 			iterator tmp = first;
 			while(first != last)
 			{
-				++tmp;
+				tmp++;
 				deleteNode(first.getPtr());
 				first = tmp;
 			}
@@ -222,13 +222,11 @@ namespace	ft
 		}
 		size_type				erase(const Key &key) 
 		{
-			iterator it = search(key); 
-			if(it != end())
-			{
-				deleteNode(it.getPtr());
-				return (1);
-			}
-			return(0);
+			iterator	it = find(key);
+			if (it == end())
+				return (0);
+			deleteNode(it.getPtr());
+			return (1);
 		}
 		void					swap(map& other)
 		{
@@ -465,53 +463,34 @@ namespace	ft
 				current = current->m_right;
 			return (current);
 		}
-		void					delNode(node_pointer N)
-		{
-			_alloc.destroy(N);
-			_alloc.deallocate(N, 1);
-			_size--;
-		}
-		void					relink(node_pointer N, node_pointer new_node)
+		void					relink(node_pointer N, node_pointer newNode)
 		{
 			if (N == _root)
-				_root = new_node;
+				_root = newNode;
 			else if (N == N->m_up->m_left)
-				N->m_up->m_left = new_node;
+				N->m_up->m_left = newNode;
 			else if (N == N->m_up->m_right)
-				N->m_up->m_right = new_node;
-			if (new_node != NULL)
-				new_node->m_up = N->m_up;
-		}
-		void					nullCheck(node_pointer N)
-		{
-			if (N == NULL)
-				return ;
+				N->m_up->m_right = newNode;
+			if (newNode)
+				newNode->m_up = N->m_up;
 		}
 		void					deleteNode(node_pointer N)
 		{
-			node_pointer tmp;
-			if(N == NULL)
-				return;
+			if(!N)
+				return ;
 			if (!N->m_left)
-			{
-				tmp = N;
 				relink(N, N->m_right);
-				nullCheck(tmp);
-			}
 			else if (!N->m_right)
-			{
-				tmp = N;
 				relink(N, N->m_left);
-				nullCheck(tmp);
-			}
 			else	
 			{
-				iterator it = begin();
-				while (it.getPtr() != N)
-					it++;
+				iterator it = find(N->m_pair.first);
 				it++;
 				node_pointer newRoot = it.getPtr();
+				node_pointer tmp;
 				tmp = newRoot;
+				if (!tmp)
+					return ;
 				if (newRoot->m_up != N)
 				{
 					tmp = newRoot->m_up;
@@ -522,9 +501,10 @@ namespace	ft
 				relink(N, newRoot);
 				newRoot->m_left = N->m_left;
 				newRoot->m_left->m_up = newRoot;
-				nullCheck(tmp);
 			}
-			delNode(N);
+			_alloc.destroy(N);
+			_alloc.deallocate(N, 1);
+			_size--;
 		}
 		node_pointer			search(const key_type key) const
 		{
