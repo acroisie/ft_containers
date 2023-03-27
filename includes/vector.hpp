@@ -65,7 +65,11 @@ namespace		ft
 		}
 
 		//Destructor ---------------------------------------------------------//
-		~vector(){}
+		~vector()
+		{
+			clear();
+			_alloc.deallocate(_data, _capacity);
+		}
 
 		//Assign operator ----------------------------------------------------//
 		vector&	operator=(const vector& x)
@@ -123,6 +127,10 @@ namespace		ft
 				_alloc.deallocate(_data, _capacity);
 			_data = newData;
 			_capacity = n;
+			for (size_type i = 0; i < _size; i++)
+			{
+				_alloc.destroy(newData + i);
+			}
 		}
 
 	//Element access ---------------------------------------------------------//

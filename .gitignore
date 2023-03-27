@@ -5,3 +5,5 @@ objs/
 ft_containers_ultiMATE_tester
 includes/containers_test
 includes/containers_test
+ft_results
+stl_results

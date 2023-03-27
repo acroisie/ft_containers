@@ -98,7 +98,11 @@ namespace	ft
 		}
 
 		//Destructor ---------------------------------------------------------//
-		~map() {clearTree();}
+		~map()
+		{
+			clearTree();
+			_alloc.deallocate(_meta, 1);
+		}
 
 		//Assign operator ----------------------------------------------------//
 		map&	operator=(const map& other) 

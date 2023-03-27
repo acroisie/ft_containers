@@ -1,5 +1,5 @@
 CC			:= c++
-CC_FLAGS	:= -Wall -Werror -Wextra -std=c++98
+CC_FLAGS	:= -Wall -Werror -Wextra -std=c++98 #-fsanitize=address
 NAME		:= ft_containers
 OBJS_DIR 	:= srcs/objs/
 SRCS_DIR	:= srcs/

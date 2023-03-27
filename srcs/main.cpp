@@ -6,7 +6,7 @@
 # include <sys/time.h>
 
 #ifndef STL
-# define STL 1
+# define STL 0
 #endif
 
 #if STL //CREATE A REAL STL EXAMPLE
@@ -15,9 +15,9 @@
 	#include <vector>
 	namespace ft = std;
 #else
-	#include "containers/map.hpp"
-	#include "containers/stack.hpp"
-	#include "containers/vector.hpp"
+	#include "../includes/map.hpp"
+	#include "../includes/stack.hpp"
+	#include "../includes/vector.hpp"
 #endif
 
 #include <stdlib.h>
