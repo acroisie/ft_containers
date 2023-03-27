@@ -35,7 +35,7 @@ namespace	ft
 		typedef typename ft::reverse_iterator<iterator>									reverse_iterator;
 		typedef typename ft::reverse_iterator<const_iterator>							const_reverse_iterator;
 
-	public: //temporary public
+	private:
 		node_pointer	_meta;
 		node_pointer	_root;
 		size_type		_size;
@@ -544,8 +544,6 @@ namespace	ft
 			clearFrom(_root);
 			_root = NULL;
 		}
-
-	public: //temporary public
 		void					printTree(node_pointer node, std::string indent, bool last) const
 		{
 			if (node != NULL)
